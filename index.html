@@ -31,8 +31,16 @@
   .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
     top:-10px; left:10px; font-size:12px; color:#0b5ed7;
   }
-  label.agreement{display:flex;align-items:flex-start;margin-bottom:20px;font-size:14px;}
-  label.agreement input{margin-right:12px;margin-top:3px;}
+  label.agreement {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom:20px;
+    font-size:14px;
+  }
+  label.agreement input {
+    margin: 0;
+  }
   button{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
   button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
   .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
@@ -54,8 +62,7 @@
     <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
     <div class="form-group"><i class="fas fa-oil-can"></i>
-      <select name="TipoAceite" required>
-        <option value="">Selecciona</option>
+      <select name="TipoAceite">
         <option value="0W20">0W20</option>
         <option value="0W30">0W30</option>
         <option value="5W20">5W20</option>
@@ -106,49 +113,55 @@ function applyLang(lang){
   document.getElementById('lblComentarios').innerText=t.Comentarios;
 }
 
-function serializeForm(form) {
-  const fd = new FormData(form);
-  const params = new URLSearchParams();
-  for (const [k,v] of fd.entries()) params.append(k,v);
-  return params.toString();
-}
-
-function generateCallbackName(){return "cb_"+Date.now()+"_"+Math.floor(Math.random()*10000);}
-
-document.getElementById('formCita').addEventListener('submit',function(e){
+// Normalizar aceite y enviar
+document.getElementById('formCita').addEventListener('submit', function(e){
   e.preventDefault();
-  const form=e.target;
-  const msg=document.getElementById('mensaje');
-  msg.textContent="⏳ Enviando...";
+  const form = e.target;
+  const msg = document.getElementById('mensaje');
+  msg.textContent = "⏳ Enviando...";
 
-  const data=Object.fromEntries(new FormData(form).entries());
-  const now=new Date();
-  const selected=new Date((data.Fecha||"")+"T"+(data.Hora||""));
-  if(!data.Fecha || !data.Hora || selected-now < 24*60*60*1000){
-    msg.textContent=translations[lang].error24;
+  const data = Object.fromEntries(new FormData(form).entries());
+
+  // Normalizar aceite a mayúsculas exactas
+  const aceite = (data.TipoAceite || "").toUpperCase();
+  const validAceite = ["0W20","0W30","5W20","5W30"];
+  if(!validAceite.includes(aceite)){
+    msg.textContent = "⚠️ Tipo de aceite inválido";
+    return;
+  }
+  data.TipoAceite = aceite;
+
+  const now = new Date();
+  const selected = new Date((data.Fecha || "") + "T" + (data.Hora || ""));
+  if (!data.Fecha || !data.Hora || selected - now < 24*60*60*1000) {
+    msg.textContent = translations[lang].error24;
     return;
   }
 
-  const cbName=generateCallbackName();
-  window[cbName]=function(response){
+  // Generar callback JSONP
+  const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+  window[cbName] = function(response){
     try{
       if(response && response.success){
-        msg.textContent=translations[lang].exito;
+        msg.textContent = translations[lang].exito;
         form.reset();
-      } else msg.textContent="⚠️ "+(response.error||"Error al registrar la cita");
-    } finally{
-      const s=document.getElementById(cbName+"_script");
+      }else{
+        msg.textContent = "⚠️ "+(response.error || "Error al registrar la cita");
+      }
+    }finally{
+      const s = document.getElementById(cbName+"_script");
       if(s && s.parentNode) s.parentNode.removeChild(s);
       delete window[cbName];
     }
   };
 
-  const qs=serializeForm(form)+"&callback="+encodeURIComponent(cbName);
-  const script=document.createElement('script');
-  script.src=SCRIPT_URL+"?"+qs;
-  script.id=cbName+"_script";
-  script.onerror=function(){
-    msg.textContent="⚠️ Error de conexión al servidor";
+  const qs = new URLSearchParams(data);
+  qs.append("callback", cbName);
+  const script = document.createElement('script');
+  script.src = SCRIPT_URL+"?"+qs.toString();
+  script.id = cbName+"_script";
+  script.onerror = function(){
+    msg.textContent = "⚠️ Error de conexión al servidor";
     if(script.parentNode) script.parentNode.removeChild(script);
     delete window[cbName];
   };
