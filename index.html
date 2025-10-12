@@ -31,15 +31,18 @@
   .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
     top:-10px; left:10px; font-size:12px; color:#0b5ed7;
   }
-  label.agreement {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  /* Checkbox al final */
+  .agreement-container{
     margin-bottom:20px;
-    font-size:14px;
+    text-align:left;
   }
-  label.agreement input {
-    margin: 0;
+  .agreement-container label{
+    font-size:14px;
+    cursor:pointer;
+  }
+  .agreement-container input{
+    margin-right:10px;
+    vertical-align:middle;
   }
   button{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
   button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
@@ -74,8 +77,12 @@
     <div class="form-group"><i class="fas fa-calendar-day"></i><input type="date" name="Fecha" placeholder=" " required><label id="lblFecha">Fecha</label></div>
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
     <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
-    
-    <label class="agreement"><input type="checkbox" name="agreement" required><span id="acuerdoTexto">Acepto que la cita se agenda con al menos 24 horas de anticipación.</span></label>
+
+    <!-- Checkbox 24h al final -->
+    <div class="agreement-container">
+      <label><input type="checkbox" name="agreement" required><span id="acuerdoTexto">Acepto que la cita se agenda con al menos 24 horas de anticipación.</span></label>
+    </div>
+
     <input type="hidden" name="Estado" value="Pendiente">
     <button type="submit" id="btnEnviar">Enviar Reserva</button>
   </form>
@@ -84,7 +91,6 @@
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcanO2Sc7tBT0cNXNCLPq-HpCkOLUlYnau7SUd0LobZl8CSMFSuqmurBqI7Xinjt3f2w/exec";
-
 const translations = {
   es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", Nombre:"Nombre completo", Telefono:"Teléfono", Marca:"Marca del vehículo", Modelo:"Modelo del vehículo", Ano:"Año del vehículo", TipoAceite:"Tipo de Aceite", Direccion:"Dirección del servicio", Fecha:"Fecha", Hora:"Hora", Comentarios:"Comentarios adicionales", acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación."},
   en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", Nombre:"Full Name", Telefono:"Phone", Marca:"Vehicle Brand", Modelo:"Vehicle Model", Ano:"Vehicle Year", TipoAceite:"Oil Type", Direccion:"Service Address", Fecha:"Date", Hora:"Time", Comentarios:"Additional Comments", acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance."},
@@ -113,7 +119,6 @@ function applyLang(lang){
   document.getElementById('lblComentarios').innerText=t.Comentarios;
 }
 
-// Normalizar aceite y enviar
 document.getElementById('formCita').addEventListener('submit', function(e){
   e.preventDefault();
   const form = e.target;
@@ -121,8 +126,6 @@ document.getElementById('formCita').addEventListener('submit', function(e){
   msg.textContent = "⏳ Enviando...";
 
   const data = Object.fromEntries(new FormData(form).entries());
-
-  // Normalizar aceite a mayúsculas exactas
   const aceite = (data.TipoAceite || "").toUpperCase();
   const validAceite = ["0W20","0W30","5W20","5W30"];
   if(!validAceite.includes(aceite)){
@@ -138,7 +141,6 @@ document.getElementById('formCita').addEventListener('submit', function(e){
     return;
   }
 
-  // Generar callback JSONP
   const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
   window[cbName] = function(response){
     try{
