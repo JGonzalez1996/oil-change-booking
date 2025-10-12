@@ -75,15 +75,16 @@
 </div>
 
 <script>
-const scriptURL="https://script.google.com/macros/s/AKfycbxNKxLhH6fTL2KgZfJ9b-L9htzYdptXEHxvOKagcqN9y2H2Ftkp2_dqIyLvo2LI2LJv/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxhoDToIbcLYlH7a27wLNdAUpu4UOMW0Uqk6rLp8m2AUf2BWUE3g7vbjmTJSMOISwJ/exec";
 
-const translations={
+/* === Traducciones (se mantienen igual) === */
+const translations = {
   es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", Nombre:"Nombre completo", Telefono:"Teléfono", Marca:"Marca del vehículo", Modelo:"Modelo del vehículo", Ano:"Año del vehículo", TipoAceite:"Tipo de Aceite", Direccion:"Dirección del servicio", Fecha:"Fecha", Hora:"Hora", Comentarios:"Comentarios adicionales", acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación."},
   en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", Nombre:"Full Name", Telefono:"Phone", Marca:"Vehicle Brand", Modelo:"Vehicle Model", Ano:"Vehicle Year", TipoAceite:"Oil Type", Direccion:"Service Address", Fecha:"Date", Hora:"Time", Comentarios:"Additional Comments", acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance."},
   pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", Nombre:"Nome Completo", Telefono:"Telefone", Marca:"Marca do Veículo", Modelo:"Modelo do Veículo", Ano:"Ano do Veículo", TipoAceite:"Tipo de Óleo", Direccion:"Endereço do Serviço", Fecha:"Data", Hora:"Hora", Comentarios:"Comentários Adicionais", acuerdo:"Concordo que a reserva deve ser feita com pelo menos 24 horas de antecedência."}
 };
 
-let lang=navigator.language.slice(0,2);
+let lang = navigator.language.slice(0,2);
 if(!translations[lang]) lang='es';
 applyLang(lang);
 
@@ -105,20 +106,60 @@ function applyLang(lang){
   document.getElementById('lblComentarios').innerText=t.Comentarios;
 }
 
-document.getElementById('formCita').addEventListener('submit', async function(e){
+/* === Envío JSONP === */
+function serializeForm(form) {
+  const fd = new FormData(form);
+  const params = new URLSearchParams();
+  for (const [k, v] of fd.entries()) {
+    params.append(k, v);
+  }
+  return params.toString();
+}
+
+function generateCallbackName() {
+  return "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+}
+
+document.getElementById('formCita').addEventListener('submit', function(e){
   e.preventDefault();
-  const form=e.target;
-  const data=Object.fromEntries(new FormData(form).entries());
-  const now=new Date();
-  const selected=new Date(data.Fecha+"T"+data.Hora);
-  if(selected-now<24*60*60*1000){document.getElementById('mensaje').innerText=translations[lang].error24; return;}
-  document.getElementById('mensaje').innerText="⏳ Enviando...";
-  try{
-    const res=await fetch(scriptURL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-    const respuesta=await res.json();
-    document.getElementById('mensaje').innerText=respuesta.estado==="ok"?translations[lang].exito:"⚠️ Error al registrar la cita";
-    if(respuesta.estado==="ok") form.reset();
-  }catch(err){document.getElementById('mensaje').innerText="⚠️ Error de conexión";}
+  const form = e.target;
+  const msg = document.getElementById('mensaje');
+  msg.textContent = "⏳ Enviando...";
+
+  const data = Object.fromEntries(new FormData(form).entries());
+  const now = new Date();
+  const selected = new Date((data.Fecha || "") + "T" + (data.Hora || ""));
+  if (!data.Fecha || !data.Hora || selected - now < 24*60*60*1000) {
+    msg.textContent = translations[lang].error24;
+    return;
+  }
+
+  const cbName = generateCallbackName();
+  window[cbName] = function(response) {
+    try {
+      if (response && response.success) {
+        msg.textContent = translations[lang].exito;
+        form.reset();
+      } else {
+        msg.textContent = "⚠️ " + (response.error || "Error al registrar la cita");
+      }
+    } finally {
+      const s = document.getElementById(cbName + "_script");
+      if (s && s.parentNode) s.parentNode.removeChild(s);
+      delete window[cbName];
+    }
+  };
+
+  const qs = serializeForm(form) + "&callback=" + encodeURIComponent(cbName);
+  const script = document.createElement('script');
+  script.src = SCRIPT_URL + "?" + qs;
+  script.id = cbName + "_script";
+  script.onerror = function() {
+    msg.textContent = "⚠️ Error de conexión al servidor";
+    if (script.parentNode) script.parentNode.removeChild(script);
+    delete window[cbName];
+  };
+  document.body.appendChild(script);
 });
 </script>
 </body>
