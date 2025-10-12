@@ -1,176 +1,125 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reservar Cambio de Aceite</title>
-  <style>
-    :root{--accent:#0b5ed7;--bg:#f5f7fb;--card:#ffffff;--muted:#6b7280}
-    body{font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);margin:0;color:#1f2937}
-    .container{max-width:820px;margin:32px auto;padding:20px}
-    .card{background:var(--card);border-radius:12px;padding:26px;box-shadow:0 6px 20px rgba(15,23,42,0.08)}
-    h1{margin:0 0 6px;font-size:24px}
-    p.lead{margin:0 0 18px;color:var(--muted)}
-    label{display:block;margin-top:12px;font-weight:600;color:#111827}
-    input,select,textarea{width:100%;padding:10px;margin-top:6px;border:1px solid #e5e7eb;border-radius:8px;font-size:15px}
-    .row{display:flex;gap:12px}
-    .col{flex:1}
-    button{background:var(--accent);color:white;border:none;padding:12px 16px;border-radius:8px;font-weight:700;margin-top:18px;cursor:pointer}
-    button[disabled]{opacity:0.55;cursor:not-allowed}
-    .note{font-size:13px;color:var(--muted);margin-top:8px}
-    .success{padding:12px;border-radius:8px;margin-top:14px}
-    .success.ok{background:#ecfdf5;color:#064e3b}
-    .success.err{background:#fff1f2;color:#7f1d1d}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserva Cambio de Aceite</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+  body{background-color:#121212;color:#e0e0e0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 10px;}
+  .container{background:#1e1e1e;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.7);padding:40px 30px;max-width:600px;width:100%;}
+  h2{text-align:center;margin-bottom:30px;font-size:28px;color:#ffffff;}
+  .idiomas{text-align:right;margin-bottom:25px;}
+  .idiomas img{width:30px;height:20px;cursor:pointer;margin-left:8px;border-radius:3px;border:1px solid #333;transition:transform 0.2s;}
+  .idiomas img:hover{transform:scale(1.2);}
+  .form-group{position:relative;margin-bottom:25px;}
+  .form-group i{position:absolute;top:50%;left:12px;transform:translateY(-50%);color:#888;font-size:16px;}
+  .form-group input, .form-group select, .form-group textarea{
+    width:100%;padding:14px 12px 14px 38px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;transition:all 0.3s ease;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+    outline:none;background-color:#333;box-shadow:0 0 8px #0b5ed7;
+  }
+  .form-group textarea{min-height:80px;resize:vertical;}
+  .form-group label{
+    position:absolute;top:50%;left:38px;transform:translateY(-50%);
+    pointer-events:none;color:#aaa;transition:0.3s;font-size:14px;background:#1e1e1e;padding:0 5px;
+  }
+  .form-group input:focus + label, .form-group input:not(:placeholder-shown) + label,
+  .form-group select:focus + label, .form-group select:not([value=""]) + label,
+  .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
+    top:-10px; left:10px; font-size:12px; color:#0b5ed7;
+  }
+  label.agreement{display:flex;align-items:flex-start;margin-bottom:20px;font-size:14px;}
+  label.agreement input{margin-right:12px;margin-top:3px;}
+  button{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
+  button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
+  .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
+  @media(max-width:600px){.container{padding:30px 20px;}h2{font-size:24px;}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <h1>Reserva de cambio de aceite a domicilio</h1>
-      <p class="lead">Rellena tus datos. La cita debe hacerse con <strong>mínimo 24 horas</strong> de antelación.</p>
-
-      <form id="reservaForm">
-        <label>Nombre completo</label>
-        <input name="nombre" required />
-
-        <div class="row">
-          <div class="col">
-            <label>Teléfono</label>
-            <input name="telefono" required placeholder="ej. +1 809 555 1234" />
-          </div>
-          <div class="col">
-            <label>Correo</label>
-            <input name="correo" type="email" required placeholder="cliente@correo.com" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <label>Marca</label>
-            <input name="marca" required />
-          </div>
-          <div class="col">
-            <label>Modelo</label>
-            <input name="modelo" required />
-          </div>
-          <div class="col">
-            <label>Año</label>
-            <input name="ano" type="number" min="1900" max="2100" required />
-          </div>
-        </div>
-
-        <label>Tipo de Aceite (si lo sabe)</label>
-        <select name="tipoAceite">
-          <option value="">No lo sé / Otro</option>
-          <option value="Convencional">Convencional</option>
-          <option value="Semi-Sintético">Semi-Sintético</option>
-          <option value="Sintético">Sintético</option>
-        </select>
-
-        <label>Dirección donde se realizará el servicio</label>
-        <textarea name="direccion" rows="2" required></textarea>
-
-        <div class="row">
-          <div class="col">
-            <label>Fecha</label>
-            <input id="fecha" name="fecha" type="date" required />
-          </div>
-          <div class="col">
-            <label>Hora</label>
-            <input id="hora" name="hora" type="time" required />
-          </div>
-        </div>
-
-        <label>Comentarios</label>
-        <textarea name="comentarios" rows="2"></textarea>
-
-        <div style="margin-top:14px" class="note">
-          <div style="background:#fafafa;border:1px solid #eef2ff;padding:12px;border-radius:8px">
-            <strong>Acuerdo:</strong> La reserva debe realizarse con <strong>mínimo 24 horas</strong> de antelación. El mecánico realizará únicamente el cambio de aceite y filtro y no será responsable por daños no relacionados directamente con este servicio. Cualquier recomendación adicional no se aplicará hasta contar con la aprobación previa del cliente.
-          </div>
-          <label style="margin-top:8px"><input id="acepto" type="checkbox" required />&nbsp; Acepto los términos</label>
-        </div>
-
-        <button id="submitBtn" type="submit">Reservar</button>
-        <div id="msg" class="success" style="display:none"></div>
-      </form>
-    </div>
+<div class="container">
+  <div class="idiomas">
+    <img src="https://flagcdn.com/16x12/es.png" alt="Español" onclick="setLang('es')">
+    <img src="https://flagcdn.com/16x12/gb.png" alt="English" onclick="setLang('en')">
+    <img src="https://flagcdn.com/16x12/pt.png" alt="Português" onclick="setLang('pt')">
   </div>
+  <h2 id="titulo">Reserva de Servicio a Domicilio</h2>
+  <form id="formCita">
+    <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
+    <div class="form-group"><i class="fas fa-phone"></i><input type="tel" name="Telefono" placeholder=" " required><label id="lblTelefono">Teléfono</label></div>
+    <div class="form-group"><i class="fas fa-envelope"></i><input type="email" name="Correo" placeholder=" "><label id="lblCorreo">Correo electrónico</label></div>
+    <div class="form-group"><i class="fas fa-car"></i><input type="text" name="Marca" placeholder=" "><label id="lblMarca">Marca del vehículo</label></div>
+    <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
+    <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
+    <div class="form-group"><i class="fas fa-oil-can"></i>
+      <select name="Tipo de Aceite">
+        <option value="0w20">0w20</option>
+        <option value="0w30">0w30</option>
+        <option value="5w20">5w20</option>
+        <option value="5w30">5w30</option>
+      </select>
+      <label id="lblAceite">Tipo de Aceite</label>
+    </div>
+    <div class="form-group"><i class="fas fa-map-marker-alt"></i><input type="text" name="Direccion" placeholder=" "><label id="lblDireccion">Dirección del servicio</label></div>
+    <div class="form-group"><i class="fas fa-calendar-day"></i><input type="date" name="Fecha" placeholder=" " required><label id="lblFecha">Fecha</label></div>
+    <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
+    <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
+    
+    <label class="agreement"><input type="checkbox" name="agreement" required><span id="acuerdoTexto">Acepto que la cita se agenda con al menos 24 horas de anticipación y no me hago responsable por daños antes, durante o después del cambio de aceite.</span></label>
+    <input type="hidden" name="Estado" value="Pendiente">
+    <button type="submit" id="btnEnviar">Enviar Reserva</button>
+  </form>
+  <div class="mensaje" id="mensaje"></div>
+</div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwOxYQ7_6U5EPlQjBcl0NYFApqfJcaTugm2JBnvQIbq85bdWQdal4zgu2ZwBGQROafjOA/exec";
+const scriptURL="https://script.google.com/macros/s/AKfycbzLoRurRZSfjgSU5O3n4qbTDUv_7EfzUG_Vm1w7pei7CtQyN-WNz_L1nu1HHJ0GTAyB/exec"; // Reemplaza con tu URL
+const translations={
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", Nombre:"Nombre completo", Telefono:"Teléfono", Correo:"Correo electrónico", Marca:"Marca del vehículo", Modelo:"Modelo del vehículo", Ano:"Año del vehículo", "Tipo de Aceite":"Tipo de Aceite", Direccion:"Dirección del servicio", Fecha:"Fecha", Hora:"Hora", Comentarios:"Comentarios adicionales", acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación y no me hago responsable por daños antes, durante o después del cambio de aceite."},
+  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", Nombre:"Full Name", Telefono:"Phone", Correo:"Email", Marca:"Vehicle Brand", Modelo:"Vehicle Model", Ano:"Vehicle Year", "Tipo de Aceite":"Oil Type", Direccion:"Service Address", Fecha:"Date", Hora:"Time", Comentarios:"Additional Comments", acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance and I am not responsible for damages before, during, or after the oil change."},
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", Nombre:"Nome Completo", Telefono:"Telefone", Correo:"E-mail", Marca:"Marca do Veículo", Modelo:"Modelo do Veículo", Ano:"Ano do Veículo", "Tipo de Aceite":"Tipo de Óleo", Direccion:"Endereço do Serviço", Fecha:"Data", Hora:"Hora", Comentarios:"Comentários Adicionais", acuerdo:"Concordo que a reserva deve ser feita com pelo menos 24 horas de antecedência e não me responsabilizo por danos antes, durante ou após a troca de óleo."}
+};
 
-function showMsg(text, ok=true){
-  const el = document.getElementById('msg');
-  el.style.display = 'block';
-  el.textContent = text;
-  el.className = ok ? 'success ok' : 'success err';
+let lang=navigator.language.slice(0,2);
+if(!translations[lang]) lang='es';
+applyLang(lang);
+
+function setLang(l){lang=l;applyLang(lang);}
+function applyLang(lang){
+  const t=translations[lang];
+  document.getElementById('titulo').innerText=t.titulo;
+  document.getElementById('btnEnviar').innerText=t.enviar;
+  document.getElementById('acuerdoTexto').innerText=t.acuerdo;
+  document.getElementById('lblNombre').innerText=t.Nombre;
+  document.getElementById('lblTelefono').innerText=t.Telefono;
+  document.getElementById('lblCorreo').innerText=t.Correo;
+  document.getElementById('lblMarca').innerText=t.Marca;
+  document.getElementById('lblModelo').innerText=t.Modelo;
+  document.getElementById('lblAno').innerText=t.Ano;
+  document.getElementById('lblAceite').innerText=t["Tipo de Aceite"];
+  document.getElementById('lblDireccion').innerText=t.Direccion;
+  document.getElementById('lblFecha').innerText=t.Fecha;
+  document.getElementById('lblHora').innerText=t.Hora;
+  document.getElementById('lblComentarios').innerText=t.Comentarios;
 }
 
-async function fetchReservations(){
+document.getElementById('formCita').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const form=e.target;
+  const data=Object.fromEntries(new FormData(form).entries());
+  const now=new Date();
+  const selected=new Date(data.Fecha+"T"+data.Hora);
+  if(selected-now<24*60*60*1000){document.getElementById('mensaje').innerText=translations[lang].error24; return;}
+  document.getElementById('mensaje').innerText="⏳ Enviando...";
   try{
-    const res = await fetch(SCRIPT_URL + '?action=list');
-    if(!res.ok) return [];
-    const data = await res.json();
-    return data;
-  }catch(e){
-    console.warn('No se pudo obtener reservas', e);
-    return [];
-  }
-}
-
-document.addEventListener('DOMContentLoaded', async ()=>{
-  const reserved = await fetchReservations();
-  const busy = new Set(reserved.map(r => `${r.Fecha}|${r.Hora}`));
-
-  const form = document.getElementById('reservaForm');
-  const submitBtn = document.getElementById('submitBtn');
-
-  form.addEventListener('submit', async (ev)=>{
-    ev.preventDefault();
-    showMsg('', true);
-    const fd = new FormData(form);
-    const obj = Object.fromEntries(fd.entries());
-
-    const fecha = obj.fecha;
-    const hora = obj.hora;
-    const dt = new Date(fecha + 'T' + hora + ':00');
-    const now = new Date();
-    const diffH = (dt - now) / (1000*60*60);
-    if(diffH < 24){
-      showMsg('Debes reservar con al menos 24 horas de anticipación.', false);
-      return;
-    }
-
-    if(busy.has(`${fecha}|${hora}`)){
-      showMsg('Ese horario ya está ocupado. Por favor elige otra hora.', false);
-      return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...';
-
-    try{
-      const res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(obj)
-      });
-      const json = await res.json();
-      if(json.result === 'success'){
-        showMsg('✅ Reserva registrada correctamente.', true);
-        form.reset();
-      } else {
-        showMsg('⛔ ' + (json.message || 'Error al registrar'), false);
-      }
-    }catch(e){
-      showMsg('❌ Error al enviar la reserva.', false);
-      console.error(e);
-    }finally{
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Reservar';
-    }
-  });
+    const res=await fetch(scriptURL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    const respuesta=await res.json();
+    document.getElementById('mensaje').innerText=respuesta.success?translations[lang].exito:respuesta.error;
+    if(respuesta.success) form.reset();
+  }catch(err){document.getElementById('mensaje').innerText="⚠️ Error de conexión";}
 });
 </script>
 </body>
