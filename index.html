@@ -54,14 +54,18 @@
     <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
     <div class="form-group"><i class="fas fa-oil-can"></i>
-      <select name="TipoAceite" required>
-        <option value="0W20">0W20</option>
-        <option value="0W30">0W30</option>
-        <option value="5W20">5W20</option>
-        <option value="5W30">5W30</option>
-      </select>
-      <label id="lblAceite">Tipo de Aceite</label>
-    </div>
+      <div class="form-group"><i class="fas fa-oil-can"></i>
+  <select name="TipoAceite" required>
+    <option value="">Selecciona</option>
+    <option value="0W20">0W20</option>
+    <option value="0W30">0W30</option>
+    <option value="5W20">5W20</option>
+    <option value="5W30">5W30</option>
+  </select>
+  <label id="lblAceite">Tipo de Aceite</label>
+</div>
+<div class="form-group"><i class="fas fa-map-marker-alt"></i><input type="text" name="Direccion" placeholder=" " required><label id="lblDireccion">Dirección del servicio</label></div>
+
     <div class="form-group"><i class="fas fa-map-marker-alt"></i><input type="text" name="Direccion" placeholder=" "><label id="lblDireccion">Dirección del servicio</label></div>
     <div class="form-group"><i class="fas fa-calendar-day"></i><input type="date" name="Fecha" placeholder=" " required><label id="lblFecha">Fecha</label></div>
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
@@ -75,7 +79,7 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://https://script.google.com/macros/s/AKfycbxOMP6j3D4ECujVd7pipCGUeMhR_M70A5vpwm3XcoBKeDCoT5q_g_RYSm_cBOmVqPgtaA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcanO2Sc7tBT0cNXNCLPq-HpCkOLUlYnau7SUd0LobZl8CSMFSuqmurBqI7Xinjt3f2w/exec";
 
 /* === Traducciones (sin cambios) === */
 const translations = { /* ...igual que antes... */ };
