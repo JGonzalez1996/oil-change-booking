@@ -50,12 +50,11 @@
   <form id="formCita">
     <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
     <div class="form-group"><i class="fas fa-phone"></i><input type="tel" name="Telefono" placeholder=" " required><label id="lblTelefono">Teléfono</label></div>
-    <div class="form-group"><i class="fas fa-envelope"></i><input type="email" name="Correo" placeholder=" "><label id="lblCorreo">Correo electrónico</label></div>
     <div class="form-group"><i class="fas fa-car"></i><input type="text" name="Marca" placeholder=" "><label id="lblMarca">Marca del vehículo</label></div>
     <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
     <div class="form-group"><i class="fas fa-oil-can"></i>
-      <select name="Tipo de Aceite">
+      <select name="TipoAceite">
         <option value="0w20">0w20</option>
         <option value="0w30">0w30</option>
         <option value="5w20">5w20</option>
@@ -68,7 +67,7 @@
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
     <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
     
-    <label class="agreement"><input type="checkbox" name="agreement" required><span id="acuerdoTexto">Acepto que la cita se agenda con al menos 24 horas de anticipación y no me hago responsable por daños antes, durante o después del cambio de aceite.</span></label>
+    <label class="agreement"><input type="checkbox" name="agreement" required><span id="acuerdoTexto">Acepto que la cita se agenda con al menos 24 horas de anticipación.</span></label>
     <input type="hidden" name="Estado" value="Pendiente">
     <button type="submit" id="btnEnviar">Enviar Reserva</button>
   </form>
@@ -76,11 +75,12 @@
 </div>
 
 <script>
-const scriptURL="https://script.google.com/macros/s/AKfycbzLoRurRZSfjgSU5O3n4qbTDUv_7EfzUG_Vm1w7pei7CtQyN-WNz_L1nu1HHJ0GTAyB/exec"; // Reemplaza con tu URL
+const scriptURL="https://script.google.com/macros/s/AKfycbwcyoLo3vTDna0rWGFw2TohgFtI9kG_A-8FxyJC9Nj_U8okpg0RdwknRyu587WZ7Cs/exec";
+
 const translations={
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", Nombre:"Nombre completo", Telefono:"Teléfono", Correo:"Correo electrónico", Marca:"Marca del vehículo", Modelo:"Modelo del vehículo", Ano:"Año del vehículo", "Tipo de Aceite":"Tipo de Aceite", Direccion:"Dirección del servicio", Fecha:"Fecha", Hora:"Hora", Comentarios:"Comentarios adicionales", acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación y no me hago responsable por daños antes, durante o después del cambio de aceite."},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", Nombre:"Full Name", Telefono:"Phone", Correo:"Email", Marca:"Vehicle Brand", Modelo:"Vehicle Model", Ano:"Vehicle Year", "Tipo de Aceite":"Oil Type", Direccion:"Service Address", Fecha:"Date", Hora:"Time", Comentarios:"Additional Comments", acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance and I am not responsible for damages before, during, or after the oil change."},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", Nombre:"Nome Completo", Telefono:"Telefone", Correo:"E-mail", Marca:"Marca do Veículo", Modelo:"Modelo do Veículo", Ano:"Ano do Veículo", "Tipo de Aceite":"Tipo de Óleo", Direccion:"Endereço do Serviço", Fecha:"Data", Hora:"Hora", Comentarios:"Comentários Adicionais", acuerdo:"Concordo que a reserva deve ser feita com pelo menos 24 horas de antecedência e não me responsabilizo por danos antes, durante ou após a troca de óleo."}
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", Nombre:"Nombre completo", Telefono:"Teléfono", Marca:"Marca del vehículo", Modelo:"Modelo del vehículo", Ano:"Año del vehículo", TipoAceite:"Tipo de Aceite", Direccion:"Dirección del servicio", Fecha:"Fecha", Hora:"Hora", Comentarios:"Comentarios adicionales", acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación."},
+  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", Nombre:"Full Name", Telefono:"Phone", Marca:"Vehicle Brand", Modelo:"Vehicle Model", Ano:"Vehicle Year", TipoAceite:"Oil Type", Direccion:"Service Address", Fecha:"Date", Hora:"Time", Comentarios:"Additional Comments", acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance."},
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", Nombre:"Nome Completo", Telefono:"Telefone", Marca:"Marca do Veículo", Modelo:"Modelo do Veículo", Ano:"Ano do Veículo", TipoAceite:"Tipo de Óleo", Direccion:"Endereço do Serviço", Fecha:"Data", Hora:"Hora", Comentarios:"Comentários Adicionais", acuerdo:"Concordo que a reserva deve ser feita com pelo menos 24 horas de antecedência."}
 };
 
 let lang=navigator.language.slice(0,2);
@@ -95,11 +95,10 @@ function applyLang(lang){
   document.getElementById('acuerdoTexto').innerText=t.acuerdo;
   document.getElementById('lblNombre').innerText=t.Nombre;
   document.getElementById('lblTelefono').innerText=t.Telefono;
-  document.getElementById('lblCorreo').innerText=t.Correo;
   document.getElementById('lblMarca').innerText=t.Marca;
   document.getElementById('lblModelo').innerText=t.Modelo;
   document.getElementById('lblAno').innerText=t.Ano;
-  document.getElementById('lblAceite').innerText=t["Tipo de Aceite"];
+  document.getElementById('lblAceite').innerText=t.TipoAceite;
   document.getElementById('lblDireccion').innerText=t.Direccion;
   document.getElementById('lblFecha').innerText=t.Fecha;
   document.getElementById('lblHora').innerText=t.Hora;
@@ -117,8 +116,8 @@ document.getElementById('formCita').addEventListener('submit', async function(e)
   try{
     const res=await fetch(scriptURL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
     const respuesta=await res.json();
-    document.getElementById('mensaje').innerText=respuesta.success?translations[lang].exito:respuesta.error;
-    if(respuesta.success) form.reset();
+    document.getElementById('mensaje').innerText=respuesta.estado==="ok"?translations[lang].exito:"⚠️ Error al registrar la cita";
+    if(respuesta.estado==="ok") form.reset();
   }catch(err){document.getElementById('mensaje').innerText="⚠️ Error de conexión";}
 });
 </script>
