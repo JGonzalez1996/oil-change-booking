@@ -1,209 +1,143 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reserva Cambio de Aceite</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-  body{background-color:#121212;color:#e0e0e0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 10px;}
-  .container{background:#1e1e1e;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.7);padding:40px 30px;max-width:600px;width:100%;}
-  h2{text-align:center;margin-bottom:30px;font-size:28px;color:#ffffff;}
-  .idiomas{text-align:right;margin-bottom:25px;}
-  .idiomas img{width:30px;height:20px;cursor:pointer;margin-left:8px;border-radius:3px;border:1px solid #333;transition:transform 0.2s;}
-  .idiomas img:hover{transform:scale(1.2);}
-  .form-group{position:relative;margin-bottom:25px;}
-  .form-group i{position:absolute;top:50%;left:12px;transform:translateY(-50%);color:#888;font-size:16px;}
-  .form-group input, .form-group select, .form-group textarea{
-    width:100%;padding:14px 12px 14px 38px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;transition:all 0.3s ease;
-  }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
-    outline:none;background-color:#333;box-shadow:0 0 8px #0b5ed7;
-  }
-  .form-group textarea{min-height:80px;resize:vertical;}
-  .form-group label{
-    position:absolute;top:50%;left:38px;transform:translateY(-50%);
-    pointer-events:none;color:#aaa;transition:0.3s;font-size:14px;background:#1e1e1e;padding:0 5px;
-  }
-  .form-group input:focus + label, .form-group input:not(:placeholder-shown) + label,
-  .form-group select:focus + label, .form-group select:not([value=""]) + label,
-  .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
-    top:-10px; left:10px; font-size:12px; color:#0b5ed7;
-  }
-
-  .agreement-container{margin-bottom:20px;text-align:left;}
-  .agreement-container label{font-size:14px;cursor:pointer;display:flex;align-items:center;}
-  .agreement-container input{margin-right:10px;vertical-align:middle;}
-  .agreement-container a{color:#0b5ed7;text-decoration:underline;font-size:13px;margin-top:5px;display:inline-block;}
-
-  .firma-container{margin-bottom:20px;}
-  .firma-container input{width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;}
-
-  button{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
-  button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
-  .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
-  #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:20px;border-radius:10px;color:#fff;}
-  #recibo h3{text-align:center;margin-bottom:20px;}
-  @media(max-width:600px){.container{padding:30px 20px;}h2{font-size:24px;}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reserva - Cambio de Aceite</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f5f5f5; }
+    .container { max-width: 650px; margin: 30px auto; background: white; border-radius: 10px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; color: #0b5ed7; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; margin-top: 5px; }
+    button { background-color: #0b5ed7; color: white; padding: 12px 18px; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; width: 100%; font-size: 16px; }
+    button:hover { background-color: #094bb7; }
+    .check-section { margin-top: 20px; background: #f9f9f9; padding: 10px 15px; border-radius: 8px; border: 1px solid #ddd; }
+    .check-section a { color: #0b5ed7; font-weight: 600; text-decoration: none; }
+    .check-section a:hover { text-decoration: underline; }
+    .firma { margin-top: 20px; }
+  </style>
 </head>
 <body>
+
 <div class="container">
-  <div class="idiomas">
-    <img src="https://flagcdn.com/16x12/es.png" alt="Español" onclick="setLang('es')">
-    <img src="https://flagcdn.com/16x12/gb.png" alt="English" onclick="setLang('en')">
-    <img src="https://flagcdn.com/16x12/pt.png" alt="Português" onclick="setLang('pt')">
-  </div>
-  <h2 id="titulo">Reserva de Servicio a Domicilio</h2>
-  <form id="formCita">
-    <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
-    <div class="form-group"><i class="fas fa-phone"></i><input type="tel" name="Telefono" placeholder=" " required><label id="lblTelefono">Teléfono</label></div>
-    <div class="form-group"><i class="fas fa-envelope"></i><input type="email" name="Correo" placeholder=" " required><label id="lblCorreo">Correo electrónico</label></div>
-    <div class="form-group"><i class="fas fa-car"></i><input type="text" name="Marca" placeholder=" "><label id="lblMarca">Marca del vehículo</label></div>
-    <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
-    <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
-    <div class="form-group"><i class="fas fa-oil-can"></i>
-      <select name="TipoAceite">
-        <option value="">Selecciona tipo de aceite</option>
-        <option value="0W20">0W20</option>
-        <option value="0W30">0W30</option>
-        <option value="5W20">5W20</option>
-        <option value="5W30">5W30</option>
-      </select>
-      <label id="lblAceite">Tipo de Aceite</label>
-    </div>
-    <div class="form-group"><i class="fas fa-map-marker-alt"></i><input type="text" name="Direccion" placeholder=" " required><label id="lblDireccion">Dirección del servicio</label></div>
-    <div class="form-group"><i class="fas fa-calendar-day"></i><input type="date" name="Fecha" placeholder=" " required><label id="lblFecha">Fecha</label></div>
-    <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
-    <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
+  <h2>Reserva de Cambio de Aceite</h2>
 
-    <div class="agreement-container">
-      <label>
-        <input type="checkbox" name="agreement" id="chkAgreement" disabled required>
-        <span id="acuerdoTexto">Debes firmar el acuerdo antes de enviar la cita.</span>
+  <form id="formReserva">
+    <label>Nombre</label>
+    <input type="text" name="Nombre" required>
+
+    <label>Teléfono</label>
+    <input type="tel" name="Telefono" required>
+
+    <label>Correo</label>
+    <input type="email" name="Correo" required>
+
+    <label>Marca</label>
+    <input type="text" name="Marca">
+
+    <label>Modelo</label>
+    <input type="text" name="Modelo">
+
+    <label>Año</label>
+    <input type="text" name="Ano">
+
+    <label>Tipo de Aceite</label>
+    <select name="TipoAceite" required>
+      <option value="">Seleccionar...</option>
+      <option>0W20</option>
+      <option>5W20</option>
+      <option>0W30</option>
+      <option>5W30</option>
+    </select>
+
+    <label>Dirección</label>
+    <textarea name="Direccion" rows="2" required></textarea>
+
+    <label>Fecha</label>
+    <input type="date" name="Fecha" required>
+
+    <label>Hora</label>
+    <input type="time" name="Hora" required>
+
+    <label>Comentarios</label>
+    <textarea name="Comentarios" rows="3"></textarea>
+
+    <!-- Firma digital -->
+    <div class="firma">
+      <label>Escriba su nombre como firma digital ✍️</label>
+      <input type="text" name="Firma" id="firmaInput" required>
+    </div>
+
+    <!-- Acuerdo -->
+    <div class="check-section">
+      <input type="checkbox" id="checkAcuerdo" disabled required>
+      <label for="checkAcuerdo">
+        He leído y acepto los <a href="acuerdo.html" target="_blank" id="btnVerAcuerdo">Términos del Servicio</a>.
       </label>
-      <a href="acuerdo.html" target="_blank">Leer acuerdo completo</a>
     </div>
 
-    <div class="firma-container">
-      <input type="text" name="Firma" placeholder="Escribe tu nombre como firma digital" required>
-    </div>
-
-    <input type="hidden" name="Estado" value="Pendiente">
-    <button type="submit" id="btnEnviar">Enviar Reserva</button>
+    <button type="submit">Enviar Reserva</button>
   </form>
-  <div class="mensaje" id="mensaje"></div>
-
-  <div id="recibo">
-    <h3 id="reciboTitulo">✅ Recibo de Reserva</h3>
-    <p><b>Nombre:</b> <span id="reciboNombre"></span></p>
-    <p><b>Teléfono:</b> <span id="reciboTelefono"></span></p>
-    <p><b>Correo:</b> <span id="reciboCorreo"></span></p>
-    <p><b>Marca:</b> <span id="reciboMarca"></span></p>
-    <p><b>Modelo:</b> <span id="reciboModelo"></span></p>
-    <p><b>Año:</b> <span id="reciboAno"></span></p>
-    <p><b>Tipo de Aceite:</b> <span id="reciboAceite"></span></p>
-    <p><b>Dirección:</b> <span id="reciboDireccion"></span></p>
-    <p><b>Fecha del Servicio:</b> <span id="reciboFecha"></span></p>
-    <p><b>Hora del Servicio:</b> <span id="reciboHora"></span></p>
-    <p><b>Comentarios:</b> <span id="reciboComentarios"></span></p>
-    <p><b>Firma:</b> <span id="reciboFirma"></span></p>
-  </div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrbDLiaM2aV1CLDqEuOkrL54Xb0VqJeq_mWZoA8Wthr0UYU0k7zOnbunG1ZVoeKTRnow/exec"; 
+document.addEventListener("DOMContentLoaded", () => {
+  const check = document.getElementById("checkAcuerdo");
+  const btnVerAcuerdo = document.getElementById("btnVerAcuerdo");
 
-const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes firmar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva"},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must sign the agreement before submitting the booking.", recibo:"✅ Booking Receipt"},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva"}
-};
-
-let lang = navigator.language.slice(0,2);
-if(!translations[lang]) lang='es';
-applyLang(lang);
-
-function setLang(l){lang=l;applyLang(lang);}
-function applyLang(lang){
-  const t=translations[lang];
-  document.getElementById('titulo').innerText=t.titulo;
-  document.getElementById('btnEnviar').innerText=t.enviar;
-  document.getElementById('acuerdoTexto').innerText=t.acuerdo;
-  document.getElementById('reciboTitulo').innerText=t.recibo;
-}
-
-// Habilitar checkbox si acuerdo fue firmado
-window.addEventListener('load', ()=>{
-  const chk = document.getElementById('chkAgreement');
-  if(localStorage.getItem('acuerdoFirmado')==='true'){
-    chk.disabled = false;
-    chk.checked = true;
-  }
-});
-
-document.getElementById('formCita').addEventListener('submit', function(e){
-  e.preventDefault();
-  const form = e.target;
-  const msg = document.getElementById('mensaje');
-  msg.textContent = "⏳ Enviando...";
-
-  const agreement = document.getElementById('chkAgreement');
-  if(!agreement.checked){
-    msg.textContent = translations[lang].acuerdo;
-    return;
+  // Verifica si ya se firmó el acuerdo (desde localStorage)
+  if (localStorage.getItem("acuerdoFirmado") === "true") {
+    check.disabled = false;
   }
 
-  const data = Object.fromEntries(new FormData(form).entries());
-  const now = new Date();
-  const selected = new Date(data.Fecha + "T" + data.Hora);
-  if (!data.Fecha || !data.Hora || selected - now < 24*60*60*1000) {
-    msg.textContent = translations[lang].error24;
-    return;
-  }
+  // Al hacer clic en el enlace de acuerdo
+  btnVerAcuerdo.addEventListener("click", () => {
+    localStorage.removeItem("acuerdoFirmado"); // limpia estado previo
+    setTimeout(() => {
+      alert("📝 Lea y acepte el acuerdo en la nueva ventana. Luego vuelva aquí para continuar.");
+    }, 200);
+  });
 
-  const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
-  window[cbName] = function(response){
-    try{
-      if(response && response.success){
-        msg.textContent = translations[lang].exito;
-        form.reset();
-        document.getElementById('reciboNombre').innerText = data.Nombre;
-        document.getElementById('reciboTelefono').innerText = data.Telefono;
-        document.getElementById('reciboCorreo').innerText = data.Correo;
-        document.getElementById('reciboMarca').innerText = data.Marca;
-        document.getElementById('reciboModelo').innerText = data.Modelo;
-        document.getElementById('reciboAno').innerText = data.Año;
-        document.getElementById('reciboAceite').innerText = data.TipoAceite;
-        document.getElementById('reciboDireccion').innerText = data.Direccion;
-        document.getElementById('reciboFecha').innerText = data.Fecha;
-        document.getElementById('reciboHora').innerText = data.Hora;
-        document.getElementById('reciboComentarios').innerText = data.Comentarios;
-        document.getElementById('reciboFirma').innerText = data.Firma;
-        document.getElementById('recibo').style.display = "block";
-      } else {
-        msg.textContent = "⚠️ "+(response.error || "Error al registrar la cita");
-      }
-    } finally {
-      const s = document.getElementById(cbName+"_script");
-      if(s && s.parentNode) s.parentNode.removeChild(s);
-      delete window[cbName];
+  // Impide marcar el checkbox sin haber aceptado el acuerdo
+  check.addEventListener("click", (e) => {
+    if (check.disabled) {
+      e.preventDefault();
+      alert("Debe leer y aceptar el acuerdo antes de marcar esta casilla.");
+      return false;
     }
-  };
+  });
 
-  const qs = new URLSearchParams(data);
-  qs.append("callback", cbName);
-  const script = document.createElement('script');
-  script.src = SCRIPT_URL+"?"+qs.toString();
-  script.id = cbName+"_script";
-  script.onerror = function(){
-    msg.textContent = "⚠️ Error de conexión al servidor";
-    if(script.parentNode) script.parentNode.removeChild(script);
-    delete window[cbName];
-  };
-  document.body.appendChild(script);
+  // Cuando vuelve al index, si ya aceptó, habilita el check
+  window.addEventListener("focus", () => {
+    if (localStorage.getItem("acuerdoFirmado") === "true") {
+      check.disabled = false;
+    }
+  });
+
+  // Enviar formulario
+  document.getElementById("formReserva").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (check.disabled || !check.checked) {
+      alert("Debe aceptar los términos del servicio antes de continuar.");
+      return;
+    }
+
+    const form = e.target;
+    const data = new URLSearchParams(new FormData(form)).toString();
+    const url = "https://script.google.com/macros/s/AKfycbxcI6GNX0ah3aphHVToNsTTBfRki7awGc87nu0-Pklz34WGZ4A_mnYOy2ktvVSUb7Cpdw/exec" + "?" + data;
+
+    const res = await fetch(url);
+    const json = await res.text();
+    alert("✅ Reserva enviada correctamente");
+    form.reset();
+    localStorage.removeItem("acuerdoFirmado");
+    check.disabled = true;
+    check.checked = false;
+  });
 });
 </script>
+
 </body>
 </html>
