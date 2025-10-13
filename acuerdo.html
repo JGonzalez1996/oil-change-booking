@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acuerdo de Servicio Cambio de Aceite</title>
+<style>
+  body{font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;background:#f5f5f5;margin:0;padding:0;}
+  .container{max-width:700px;margin:40px auto;background:#fff;padding:30px;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.2);}
+  h2{text-align:center;color:#0b5ed7;margin-bottom:20px;}
+  p{line-height:1.6;margin-bottom:15px;color:#333;}
+  label{display:block;margin-top:15px;margin-bottom:5px;font-weight:bold;color:#0b5ed7;}
+  input[type=text], input[type=email], input[type=tel]{width:100%;padding:12px;border-radius:6px;border:1px solid #ccc;margin-bottom:10px;}
+  canvas{border:1px solid #ccc;border-radius:6px;width:100%;height:200px;margin-top:10px;}
+  button{margin-top:20px;width:100%;padding:15px;background:#0b5ed7;color:white;font-size:16px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;}
+  button:hover{background:#084298;}
+  .mensaje{text-align:center;margin-top:15px;font-weight:bold;color:green;}
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Acuerdo de Servicio - Cambio de Aceite</h2>
+
+  <p>Al firmar este acuerdo, usted acepta que el servicio de cambio de aceite se realizará bajo las condiciones establecidas, incluyendo la responsabilidad limitada del proveedor frente a daños indirectos, y entiende que la cita debe agendarse con al menos 24 horas de anticipación.</p>
+
+  <label>Nombre completo</label>
+  <input type="text" id="nombre" placeholder="Tu nombre" required>
+
+  <label>Correo electrónico</label>
+  <input type="email" id="correo" placeholder="Tu correo" required>
+
+  <label>Teléfono</label>
+  <input type="tel" id="telefono" placeholder="Tu teléfono" required>
+
+  <label>Firma (toca o arrastra para firmar)</label>
+  <canvas id="canvas"></canvas>
+  <button type="button" id="clearBtn">Borrar Firma</button>
+
+  <button type="button" id="submitBtn">Aceptar y Enviar Acuerdo</button>
+  <div class="mensaje" id="mensaje"></div>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+let lastX = 0;
+let lastY = 0;
+
+function resizeCanvas(){
+  canvas.width = canvas.offsetWidth;
+  canvas.height = 200;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function startDrawing(e){
+  drawing = true;
+  [lastX, lastY] = [e.offsetX, e.offsetY];
+}
+function stopDrawing(){drawing=false;}
+function draw(e){
+  if(!drawing) return;
+  ctx.strokeStyle = '#0b5ed7';
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(lastX,lastY);
+  ctx.lineTo(e.offsetX,e.offsetY);
+  ctx.stroke();
+  [lastX,lastY] = [e.offsetX,e.offsetY];
+}
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+
+document.getElementById('clearBtn').addEventListener('click', ()=>{
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+});
+
+document.getElementById('submitBtn').addEventListener('click', ()=>{
+  const nombre = document.getElementById('nombre').value.trim();
+  const correo = document.getElementById('correo').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+  if(!nombre || !correo || !telefono){
+    alert('Por favor completa todos los campos.');
+    return;
+  }
+  const firmaData = canvas.toDataURL();
+  if(firmaData === canvas.toDataURL('image/png',1).replace(/^data:image\/png;base64,/,'')){
+    alert('Por favor realiza tu firma.');
+    return;
+  }
+
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwk_8XOLF2v10uLwHUB1woeIoLvMSg0UxA-gGzIwJHyJJD8x7kA4mDiW3osFhrjyiup/exec"; // Reemplaza con tu Apps Script
+  const data = {Nombre:nombre,Correo:correo,Telefono:telefono,Firma:firmaData,Timestamp: new Date().toISOString()};
+
+  const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+  window[cbName] = function(resp){
+    try{
+      if(resp && resp.success){
+        document.getElementById('mensaje').innerText = '✅ Acuerdo enviado correctamente';
+      }else{
+        document.getElementById('mensaje').innerText = '⚠️ Error al enviar el acuerdo';
+      }
+    }finally{
+      delete window[cbName];
+    }
+  };
+
+  const qs = new URLSearchParams(data);
+  qs.append("callback", cbName);
+  const script = document.createElement('script');
+  script.src = SCRIPT_URL + "?" + qs.toString();
+  document.body.appendChild(script);
+});
+</script>
+</body>
+</html>
