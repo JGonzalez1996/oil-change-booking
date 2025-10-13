@@ -88,9 +88,10 @@
 
     <div class="agreement-container">
       <label>
-        <input type="checkbox" name="agreement" required>
+        <input type="checkbox" name="agreement" id="agreementCheckbox" disabled required>
         <span id="acuerdoTexto">Acepto que la cita se agenda con al menos 24 horas de anticipación.</span>
       </label>
+      <p style="font-size:13px;color:#aaa;margin-top:5px;">Debes completar el <a href="acuerdo.html" target="_blank">Acuerdo de Servicio</a> antes de marcar esta opción.</p>
     </div>
 
     <div class="firma-container">
@@ -120,33 +121,12 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznoJ3kJRBaOJE-Oro0D_4WP74NIfBaYIlyezue0p6rxBGZ9B5a5WaGYTcQ5RNiRJMtCQ/exec"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznoJ3kJRBaOJE-Oro0D_4WP74NIfBaYIlyezue0p6rxBGZ9B5a5WaGYTcQ5RNiRJMtCQ/exec";
 
 const translations = {
-  es:{
-    titulo:"Reserva de Servicio a Domicilio",
-    enviar:"Enviar Reserva",
-    exito:"✅ Tu cita ha sido registrada correctamente",
-    error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación",
-    acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación.",
-    recibo:"✅ Recibo de Reserva"
-  },
-  en:{
-    titulo:"Home Service Booking",
-    enviar:"Submit Booking",
-    exito:"✅ Your appointment has been successfully booked",
-    error24:"❌ Appointments must be scheduled at least 24 hours in advance",
-    acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance.",
-    recibo:"✅ Booking Receipt"
-  },
-  pt:{
-    titulo:"Agendamento de Serviço Domiciliar",
-    enviar:"Enviar Reserva",
-    exito:"✅ Sua reserva foi registrada com sucesso",
-    error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência",
-    acuerdo:"Concordo que a reserva deve ser feita com pelo menos 24 horas de antecedência.",
-    recibo:"✅ Recibo de Reserva"
-  }
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación.", recibo:"✅ Recibo de Reserva"},
+  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance.", recibo:"✅ Booking Receipt"},
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Concordo que a reserva deve ser feita com pelo menos 24 horas de antecedência.", recibo:"✅ Recibo de Reserva"}
 };
 
 let lang = navigator.language.slice(0,2);
@@ -161,6 +141,14 @@ function applyLang(lang){
   document.getElementById('acuerdoTexto').innerText=t.acuerdo;
   document.getElementById('reciboTitulo').innerText=t.recibo;
 }
+
+// Habilitar checkbox si el acuerdo fue firmado
+window.addEventListener('load', ()=>{
+  const cb = document.getElementById('agreementCheckbox');
+  if(localStorage.getItem('acuerdoFirmado') === 'true'){
+    cb.disabled = false;
+  }
+});
 
 document.getElementById('formCita').addEventListener('submit', function(e){
   e.preventDefault();
@@ -182,13 +170,12 @@ document.getElementById('formCita').addEventListener('submit', function(e){
       if(response && response.success){
         msg.textContent = translations[lang].exito;
         form.reset();
-        // Recibo digital
         document.getElementById('reciboNombre').innerText = data.Nombre;
         document.getElementById('reciboTelefono').innerText = data.Telefono;
         document.getElementById('reciboCorreo').innerText = data.Correo;
         document.getElementById('reciboMarca').innerText = data.Marca;
         document.getElementById('reciboModelo').innerText = data.Modelo;
-        document.getElementById('reciboAno').innerText = data.Año;
+        document.getElementById('reciboAno').innerText = data.Ano;
         document.getElementById('reciboAceite').innerText = data.TipoAceite;
         document.getElementById('reciboDireccion').innerText = data.Direccion;
         document.getElementById('reciboFecha').innerText = data.Fecha;
@@ -196,10 +183,10 @@ document.getElementById('formCita').addEventListener('submit', function(e){
         document.getElementById('reciboComentarios').innerText = data.Comentarios;
         document.getElementById('reciboFirma').innerText = data.Firma;
         document.getElementById('recibo').style.display = "block";
-      }else{
+      } else{
         msg.textContent = "⚠️ "+(response.error || "Error al registrar la cita");
       }
-    }finally{
+    } finally {
       const s = document.getElementById(cbName+"_script");
       if(s && s.parentNode) s.parentNode.removeChild(s);
       delete window[cbName];
