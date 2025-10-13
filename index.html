@@ -60,10 +60,7 @@
   <form id="formCita">
     <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
     <div class="form-group"><i class="fas fa-phone"></i><input type="tel" name="Telefono" placeholder=" " required><label id="lblTelefono">Teléfono</label></div>
-    
-    <!-- NUEVO CAMPO DE CORREO -->
     <div class="form-group"><i class="fas fa-envelope"></i><input type="email" name="Correo" placeholder=" " required><label id="lblCorreo">Correo electrónico</label></div>
-
     <div class="form-group"><i class="fas fa-car"></i><input type="text" name="Marca" placeholder=" "><label id="lblMarca">Marca del vehículo</label></div>
     <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
@@ -81,8 +78,15 @@
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
     <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
 
+    <!-- Checkbox actualizado con enlace al acuerdo completo -->
     <div class="agreement-container">
-      <label><input type="checkbox" name="agreement" required><span id="acuerdoTexto">Acepto que la cita se agenda con al menos 24 horas de anticipación.</span></label>
+      <label>
+        <input type="checkbox" name="agreement" required>
+        <span id="acuerdoTexto">
+          Acepto que la cita se agenda con al menos 24 horas de anticipación y he leído el
+          <a href="acuerdo.html" target="_blank" style="color:#0b5ed7; text-decoration:underline;">Acuerdo de Servicio completo</a>.
+        </span>
+      </label>
     </div>
 
     <input type="hidden" name="Estado" value="Pendiente">
