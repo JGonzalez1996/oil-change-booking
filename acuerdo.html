@@ -77,7 +77,7 @@ document.getElementById('submitBtn').addEventListener('click',()=>{
   const pixelData=ctx.getImageData(0,0,canvas.width,canvas.height).data;
   if(pixelData.every(v=>v===0)){alert('Por favor realiza tu firma.'); return;}
 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz61rH1HTgxZCEoxvdVRyZhQQfl9wzO86P4X4naFNaGk3xwcL6WZzOVzwM9lCeMJFfvSg/exec"; // Reemplaza con tu Apps Script del acuerdo
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBe3WMP59e3Avv5AK8Fw2ZlC1w4rRGw8NRTV9ddW_a9IUbbyBbye1JuI-U_tPq2JaUHA/exec"; // Reemplaza con tu Apps Script del acuerdo
 
   const data = {
     Timestamp: new Date().toISOString(),
