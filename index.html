@@ -64,7 +64,7 @@
     <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
     <div class="form-group"><i class="fas fa-oil-can"></i>
-      <select name="TipoAceite">
+      <select name="TipoAceite" required>
         <option value="">Selecciona tipo de aceite</option>
         <option value="0W20">0W20</option>
         <option value="0W30">0W30</option>
@@ -83,7 +83,7 @@
         <input type="checkbox" name="agreement" id="chkAgreement" disabled required>
         <span id="acuerdoTexto">Debes firmar el acuerdo antes de enviar la cita.</span>
       </label>
-      <a href="acuerdo.html" target="_blank">Leer acuerdo completo</a>
+      <a href="acuerdo.html" target="_blank" id="linkAcuerdo">Leer acuerdo completo</a>
     </div>
 
     <div class="firma-container">
@@ -91,6 +91,7 @@
     </div>
 
     <input type="hidden" name="Estado" value="Pendiente">
+    <input type="hidden" id="langField" name="Idioma">
     <button type="submit" id="btnEnviar">Enviar Reserva</button>
   </form>
   <div class="mensaje" id="mensaje"></div>
@@ -116,9 +117,9 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrbDLiaM2aV1CLDqEuOkrL54Xb0VqJeq_mWZoA8Wthr0UYU0k7zOnbunG1ZVoeKTRnow/exec"; 
 
 const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes firmar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva"},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must sign the agreement before submitting the booking.", recibo:"✅ Booking Receipt"},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva"}
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes firmar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
+  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must sign the agreement before submitting the booking.", recibo:"✅ Booking Receipt", link:"Read full agreement"},
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acordo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
 };
 
 let lang = navigator.language.slice(0,2);
@@ -132,6 +133,8 @@ function applyLang(lang){
   document.getElementById('btnEnviar').innerText=t.enviar;
   document.getElementById('acuerdoTexto').innerText=t.acuerdo;
   document.getElementById('reciboTitulo').innerText=t.recibo;
+  document.getElementById('linkAcuerdo').innerText=t.link;
+  document.getElementById('langField').value=lang;
 }
 
 // Habilitar checkbox si acuerdo fue firmado
@@ -174,7 +177,7 @@ document.getElementById('formCita').addEventListener('submit', function(e){
         document.getElementById('reciboCorreo').innerText = data.Correo;
         document.getElementById('reciboMarca').innerText = data.Marca;
         document.getElementById('reciboModelo').innerText = data.Modelo;
-        document.getElementById('reciboAno').innerText = data.Año;
+        document.getElementById('reciboAno').innerText = data.Ano;
         document.getElementById('reciboAceite').innerText = data.TipoAceite;
         document.getElementById('reciboDireccion').innerText = data.Direccion;
         document.getElementById('reciboFecha').innerText = data.Fecha;
