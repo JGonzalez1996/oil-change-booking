@@ -20,7 +20,6 @@
 <body>
 <div class="container">
   <h2>Acuerdo de Servicio - Cambio de Aceite</h2>
-
   <p>Al firmar este acuerdo, usted acepta que el servicio de cambio de aceite se realizará bajo las condiciones establecidas, incluyendo la responsabilidad limitada del proveedor frente a daños indirectos, y entiende que la cita debe agendarse con al menos 24 horas de anticipación.</p>
 
   <label>Nombre completo</label>
@@ -44,77 +43,33 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 let drawing = false;
-let lastX = 0;
-let lastY = 0;
+let lastX = 0, lastY = 0;
 
-function resizeCanvas(){
-  canvas.width = canvas.offsetWidth;
-  canvas.height = 200;
-}
+function resizeCanvas(){canvas.width = canvas.offsetWidth; canvas.height = 200;}
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-function startDrawing(e){
-  drawing = true;
-  [lastX, lastY] = [e.offsetX, e.offsetY];
-}
+function startDrawing(e){drawing=true;[lastX,lastY]=[e.offsetX,e.offsetY];}
 function stopDrawing(){drawing=false;}
-function draw(e){
-  if(!drawing) return;
-  ctx.strokeStyle = '#0b5ed7';
-  ctx.lineWidth = 2;
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
-  ctx.beginPath();
-  ctx.moveTo(lastX,lastY);
-  ctx.lineTo(e.offsetX,e.offsetY);
-  ctx.stroke();
-  [lastX,lastY] = [e.offsetX,e.offsetY];
-}
-canvas.addEventListener('mousedown', startDrawing);
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mouseup', stopDrawing);
-canvas.addEventListener('mouseout', stopDrawing);
+function draw(e){if(!drawing) return; ctx.strokeStyle='#0b5ed7'; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); [lastX,lastY]=[e.offsetX,e.offsetY];}
+canvas.addEventListener('mousedown',startDrawing);
+canvas.addEventListener('mousemove',draw);
+canvas.addEventListener('mouseup',stopDrawing);
+canvas.addEventListener('mouseout',stopDrawing);
 
-document.getElementById('clearBtn').addEventListener('click', ()=>{
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-});
+document.getElementById('clearBtn').addEventListener('click',()=>ctx.clearRect(0,0,canvas.width,canvas.height));
 
-document.getElementById('submitBtn').addEventListener('click', ()=>{
-  const nombre = document.getElementById('nombre').value.trim();
-  const correo = document.getElementById('correo').value.trim();
-  const telefono = document.getElementById('telefono').value.trim();
-  if(!nombre || !correo || !telefono){
-    alert('Por favor completa todos los campos.');
-    return;
-  }
-  const firmaData = canvas.toDataURL();
-  if(firmaData === canvas.toDataURL('image/png',1).replace(/^data:image\/png;base64,/,'')){
-    alert('Por favor realiza tu firma.');
-    return;
-  }
-
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwk_8XOLF2v10uLwHUB1woeIoLvMSg0UxA-gGzIwJHyJJD8x7kA4mDiW3osFhrjyiup/exec"; // Reemplaza con tu Apps Script
-  const data = {Nombre:nombre,Correo:correo,Telefono:telefono,Firma:firmaData,Timestamp: new Date().toISOString()};
-
-  const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
-  window[cbName] = function(resp){
-    try{
-      if(resp && resp.success){
-        document.getElementById('mensaje').innerText = '✅ Acuerdo enviado correctamente';
-      }else{
-        document.getElementById('mensaje').innerText = '⚠️ Error al enviar el acuerdo';
-      }
-    }finally{
-      delete window[cbName];
-    }
-  };
-
-  const qs = new URLSearchParams(data);
-  qs.append("callback", cbName);
-  const script = document.createElement('script');
-  script.src = SCRIPT_URL + "?" + qs.toString();
-  document.body.appendChild(script);
+document.getElementById('submitBtn').addEventListener('click',()=>{
+  const nombre=document.getElementById('nombre').value.trim();
+  const correo=document.getElementById('correo').value.trim();
+  const telefono=document.getElementById('telefono').value.trim();
+  if(!nombre||!correo||!telefono){alert('Por favor completa todos los campos.');return;}
+  const firmaData=canvas.toDataURL();
+  const pixelData=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+  if(pixelData.every(v=>v===0)){alert('Por favor realiza tu firma.'); return;}
+  // Guardamos que el acuerdo fue firmado
+  localStorage.setItem('acuerdoFirmado','true');
+  document.getElementById('mensaje').innerText='✅ Acuerdo enviado correctamente. Ahora puedes marcar el checkbox en la reserva.';
 });
 </script>
 </body>
