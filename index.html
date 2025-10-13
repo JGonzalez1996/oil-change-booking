@@ -43,9 +43,17 @@
     margin-right:10px;
     vertical-align:middle;
   }
+  .firma-container{
+    margin-bottom:20px;
+  }
+  .firma-container input{
+    width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;
+  }
   button{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
   button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
   .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
+  #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:20px;border-radius:10px;color:#fff;}
+  #recibo h3{text-align:center;margin-bottom:20px;}
   @media(max-width:600px){.container{padding:30px 20px;}h2{font-size:24px;}}
 </style>
 </head>
@@ -78,29 +86,67 @@
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
     <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
 
-    <!-- Checkbox actualizado con enlace al acuerdo completo -->
     <div class="agreement-container">
       <label>
         <input type="checkbox" name="agreement" required>
-        <span id="acuerdoTexto">
-          Acepto que la cita se agenda con al menos 24 horas de anticipación y he leído el
-          <a href="acuerdo.html" target="_blank" style="color:#0b5ed7; text-decoration:underline;">Acuerdo de Servicio completo</a>.
-        </span>
+        <span id="acuerdoTexto">Acepto que la cita se agenda con al menos 24 horas de anticipación.</span>
       </label>
+    </div>
+
+    <div class="firma-container">
+      <input type="text" name="Firma" placeholder="Escribe tu nombre como firma digital" required>
     </div>
 
     <input type="hidden" name="Estado" value="Pendiente">
     <button type="submit" id="btnEnviar">Enviar Reserva</button>
   </form>
   <div class="mensaje" id="mensaje"></div>
+
+  <div id="recibo">
+    <h3 id="reciboTitulo">✅ Recibo de Reserva</h3>
+    <p><b>Nombre:</b> <span id="reciboNombre"></span></p>
+    <p><b>Teléfono:</b> <span id="reciboTelefono"></span></p>
+    <p><b>Correo:</b> <span id="reciboCorreo"></span></p>
+    <p><b>Marca:</b> <span id="reciboMarca"></span></p>
+    <p><b>Modelo:</b> <span id="reciboModelo"></span></p>
+    <p><b>Año:</b> <span id="reciboAno"></span></p>
+    <p><b>Tipo de Aceite:</b> <span id="reciboAceite"></span></p>
+    <p><b>Dirección:</b> <span id="reciboDireccion"></span></p>
+    <p><b>Fecha del Servicio:</b> <span id="reciboFecha"></span></p>
+    <p><b>Hora del Servicio:</b> <span id="reciboHora"></span></p>
+    <p><b>Comentarios:</b> <span id="reciboComentarios"></span></p>
+    <p><b>Firma:</b> <span id="reciboFirma"></span></p>
+  </div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznoJ3kJRBaOJE-Oro0D_4WP74NIfBaYIlyezue0p6rxBGZ9B5a5WaGYTcQ5RNiRJMtCQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznoJ3kJRBaOJE-Oro0D_4WP74NIfBaYIlyezue0p6rxBGZ9B5a5WaGYTcQ5RNiRJMtCQ/exec"; 
+
 const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", Nombre:"Nombre completo", Telefono:"Teléfono", Correo:"Correo electrónico", Marca:"Marca del vehículo", Modelo:"Modelo del vehículo", Ano:"Año del vehículo", TipoAceite:"Tipo de Aceite", Direccion:"Dirección del servicio", Fecha:"Fecha", Hora:"Hora", Comentarios:"Comentarios adicionales", acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación."},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", Nombre:"Full Name", Telefono:"Phone", Correo:"Email", Marca:"Vehicle Brand", Modelo:"Vehicle Model", Ano:"Vehicle Year", TipoAceite:"Oil Type", Direccion:"Service Address", Fecha:"Date", Hora:"Time", Comentarios:"Additional Comments", acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance."},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", Nombre:"Nome Completo", Telefono:"Telefone", Correo:"E-mail", Marca:"Marca do Veículo", Modelo:"Modelo do Veículo", Ano:"Ano do Veículo", TipoAceite:"Tipo de Óleo", Direccion:"Endereço do Serviço", Fecha:"Data", Hora:"Hora", Comentarios:"Comentários Adicionais", acuerdo:"Concordo que a reserva deve ser feita com pelo menos 24 horas de antecedência."}
+  es:{
+    titulo:"Reserva de Servicio a Domicilio",
+    enviar:"Enviar Reserva",
+    exito:"✅ Tu cita ha sido registrada correctamente",
+    error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación",
+    acuerdo:"Acepto que la cita se agenda con al menos 24 horas de anticipación.",
+    recibo:"✅ Recibo de Reserva"
+  },
+  en:{
+    titulo:"Home Service Booking",
+    enviar:"Submit Booking",
+    exito:"✅ Your appointment has been successfully booked",
+    error24:"❌ Appointments must be scheduled at least 24 hours in advance",
+    acuerdo:"I agree that the appointment is scheduled at least 24 hours in advance.",
+    recibo:"✅ Booking Receipt"
+  },
+  pt:{
+    titulo:"Agendamento de Serviço Domiciliar",
+    enviar:"Enviar Reserva",
+    exito:"✅ Sua reserva foi registrada com sucesso",
+    error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência",
+    acuerdo:"Concordo que a reserva deve ser feita com pelo menos 24 horas de antecedência.",
+    recibo:"✅ Recibo de Reserva"
+  }
 };
 
 let lang = navigator.language.slice(0,2);
@@ -113,17 +159,7 @@ function applyLang(lang){
   document.getElementById('titulo').innerText=t.titulo;
   document.getElementById('btnEnviar').innerText=t.enviar;
   document.getElementById('acuerdoTexto').innerText=t.acuerdo;
-  document.getElementById('lblNombre').innerText=t.Nombre;
-  document.getElementById('lblTelefono').innerText=t.Telefono;
-  document.getElementById('lblCorreo').innerText=t.Correo;
-  document.getElementById('lblMarca').innerText=t.Marca;
-  document.getElementById('lblModelo').innerText=t.Modelo;
-  document.getElementById('lblAno').innerText=t.Ano;
-  document.getElementById('lblAceite').innerText=t.TipoAceite;
-  document.getElementById('lblDireccion').innerText=t.Direccion;
-  document.getElementById('lblFecha').innerText=t.Fecha;
-  document.getElementById('lblHora').innerText=t.Hora;
-  document.getElementById('lblComentarios').innerText=t.Comentarios;
+  document.getElementById('reciboTitulo').innerText=t.recibo;
 }
 
 document.getElementById('formCita').addEventListener('submit', function(e){
@@ -133,14 +169,6 @@ document.getElementById('formCita').addEventListener('submit', function(e){
   msg.textContent = "⏳ Enviando...";
 
   const data = Object.fromEntries(new FormData(form).entries());
-  const aceite = (data.TipoAceite || "").toUpperCase();
-  const validAceite = ["0W20","0W30","5W20","5W30"];
-  if(!validAceite.includes(aceite)){
-    msg.textContent = "⚠️ Tipo de aceite inválido";
-    return;
-  }
-  data.TipoAceite = aceite;
-
   const now = new Date();
   const selected = new Date((data.Fecha || "") + "T" + (data.Hora || ""));
   if (!data.Fecha || !data.Hora || selected - now < 24*60*60*1000) {
@@ -154,6 +182,20 @@ document.getElementById('formCita').addEventListener('submit', function(e){
       if(response && response.success){
         msg.textContent = translations[lang].exito;
         form.reset();
+        // Recibo digital
+        document.getElementById('reciboNombre').innerText = data.Nombre;
+        document.getElementById('reciboTelefono').innerText = data.Telefono;
+        document.getElementById('reciboCorreo').innerText = data.Correo;
+        document.getElementById('reciboMarca').innerText = data.Marca;
+        document.getElementById('reciboModelo').innerText = data.Modelo;
+        document.getElementById('reciboAno').innerText = data.Año;
+        document.getElementById('reciboAceite').innerText = data.TipoAceite;
+        document.getElementById('reciboDireccion').innerText = data.Direccion;
+        document.getElementById('reciboFecha').innerText = data.Fecha;
+        document.getElementById('reciboHora').innerText = data.Hora;
+        document.getElementById('reciboComentarios').innerText = data.Comentarios;
+        document.getElementById('reciboFirma').innerText = data.Firma;
+        document.getElementById('recibo').style.display = "block";
       }else{
         msg.textContent = "⚠️ "+(response.error || "Error al registrar la cita");
       }
