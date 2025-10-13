@@ -11,7 +11,7 @@
   .container{background:#1e1e1e;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.7);padding:30px;max-width:700px;width:100%;overflow:auto;}
   h2{text-align:center;margin-bottom:20px;color:#ffffff;}
   p{margin-bottom:15px;line-height:1.6;}
-  ul{margin-left:20px; margin-bottom:15px;}
+  ul{margin-left:20px;margin-bottom:15px;}
   button{display:block;margin:20px auto 0;padding:12px 25px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:16px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
   button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
   @media(max-width:700px){.container{padding:25px 20px;}}
@@ -25,7 +25,7 @@
 </div>
 
 <script>
-// Textos del acuerdo según idioma
+// 🌐 Textos del acuerdo según idioma
 const acuerdoText = {
   es: `
     <p>Al solicitar nuestro servicio de cambio de aceite a domicilio, usted acepta los siguientes términos y condiciones:</p>
@@ -68,20 +68,31 @@ const acuerdoText = {
   `
 };
 
-// Detectar idioma del navegador
+// 🌍 Detectar idioma del navegador
 let lang = navigator.language.slice(0,2);
 if(!acuerdoText[lang]) lang='es';
 
-// Aplicar texto del acuerdo según idioma
+// Mostrar acuerdo traducido
 document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
+document.documentElement.lang = lang;
 
-// Botón aceptar
-document.getElementById('btnAceptar').addEventListener('click', function(){
+// 🧾 Botón aceptar
+document.getElementById('btnAceptar').addEventListener('click', () => {
   localStorage.setItem('acuerdoFirmado', 'true');
-  alert(lang==='es' ? '✅ Acuerdo aceptado. Ahora puede enviar su reserva.' :
-        lang==='en' ? '✅ Agreement accepted. You can now submit your booking.' :
-        '✅ Acordo aceito. Agora você pode enviar sua reserva.');
-  window.close(); // Cierra ventana si es popup
+  localStorage.setItem('langPreferido', lang);
+  
+  alert(
+    lang === 'es' ? '✅ Acuerdo aceptado. Ahora puede enviar su reserva.' :
+    lang === 'en' ? '✅ Agreement accepted. You can now submit your booking.' :
+    '✅ Acordo aceito. Agora você pode enviar sua reserva.'
+  );
+  
+  // Si está abierta como pestaña normal, redirige al index
+  if (window.opener) {
+    window.close();
+  } else {
+    window.location.href = 'index.html';
+  }
 });
 </script>
 </body>
