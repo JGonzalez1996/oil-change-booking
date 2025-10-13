@@ -31,24 +31,15 @@
   .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
     top:-10px; left:10px; font-size:12px; color:#0b5ed7;
   }
-  .agreement-container{
-    margin-bottom:20px;
-    text-align:left;
-  }
-  .agreement-container label{
-    font-size:14px;
-    cursor:pointer;
-  }
-  .agreement-container input{
-    margin-right:10px;
-    vertical-align:middle;
-  }
-  .firma-container{
-    margin-bottom:20px;
-  }
-  .firma-container input{
-    width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;
-  }
+
+  .agreement-container{margin-bottom:20px;text-align:left;}
+  .agreement-container label{font-size:14px;cursor:pointer;display:flex;align-items:center;}
+  .agreement-container input{margin-right:10px;vertical-align:middle;}
+  .agreement-container a{color:#0b5ed7;text-decoration:underline;font-size:13px;margin-top:5px;display:inline-block;}
+
+  .firma-container{margin-bottom:20px;}
+  .firma-container input{width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;}
+
   button{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
   button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
   .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
@@ -74,6 +65,7 @@
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
     <div class="form-group"><i class="fas fa-oil-can"></i>
       <select name="TipoAceite">
+        <option value="">Selecciona tipo de aceite</option>
         <option value="0W20">0W20</option>
         <option value="0W30">0W30</option>
         <option value="5W20">5W20</option>
@@ -86,15 +78,12 @@
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
     <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
 
-    <!-- ACUERDO -->
     <div class="agreement-container">
       <label>
         <input type="checkbox" name="agreement" id="chkAgreement" disabled required>
         <span id="acuerdoTexto">Debes firmar el acuerdo antes de enviar la cita.</span>
       </label>
-      <p style="margin-top:5px; font-size:13px;">
-        <a href="acuerdo.html" target="_blank" style="color:#0b5ed7; text-decoration:underline;">Leer acuerdo completo</a>
-      </p>
+      <a href="acuerdo.html" target="_blank">Leer acuerdo completo</a>
     </div>
 
     <div class="firma-container">
@@ -124,7 +113,7 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznoJ3kJRBaOJE-Oro0D_4WP74NIfBaYIlyezue0p6rxBGZ9B5a5WaGYTcQ5RNiRJMtCQ/exec"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrbDLiaM2aV1CLDqEuOkrL54Xb0VqJeq_mWZoA8Wthr0UYU0k7zOnbunG1ZVoeKTRnow/exec"; 
 
 const translations = {
   es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes firmar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva"},
@@ -147,8 +136,8 @@ function applyLang(lang){
 
 // Habilitar checkbox si acuerdo fue firmado
 window.addEventListener('load', ()=>{
+  const chk = document.getElementById('chkAgreement');
   if(localStorage.getItem('acuerdoFirmado')==='true'){
-    const chk = document.getElementById('chkAgreement');
     chk.disabled = false;
     chk.checked = true;
   }
@@ -160,7 +149,6 @@ document.getElementById('formCita').addEventListener('submit', function(e){
   const msg = document.getElementById('mensaje');
   msg.textContent = "⏳ Enviando...";
 
-  // Validar checkbox del acuerdo
   const agreement = document.getElementById('chkAgreement');
   if(!agreement.checked){
     msg.textContent = translations[lang].acuerdo;
@@ -169,7 +157,7 @@ document.getElementById('formCita').addEventListener('submit', function(e){
 
   const data = Object.fromEntries(new FormData(form).entries());
   const now = new Date();
-  const selected = new Date((data.Fecha || "") + "T" + (data.Hora || ""));
+  const selected = new Date(data.Fecha + "T" + data.Hora);
   if (!data.Fecha || !data.Hora || selected - now < 24*60*60*1000) {
     msg.textContent = translations[lang].error24;
     return;
@@ -194,10 +182,10 @@ document.getElementById('formCita').addEventListener('submit', function(e){
         document.getElementById('reciboComentarios').innerText = data.Comentarios;
         document.getElementById('reciboFirma').innerText = data.Firma;
         document.getElementById('recibo').style.display = "block";
-      }else{
+      } else {
         msg.textContent = "⚠️ "+(response.error || "Error al registrar la cita");
       }
-    }finally{
+    } finally {
       const s = document.getElementById(cbName+"_script");
       if(s && s.parentNode) s.parentNode.removeChild(s);
       delete window[cbName];
