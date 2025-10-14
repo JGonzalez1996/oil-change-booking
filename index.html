@@ -33,10 +33,9 @@
   }
 
   .agreement-container{margin-bottom:20px;text-align:left;}
-  .agreement-container label{font-size:14px;cursor:default;display:flex;align-items:center;opacity:0.7;}
-  .agreement-container input{margin-right:10px;vertical-align:middle;pointer-events:none;}
+  .agreement-container p{font-size:14px;opacity:0.8;margin-bottom:5px;}
   .agreement-container a{color:#0b5ed7;text-decoration:underline;font-size:13px;margin-top:5px;display:inline-block;}
-  .agreement-container button{margin-top:5px;padding:5px 10px;border:none;border-radius:5px;background:#0b5ed7;color:white;cursor:pointer;font-size:13px;transition:all 0.3s;}
+  .agreement-container button{margin-top:5px;padding:7px 15px;border:none;border-radius:5px;background:#0b5ed7;color:white;cursor:pointer;font-size:14px;transition:all 0.3s;}
   .agreement-container button:hover{background:#084298;}
 
   .firma-container{margin-bottom:20px;opacity:0.5;transition:opacity 0.3s;}
@@ -59,6 +58,7 @@
     <img src="https://flagcdn.com/16x12/gb.png" alt="English" onclick="setLang('en')">
     <img src="https://flagcdn.com/16x12/pt.png" alt="Português" onclick="setLang('pt')">
   </div>
+
   <h2 id="titulo">Reserva de Servicio a Domicilio</h2>
   <form id="formCita">
     <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
@@ -96,11 +96,8 @@
     <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
 
     <div class="agreement-container">
-      <label>
-        <input type="checkbox" id="chkAgreement" disabled required>
-        <span id="acuerdoTexto">Debes leer y aceptar el acuerdo antes de firmar.</span>
-      </label>
-      <a href="acuerdo.html" target="_blank" id="linkAcuerdo">Leer acuerdo completo</a>
+      <p id="acuerdoTexto">Debes aceptar el acuerdo antes de firmar.</p>
+      <a href="acuerdo.html" target="_blank" id="linkAcuerdo">Leer acuerdo completo</a><br>
       <button type="button" id="btnAceptarAcuerdo">✅ He leído y acepto</button>
     </div>
 
@@ -135,10 +132,11 @@
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg3dNWczFmzj_fxQWpHQ2451W62eCgFf8Oqfu8CVo8RPYM8ygnw/exec"; 
 
+// Traducciones
 const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes leer y aceptar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must sign the agreement before submitting the booking.", recibo:"✅ Booking Receipt", link:"Read full agreement"},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes aceptar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
+  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must accept the agreement before submitting the booking.", recibo:"✅ Booking Receipt", link:"Read full agreement"},
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve aceitar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
 };
 
 let lang = navigator.language.slice(0,2);
@@ -156,34 +154,23 @@ function applyLang(lang){
   document.getElementById('langField').value=lang;
 }
 
-// Manejo de acuerdo y firma
+// Firma bloqueada hasta aceptar
 window.addEventListener('load', ()=>{
-  const chk = document.getElementById('chkAgreement');
   const firma = document.getElementById('firmaInput');
   const btnAceptar = document.getElementById('btnAceptarAcuerdo');
   const firmaContainer = document.getElementById('firmaContainer');
-
-  if(localStorage.getItem('acuerdoFirmado')==='true'){
-    chk.checked = true;
-    chk.disabled = true;
-    firma.disabled = false;
-    firmaContainer.style.opacity = '1';
-    document.getElementById('acuerdoTexto').textContent = "✅ Acuerdo aceptado correctamente.";
-    btnAceptar.style.display = 'none';
-  }
+  const texto = document.getElementById('acuerdoTexto');
 
   btnAceptar.addEventListener('click', ()=>{
-    localStorage.setItem('acuerdoFirmado','true');
-    chk.checked = true;
-    chk.disabled = true;
     firma.disabled = false;
     firmaContainer.style.opacity = '1';
-    document.getElementById('acuerdoTexto').textContent = "✅ Acuerdo aceptado correctamente.";
+    texto.textContent = "✅ Acuerdo aceptado correctamente.";
     btnAceptar.style.display='none';
+    setTimeout(()=>{ texto.textContent = ""; }, 2500);
   });
 });
 
-// Datos de aceites
+// Datos aceites
 const aceitesData = [
   {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
   {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
@@ -231,7 +218,7 @@ document.getElementById('formCita').addEventListener('submit', function(e){
   const msg = document.getElementById('mensaje');
   msg.textContent = "⏳ Enviando...";
 
-  if(localStorage.getItem('acuerdoFirmado')!=='true'){
+  if(document.getElementById('firmaInput').disabled){
     msg.textContent = translations[lang].acuerdo;
     return;
   }
