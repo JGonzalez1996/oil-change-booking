@@ -215,7 +215,7 @@ marcaSelect.addEventListener('change',()=>{
 });
 
 const form = document.getElementById('formCita');
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3tr_8DD4D8y7G7r6CKJQPucmbJRkkRNPktdg5Qda9bqXMXZ2ibjJAfZgkAklfzD4Ejg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxA0YNjTNPBJDbkmNx4_mkemBuO1Cag7SnB9ca9d9SQcrlVmsZ4QBYAJkG0n8FT8a7XIg/exec";
 const mensaje = document.getElementById('mensaje');
 
 form.addEventListener('submit', e=>{
@@ -224,20 +224,28 @@ form.addEventListener('submit', e=>{
     alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);
     return;
   }
+
   const data = Object.fromEntries(new FormData(form).entries());
-  fetch(SCRIPT_URL,{
-    method:'POST',body:JSON.stringify(data),headers:{'Content-Type':'application/json'}
-  })
-  .then(r=>r.json())
-  .then(r=>{
-    mensaje.textContent={'es':'Reserva enviada correctamente!','en':'Booking submitted successfully!','pt':'Reserva enviada com sucesso!'}[lang];
+  data.callback = 'handleResponse';
+
+  const script = document.createElement('script');
+  const params = new URLSearchParams(data).toString();
+  script.src = SCRIPT_URL + '?' + params;
+  document.body.appendChild(script);
+});
+
+function handleResponse(response){
+  if(response.success){
+    mensaje.textContent = {'es':'Reserva enviada correctamente!','en':'Booking submitted successfully!','pt':'Reserva enviada com sucesso!'}[lang];
+    const data = Object.fromEntries(new FormData(form).entries());
     form.reset();
     firmaInput.disabled=true;
     localStorage.removeItem('acuerdoFirmado');
     mostrarRecibo(data);
-  })
-  .catch(e=>{mensaje.textContent='Error: '+e.message;});
-});
+  } else {
+    mensaje.textContent = 'Error: ' + (response.error || 'Problema al enviar la reserva.');
+  }
+}
 
 function mostrarRecibo(data){
   document.getElementById('reciboNombre').innerText=data.Nombre;
