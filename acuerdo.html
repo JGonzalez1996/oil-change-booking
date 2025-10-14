@@ -77,22 +77,18 @@ document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
 document.documentElement.lang = lang;
 
 // 🧾 Botón aceptar
-document.getElementById('btnAceptar').addEventListener('click', () => {
-  localStorage.setItem('acuerdoFirmado', 'true');
-  localStorage.setItem('langPreferido', lang);
+document.getElementById('btnAceptar').addEventListener('click', ()=>{
+  localStorage.setItem('acuerdoAceptado', 'true');
+  sessionStorage.setItem('recargarDesdeAcuerdo', 'true');
   
   alert(
-    lang === 'es' ? '✅ Acuerdo aceptado. Ahora puede enviar su reserva.' :
-    lang === 'en' ? '✅ Agreement accepted. You can now submit your booking.' :
-    '✅ Acordo aceito. Agora você pode enviar sua reserva.'
+    lang === 'es' ? '✅ Acuerdo aceptado. Ahora puede firmar su reserva.' :
+    lang === 'en' ? '✅ Agreement accepted. You can now sign your booking.' :
+    '✅ Acordo aceito. Agora você pode assinar sua reserva.'
   );
-  
-  // Si está abierta como pestaña normal, redirige al index
-  if (window.opener) {
-    window.close();
-  } else {
-    window.location.href = 'index.html';
-  }
+
+  // Redirigir al index.html
+  window.location.href = "index.html";
 });
 </script>
 </body>
