@@ -63,8 +63,10 @@
     <div class="form-group"><i class="fas fa-car"></i><input type="text" name="Marca" placeholder=" "><label id="lblMarca">Marca del vehículo</label></div>
     <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
+
+    <!-- Tipo de Aceite -->
     <div class="form-group"><i class="fas fa-oil-can"></i>
-      <select name="TipoAceite" required>
+      <select name="TipoAceite" id="selectTipoAceite" required>
         <option value="">Selecciona tipo de aceite</option>
         <option value="0W20">0W20</option>
         <option value="0W30">0W30</option>
@@ -73,6 +75,20 @@
       </select>
       <label id="lblAceite">Tipo de Aceite</label>
     </div>
+
+    <!-- Marca de Aceite -->
+    <div class="form-group"><i class="fas fa-oil-can"></i>
+      <select name="Marca" id="selectMarca" required>
+        <option value="">Selecciona marca de aceite</option>
+      </select>
+      <label id="lblMarcaAceite">Marca de Aceite</label>
+    </div>
+
+    <!-- Descripción de aceite -->
+    <div class="form-group">
+      <textarea id="descripcionAceite" readonly placeholder="Descripción del aceite seleccionado"></textarea>
+    </div>
+
     <div class="form-group"><i class="fas fa-map-marker-alt"></i><input type="text" name="Direccion" placeholder=" " required><label id="lblDireccion">Dirección del servicio</label></div>
     <div class="form-group"><i class="fas fa-calendar-day"></i><input type="date" name="Fecha" placeholder=" " required><label id="lblFecha">Fecha</label></div>
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
@@ -115,12 +131,12 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzrbDLiaM2aV1CLDqEuOkrL54Xb0VqJeq_mWZoA8Wthr0UYU0k7zOnbunG1ZVoeKTRnow/exec"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg3dNWczFmzj_fxQWpHQ2451W62eCgFf8Oqfu8CVo8RPYM8ygnw/exec"; 
 
 const translations = {
   es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes firmar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
   en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must sign the agreement before submitting the booking.", recibo:"✅ Booking Receipt", link:"Read full agreement"},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acordo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
 };
 
 let lang = navigator.language.slice(0,2);
@@ -149,6 +165,47 @@ window.addEventListener('load', ()=>{
   }
 });
 
+// Datos de aceites según tabla de precios
+const aceitesData = [
+  {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
+  {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
+  {Tipo:"0W20", Marca:"Valvoline", Descripcion:"Protección avanzada contra el desgaste, buen rendimiento en frío.", Precio:27},
+  {Tipo:"0W30", Marca:"Mobil 1", Descripcion:"Totalmente sintético, excelente viscosidad en climas fríos.", Precio:25},
+  {Tipo:"0W30", Marca:"Pennzoil", Descripcion:"Reduce la fricción interna del motor y mejora la eficiencia.", Precio:25},
+  {Tipo:"0W30", Marca:"Valvoline", Descripcion:"Formulado para máxima protección en motores exigentes.", Precio:27},
+  {Tipo:"5W20", Marca:"Mobil 1", Descripcion:"Tecnología avanzada anti-desgaste, rendimiento óptimo.", Precio:25},
+  {Tipo:"5W20", Marca:"Pennzoil", Descripcion:"Mantiene el motor limpio y eficiente, buena resistencia térmica.", Precio:24},
+  {Tipo:"5W20", Marca:"Valvoline", Descripcion:"Buena durabilidad del motor, ideal para condiciones mixtas.", Precio:26},
+  {Tipo:"5W30", Marca:"Mobil 1", Descripcion:"Excelente control de oxidación y protección del motor.", Precio:26},
+  {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez a bajas temperaturas.", Precio:25},
+  {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Aceite duradero con aditivos anti-desgaste avanzados.", Precio:27},
+];
+
+const selectTipo = document.getElementById('selectTipoAceite');
+const selectMarca = document.getElementById('selectMarca');
+const descArea = document.getElementById('descripcionAceite');
+
+selectTipo.addEventListener('change', () => {
+  const tipo = selectTipo.value;
+  selectMarca.innerHTML = '<option value="">Selecciona marca de aceite</option>';
+  descArea.value = "";
+  if(!tipo) return;
+  const marcas = aceitesData.filter(a => a.Tipo === tipo).map(a => a.Marca);
+  marcas.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = m;
+    selectMarca.appendChild(opt);
+  });
+});
+
+selectMarca.addEventListener('change', () => {
+  const tipo = selectTipo.value;
+  const marca = selectMarca.value;
+  const aceite = aceitesData.find(a => a.Tipo === tipo && a.Marca === marca);
+  descArea.value = aceite ? aceite.Descripcion : "";
+});
+
 document.getElementById('formCita').addEventListener('submit', function(e){
   e.preventDefault();
   const form = e.target;
@@ -168,19 +225,24 @@ document.getElementById('formCita').addEventListener('submit', function(e){
     return;
   }
 
+  // Precio del aceite
+  const aceiteSel = aceitesData.find(a => a.Tipo === data.TipoAceite && a.Marca === data.Marca);
+  if(aceiteSel) data.PrecioAceite = aceiteSel.Precio;
+
   const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
   window[cbName] = function(response){
     try{
       if(response && response.success){
         msg.textContent = translations[lang].exito;
         form.reset();
+        descArea.value = "";
         document.getElementById('reciboNombre').innerText = data.Nombre;
         document.getElementById('reciboTelefono').innerText = data.Telefono;
         document.getElementById('reciboCorreo').innerText = data.Correo;
         document.getElementById('reciboMarca').innerText = data.Marca;
         document.getElementById('reciboModelo').innerText = data.Modelo;
         document.getElementById('reciboAno').innerText = data.Ano;
-        document.getElementById('reciboAceite').innerText = data.TipoAceite;
+        document.getElementById('reciboAceite').innerText = `${data.TipoAceite} - ${data.Marca}`;
         document.getElementById('reciboDireccion').innerText = data.Direccion;
         document.getElementById('reciboFecha').innerText = data.Fecha;
         document.getElementById('reciboHora').innerText = data.Hora;
