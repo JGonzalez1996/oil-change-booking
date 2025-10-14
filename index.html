@@ -100,8 +100,7 @@
 
     <!-- Acuerdo -->
     <div class="agreement-container">
-      <p id="acuerdoTexto">Debes aceptar el acuerdo antes de firmar.</p>
-      <a href="acuerdo.html" target="_blank" id="linkAcuerdo">Leer acuerdo completo</a>
+      <p id="acuerdoTexto"></p>
     </div>
 
     <!-- Firma -->
@@ -122,15 +121,17 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg
 
 // Traducciones
 const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes aceptar el acuerdo antes de firmar.", link:"Leer acuerdo completo"},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must accept the agreement before signing.", link:"Read full agreement"},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve aceitar o acordo antes de assinar.", link:"Ler o acordo completo"}
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"⚠️ Debes aceptar el acuerdo antes de firmar.", link:"Leer acuerdo completo"},
+  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"⚠️ You must accept the agreement before signing.", link:"Read full agreement"},
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"⚠️ Você deve aceitar o acordo antes de assinar.", link:"Ler o acordo completo"}
 };
 
 let lang = navigator.language.slice(0,2);
 if(!translations[lang]) lang='es';
 applyLang(lang);
+
 function setLang(l){lang=l;applyLang(lang);}
+
 function applyLang(lang){
   const t=translations[lang];
   document.getElementById('titulo').innerText=t.titulo;
@@ -144,32 +145,30 @@ window.addEventListener('load', ()=>{
   const firmaInput = document.getElementById('firmaInput');
   const firmaContainer = document.getElementById('firmaContainer');
   const texto = document.getElementById('acuerdoTexto');
-
+  const t = translations[lang];
   const acuerdoAceptado = localStorage.getItem('acuerdoAceptado');
 
   if(acuerdoAceptado === 'true'){
     firmaInput.disabled = false;
     firmaContainer.style.opacity = '1';
-    texto.innerHTML = "✅ Acuerdo aceptado correctamente.";
+    texto.innerHTML = "✅ " + (lang==='es' ? "Acuerdo aceptado correctamente." : lang==='en' ? "Agreement accepted successfully." : "Acordo aceito com sucesso.");
   } else {
     firmaInput.disabled = true;
     firmaContainer.style.opacity = '0.5';
-    texto.innerHTML = `⚠️ Debes aceptar el acuerdo antes de firmar. <a href='acuerdo.html' target='_blank'>Leer acuerdo completo</a>`;
+    texto.innerHTML = `${t.acuerdo} <a href='acuerdo.html' target='_blank'>${t.link}</a>`;
   }
 
-  // Si el acuerdo fue aceptado recientemente, recargar la página para actualizar el estado visual
   if (sessionStorage.getItem('recargarDesdeAcuerdo') === 'true') {
     sessionStorage.removeItem('recargarDesdeAcuerdo');
     location.reload();
   }
 });
 
-// Envío del formulario (igual que antes)
+// Envío del formulario
 document.getElementById('formCita').addEventListener('submit', async e=>{
   e.preventDefault();
   const msg=document.getElementById('mensaje');
   const firmaInput=document.getElementById('firmaInput');
-
   if(firmaInput.disabled){
     msg.textContent=translations[lang].acuerdo;
     return;
