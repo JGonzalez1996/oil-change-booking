@@ -122,9 +122,9 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg
 
 // Traducciones
 const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes aceptar el acuerdo antes de enviar la cita.", link:"Leer acuerdo completo"},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must accept the agreement before submitting the booking.", link:"Read full agreement"},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve aceitar o acordo antes de enviar a reserva.", link:"Ler o acordo completo"}
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes aceptar el acuerdo antes de firmar.", link:"Leer acuerdo completo"},
+  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must accept the agreement before signing.", link:"Read full agreement"},
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve aceitar o acordo antes de assinar.", link:"Ler o acordo completo"}
 };
 
 let lang = navigator.language.slice(0,2);
@@ -135,12 +135,11 @@ function applyLang(lang){
   const t=translations[lang];
   document.getElementById('titulo').innerText=t.titulo;
   document.getElementById('btnEnviar').innerText=t.enviar;
-  document.getElementById('acuerdoTexto').innerText=t.acuerdo;
-  document.getElementById('linkAcuerdo').innerText=t.link;
+  document.getElementById('acuerdoTexto').innerHTML=`${t.acuerdo} <a href="acuerdo.html" target="_blank" id="linkAcuerdo">${t.link}</a>`;
   document.getElementById('langField').value=lang;
 }
 
-// Bloqueo de firma hasta aceptar acuerdo (desde localStorage)
+// Bloqueo de firma hasta aceptar acuerdo
 window.addEventListener('load', ()=>{
   const firmaInput = document.getElementById('firmaInput');
   const firmaContainer = document.getElementById('firmaContainer');
@@ -151,56 +150,21 @@ window.addEventListener('load', ()=>{
   if(acuerdoAceptado === 'true'){
     firmaInput.disabled = false;
     firmaContainer.style.opacity = '1';
-    texto.textContent = "✅ Acuerdo aceptado correctamente.";
+    texto.innerHTML = "✅ Acuerdo aceptado correctamente.";
   } else {
     firmaInput.disabled = true;
     firmaContainer.style.opacity = '0.5';
-    texto.innerHTML = "⚠️ Debes aceptar el acuerdo antes de firmar. <br><a href='acuerdo.html' target='_blank'>Leer acuerdo completo</a>";
+    texto.innerHTML = `⚠️ Debes aceptar el acuerdo antes de firmar. <a href='acuerdo.html' target='_blank'>Leer acuerdo completo</a>`;
+  }
+
+  // Si el acuerdo fue aceptado recientemente, recargar la página para actualizar el estado visual
+  if (sessionStorage.getItem('recargarDesdeAcuerdo') === 'true') {
+    sessionStorage.removeItem('recargarDesdeAcuerdo');
+    location.reload();
   }
 });
 
-// Datos aceites
-const aceitesData = [
-  {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
-  {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
-  {Tipo:"0W20", Marca:"Valvoline", Descripcion:"Protección avanzada contra el desgaste, buen rendimiento en frío.", Precio:27},
-  {Tipo:"0W30", Marca:"Mobil 1", Descripcion:"Totalmente sintético, excelente viscosidad en climas fríos.", Precio:25},
-  {Tipo:"0W30", Marca:"Pennzoil", Descripcion:"Reduce la fricción interna del motor y mejora la eficiencia.", Precio:25},
-  {Tipo:"0W30", Marca:"Valvoline", Descripcion:"Formulado para máxima protección en motores exigentes.", Precio:27},
-  {Tipo:"5W20", Marca:"Mobil 1", Descripcion:"Tecnología avanzada anti-desgaste, rendimiento óptimo.", Precio:25},
-  {Tipo:"5W20", Marca:"Pennzoil", Descripcion:"Mantiene el motor limpio y eficiente, buena resistencia térmica.", Precio:24},
-  {Tipo:"5W20", Marca:"Valvoline", Descripcion:"Buena durabilidad del motor, ideal para condiciones mixtas.", Precio:26},
-  {Tipo:"5W30", Marca:"Mobil 1", Descripcion:"Excelente control de oxidación y protección del motor.", Precio:26},
-  {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez a bajas temperaturas.", Precio:25},
-  {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Aceite duradero con aditivos anti-desgaste avanzados.", Precio:27},
-];
-
-const selectTipo = document.getElementById('selectTipoAceite');
-const selectMarca = document.getElementById('selectMarca');
-const descArea = document.getElementById('descripcionAceite');
-
-selectTipo.addEventListener('change', () => {
-  const tipo = selectTipo.value;
-  selectMarca.innerHTML = '<option value="">Selecciona marca de aceite</option>';
-  descArea.value = "";
-  if(!tipo) return;
-  const marcas = aceitesData.filter(a => a.Tipo === tipo).map(a => a.Marca);
-  marcas.forEach(m => {
-    const opt = document.createElement('option');
-    opt.value = m;
-    opt.textContent = m;
-    selectMarca.appendChild(opt);
-  });
-});
-
-selectMarca.addEventListener('change', () => {
-  const tipo = selectTipo.value;
-  const marca = selectMarca.value;
-  const aceite = aceitesData.find(a => a.Tipo === tipo && a.Marca === marca);
-  descArea.value = aceite ? aceite.Descripcion : "";
-});
-
-// Envío del formulario
+// Envío del formulario (igual que antes)
 document.getElementById('formCita').addEventListener('submit', async e=>{
   e.preventDefault();
   const msg=document.getElementById('mensaje');
@@ -222,9 +186,6 @@ document.getElementById('formCita').addEventListener('submit', async e=>{
     return;
   }
 
-  const aceiteSel=aceitesData.find(a=>a.Tipo===data.TipoAceite&&a.Marca===data.MarcaAceite);
-  if(aceiteSel) data.PrecioAceite=aceiteSel.Precio;
-
   const cbName="cb_"+Date.now()+"_"+Math.floor(Math.random()*10000);
   window[cbName]=function(response){
     msg.textContent=response.success?translations[lang].exito:"⚠️ "+(response.error||"Error al registrar la cita");
@@ -236,5 +197,6 @@ document.getElementById('formCita').addEventListener('submit', async e=>{
   document.body.appendChild(script);
 });
 </script>
+
 </body>
 </html>
