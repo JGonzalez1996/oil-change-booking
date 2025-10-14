@@ -78,9 +78,11 @@ document.documentElement.lang = lang;
 
 // 🧾 Botón aceptar
 document.getElementById('btnAceptar').addEventListener('click', ()=>{
-  localStorage.setItem('acuerdoAceptado', 'true');
+  // Guardar que se aceptó el acuerdo
+  localStorage.setItem('acuerdoFirmado', 'true');
+  // Para forzar recarga desde index
   sessionStorage.setItem('recargarDesdeAcuerdo', 'true');
-  
+
   alert(
     lang === 'es' ? '✅ Acuerdo aceptado. Ahora puede firmar su reserva.' :
     lang === 'en' ? '✅ Agreement accepted. You can now sign your booking.' :
