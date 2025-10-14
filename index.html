@@ -31,13 +31,10 @@
   .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
     top:-10px; left:10px; font-size:12px; color:#0b5ed7;
   }
-
   .agreement-container{margin-bottom:20px;text-align:left;}
   .agreement-container a{color:#0b5ed7;text-decoration:underline;font-size:13px;display:inline-block;margin-top:5px;}
-
   .firma-container{margin-bottom:20px;}
   .firma-container input{width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;}
-
   button[type="submit"]{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
   button[type="submit"]:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
   .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
@@ -62,7 +59,6 @@
     <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
 
-    <!-- Tipo de Aceite -->
     <div class="form-group"><i class="fas fa-oil-can"></i>
       <select name="TipoAceite" id="selectTipoAceite" required>
         <option value="">Selecciona tipo de aceite</option>
@@ -74,7 +70,6 @@
       <label id="lblAceite">Tipo de Aceite</label>
     </div>
 
-    <!-- Marca de Aceite -->
     <div class="form-group"><i class="fas fa-oil-can"></i>
       <select name="Marca" id="selectMarca" required>
         <option value="">Selecciona marca de aceite</option>
@@ -82,7 +77,6 @@
       <label id="lblMarcaAceite">Marca de Aceite</label>
     </div>
 
-    <!-- Descripción de aceite -->
     <div class="form-group">
       <textarea id="descripcionAceite" readonly placeholder="Descripción del aceite seleccionado"></textarea>
     </div>
@@ -92,7 +86,6 @@
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
     <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
 
-    <!-- ACUERDO Y FIRMA -->
     <div class="agreement-container">
       <a href="acuerdo.html" target="_blank" id="linkAcuerdo">Leer acuerdo completo</a>
     </div>
@@ -146,11 +139,24 @@ function applyLang(lang){
   document.getElementById('langField').value=lang;
 }
 
-// Desbloquear firma si acuerdo ya fue aceptado
+// 🔓 Mantener firma bloqueada hasta aceptar acuerdo
+const firmaInput = document.getElementById('firmaInput');
+function desbloquearFirma(){
+  firmaInput.disabled = false;
+  localStorage.setItem('acuerdoFirmado','true');
+}
+
+// Si ya aceptaron el acuerdo, desbloquear automáticamente
 window.addEventListener('load', ()=>{
-  const firma = document.getElementById('firmaInput');
   if(localStorage.getItem('acuerdoFirmado')==='true'){
-    firma.disabled = false;
+    firmaInput.disabled = false;
+  }
+});
+
+// Detectar regreso desde acuerdo.html y desbloquear firma sin perder datos
+window.addEventListener('focus', ()=>{
+  if(localStorage.getItem('acuerdoFirmado')==='true'){
+    firmaInput.disabled = false;
   }
 });
 
@@ -223,8 +229,6 @@ document.getElementById('formCita').addEventListener('submit', function(e){
     try{
       if(response && response.success){
         msg.textContent = translations[lang].exito;
-        form.reset();
-        descArea.value = "";
         document.getElementById('reciboNombre').innerText = data.Nombre;
         document.getElementById('reciboTelefono').innerText = data.Telefono;
         document.getElementById('reciboCorreo').innerText = data.Correo;
@@ -238,6 +242,8 @@ document.getElementById('formCita').addEventListener('submit', function(e){
         document.getElementById('reciboComentarios').innerText = data.Comentarios;
         document.getElementById('reciboFirma').innerText = data.Firma;
         document.getElementById('recibo').style.display = "block";
+        form.reset();
+        descArea.value = "";
       } else {
         msg.textContent = "⚠️ "+(response.error || "Error al registrar la cita");
       }
