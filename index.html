@@ -40,14 +40,17 @@
   .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
   #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:20px;border-radius:10px;color:#fff;}
   #recibo h3{text-align:center;margin-bottom:20px;}
+  /* Modal */
+  .modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,0.8);}
+  .modal-content{background:#1e1e1e;margin:50px auto;padding:20px;border-radius:12px;width:90%;max-width:700px;color:#e0e0e0;max-height:80vh;overflow-y:auto;}
+  .modal-content h2{text-align:center;margin-bottom:15px;color:#fff;}
+  .modal-content p, .modal-content ul{margin-bottom:12px;line-height:1.6;}
+  .modal-content ul{margin-left:20px;}
+  .modal-close{float:right;font-size:24px;color:#888;cursor:pointer;transition:color 0.2s;}
+  .modal-close:hover{color:#fff;}
+  .modal-accept{display:block;margin:20px auto 0;padding:12px 25px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:16px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
+  .modal-accept:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
   @media(max-width:600px){.container{padding:30px 20px;}h2{font-size:24px;}}
-  /* Modal Styles */
-  .modal {display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.7);}
-  .modal-content {background:#1e1e1e;margin:10% auto;padding:20px;border-radius:10px;width:90%;max-width:600px;max-height:70vh;overflow-y:auto;color:#fff;position:relative;}
-  .modal-content h3{margin-bottom:15px;text-align:center;}
-  .modal-content p{margin-bottom:10px;line-height:1.5;}
-  .modal-close {background:#0b5ed7;padding:10px 15px;border:none;border-radius:8px;color:#fff;cursor:pointer;font-weight:bold;position:absolute;top:10px;right:10px;}
-  .modal-accept {background:#0b5ed7;padding:10px 15px;border:none;border-radius:8px;color:#fff;cursor:pointer;font-weight:bold;margin-top:10px;width:100%;}
 </style>
 </head>
 <body>
@@ -59,13 +62,13 @@
   </div>
   <h2 id="titulo">Reserva de Servicio a Domicilio</h2>
   <form id="formCita">
-    <!-- Campos del formulario -->
     <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
     <div class="form-group"><i class="fas fa-phone"></i><input type="tel" name="Telefono" placeholder=" " required><label id="lblTelefono">Teléfono</label></div>
     <div class="form-group"><i class="fas fa-envelope"></i><input type="email" name="Correo" placeholder=" " required><label id="lblCorreo">Correo electrónico</label></div>
     <div class="form-group"><i class="fas fa-car"></i><input type="text" name="Marca" placeholder=" "><label id="lblMarca">Marca del vehículo</label></div>
     <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" "><label id="lblModelo">Modelo del vehículo</label></div>
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" "><label id="lblAno">Año del vehículo</label></div>
+
     <div class="form-group"><i class="fas fa-oil-can"></i>
       <select name="TipoAceite" id="selectTipoAceite" required>
         <option value="">Selecciona tipo de aceite</option>
@@ -76,15 +79,18 @@
       </select>
       <label id="lblAceite">Tipo de Aceite</label>
     </div>
+
     <div class="form-group"><i class="fas fa-oil-can"></i>
       <select name="Marca" id="selectMarca" required>
         <option value="">Selecciona marca de aceite</option>
       </select>
       <label id="lblMarcaAceite">Marca de Aceite</label>
     </div>
+
     <div class="form-group">
       <textarea id="descripcionAceite" readonly placeholder="Descripción del aceite seleccionado"></textarea>
     </div>
+
     <div class="form-group"><i class="fas fa-map-marker-alt"></i><input type="text" name="Direccion" placeholder=" " required><label id="lblDireccion">Dirección del servicio</label></div>
     <div class="form-group"><i class="fas fa-calendar-day"></i><input type="date" name="Fecha" placeholder=" " required><label id="lblFecha">Fecha</label></div>
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
@@ -122,63 +128,60 @@
   </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal del acuerdo -->
 <div id="modalAcuerdo" class="modal">
   <div class="modal-content">
-    <button class="modal-close" id="modalCerrar">&times;</button>
-    <h3>Acuerdo de Servicio a Domicilio</h3>
-    <p>Aquí va todo el contenido completo de tu acuerdo que el usuario debe leer. Se puede scrollear si es largo.</p>
-    <button class="modal-accept" id="btnAceptarAcuerdo">Aceptar y Firmar</button>
+    <span class="modal-close">&times;</span>
+    <h2>Acuerdo de Servicio a Domicilio</h2>
+    <div id="textoAcuerdo"></div>
+    <button class="modal-accept">Aceptar y firmar acuerdo ✅</button>
   </div>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg3dNWczFmzj_fxQWpHQ2451W62eCgFf8Oqfu8CVo8RPYM8ygnw/exec"; 
-
-const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes leer y aceptar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must sign the agreement before submitting the booking.", recibo:"✅ Booking Receipt", link:"Read full agreement"},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
+// 🌐 Textos del acuerdo según idioma
+const acuerdoText = {
+  es: `<p>Al solicitar nuestro servicio de cambio de aceite a domicilio, usted acepta los siguientes términos y condiciones:</p><ul><li>El cliente debe proporcionar información veraz sobre el vehículo y la ubicación del servicio.</li><li>Se requiere agendar la cita con al menos 24 horas de anticipación.</li><li>El técnico tiene derecho a reprogramar la cita en caso de condiciones climáticas adversas o emergencias.</li><li>Los precios pueden variar según el tipo de aceite, filtro y servicio adicional solicitado.</li><li>El cliente es responsable de asegurar el acceso adecuado al vehículo durante el servicio.</li><li>Todos los pagos deben completarse al finalizar el servicio.</li><li>El cliente acepta que la firma digital en este formulario es vinculante para aceptar los términos.</li></ul><p>Lea cuidadosamente estos términos antes de aceptar. Al hacer clic en "Aceptar y firmar acuerdo", confirma que ha leído, entendido y acepta estas condiciones.</p>`,
+  en: `<p>By requesting our home oil change service, you agree to the following terms and conditions:</p><ul><li>The client must provide accurate information about the vehicle and service location.</li><li>Appointments must be scheduled at least 24 hours in advance.</li><li>The technician reserves the right to reschedule in case of adverse weather or emergencies.</li><li>Prices may vary depending on the type of oil, filter, and additional services requested.</li><li>The client is responsible for ensuring proper access to the vehicle during service.</li><li>All payments must be completed upon service completion.</li><li>The client agrees that the digital signature on this form is binding to accept the terms.</li></ul><p>Read these terms carefully before accepting. By clicking "Accept and sign agreement," you confirm you have read, understood, and agree to these conditions.</p>`,
+  pt: `<p>Ao solicitar nosso serviço domiciliar de troca de óleo, você concorda com os seguintes termos e condições:</p><ul><li>O cliente deve fornecer informações precisas sobre o veículo e o local do serviço.</li><li>As reservas devem ser feitas com pelo menos 24 horas de antecedência.</li><li>O técnico reserva-se o direito de reagendar em caso de clima adverso ou emergências.</li><li>Os preços podem variar dependendo do tipo de óleo, filtro e serviços adicionais solicitados.</li><li>O cliente é responsável por garantir o acesso adequado ao veículo durante o serviço.</li><li>Todos os pagamentos devem ser concluídos após a conclusão do serviço.</li><li>O cliente concorda que a assinatura digital neste formulário é vinculativa para aceitar os termos.</li></ul><p>Leia atentamente estes termos antes de aceitar. Ao clicar em "Aceitar e assinar acordo", você confirma que leu, entendeu e concorda com estas condições.</p>`
 };
 
+// Idioma
 let lang = navigator.language.slice(0,2);
-if(!translations[lang]) lang='es';
+if(!['es','en','pt'].includes(lang)) lang='es';
 applyLang(lang);
 
 function setLang(l){lang=l;applyLang(lang);}
 function applyLang(lang){
-  const t=translations[lang];
-  document.getElementById('titulo').innerText=t.titulo;
-  document.getElementById('btnEnviar').innerText=t.enviar;
-  document.getElementById('langField').value=lang;
+  document.getElementById('titulo').innerText = {'es':'Reserva de Servicio a Domicilio','en':'Home Service Booking','pt':'Agendamento de Serviço Domiciliar'}[lang];
+  document.getElementById('btnEnviar').innerText = {'es':'Enviar Reserva','en':'Submit Booking','pt':'Enviar Reserva'}[lang];
+  document.getElementById('langField').value = lang;
+  document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
 }
 
-// 🔓 Mantener firma bloqueada hasta aceptar acuerdo
-const firmaInput = document.getElementById('firmaInput');
-function desbloquearFirma(){
-  firmaInput.disabled = false;
-  localStorage.setItem('acuerdoFirmado','true');
-}
-
-// Abrir modal
+// Modal
 const modal = document.getElementById('modalAcuerdo');
-document.getElementById('linkAcuerdo').onclick = ()=>{ modal.style.display='block'; };
+const link = document.getElementById('linkAcuerdo');
+const spanClose = document.querySelector('.modal-close');
+const btnAceptar = document.querySelector('.modal-accept');
+const firmaInput = document.getElementById('firmaInput');
 
-// Cerrar modal
-document.getElementById('modalCerrar').onclick = ()=>{ modal.style.display='none'; };
-window.onclick = function(event){ if(event.target == modal){ modal.style.display='none'; } }
+link.onclick = ()=>{modal.style.display='block';}
+spanClose.onclick = ()=>{modal.style.display='none';}
+window.onclick = (e)=>{if(e.target==modal) modal.style.display='none';}
 
-// Aceptar acuerdo desde modal
-document.getElementById('btnAceptarAcuerdo').onclick = ()=>{
-  desbloquearFirma();
+// Aceptar acuerdo
+btnAceptar.onclick = ()=>{
+  firmaInput.disabled=false;
+  localStorage.setItem('acuerdoFirmado','true');
   modal.style.display='none';
+  alert({'es':'✅ Acuerdo aceptado. Ahora puede firmar su reserva.','en':'✅ Agreement accepted. You can now sign your booking.','pt':'✅ Acordo aceito. Agora você pode assinar sua reserva.'}[lang]);
 }
 
-// Si ya aceptaron el acuerdo, desbloquear automáticamente
-window.addEventListener('load', ()=>{ if(localStorage.getItem('acuerdoFirmado')==='true'){ firmaInput.disabled = false; } });
-window.addEventListener('focus', ()=>{ if(localStorage.getItem('acuerdoFirmado')==='true'){ firmaInput.disabled = false; } });
+// Desbloquear si ya aceptó antes
+window.addEventListener('load', ()=>{if(localStorage.getItem('acuerdoFirmado')==='true'){firmaInput.disabled=false;}});
 
-// Datos de aceites
+// --- Aquí continúa todo tu código existente para aceites y envío de formulario ---
 const aceitesData = [
   {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
   {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
@@ -193,7 +196,6 @@ const aceitesData = [
   {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez a bajas temperaturas.", Precio:25},
   {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Aceite duradero con aditivos anti-desgaste avanzados.", Precio:27},
 ];
-
 const selectTipo = document.getElementById('selectTipoAceite');
 const selectMarca = document.getElementById('selectMarca');
 const descArea = document.getElementById('descripcionAceite');
@@ -204,49 +206,51 @@ selectTipo.addEventListener('change', () => {
   descArea.value = "";
   if(!tipo) return;
   const marcas = aceitesData.filter(a => a.Tipo === tipo).map(a => a.Marca);
-  marcas.forEach(m => { const opt=document.createElement('option'); opt.value=m; opt.textContent=m; selectMarca.appendChild(opt); });
+  marcas.forEach(m => {const opt = document.createElement('option'); opt.value=m; opt.textContent=m; selectMarca.appendChild(opt);});
 });
-
 selectMarca.addEventListener('change', () => {
-  const tipo = selectTipo.value;
-  const marca = selectMarca.value;
-  const aceite = aceitesData.find(a => a.Tipo === tipo && a.Marca === marca);
+  const tipo = selectTipo.value; const marca = selectMarca.value;
+  const aceite = aceitesData.find(a => a.Tipo===tipo && a.Marca===marca);
   descArea.value = aceite ? aceite.Descripcion : "";
 });
 
 // Envío del formulario
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg3dNWczFmzj_fxQWpHQ2451W62eCgFf8Oqfu8CVo8RPYM8ygnw/exec"; 
 document.getElementById('formCita').addEventListener('submit', function(e){
   e.preventDefault();
-  const form = e.target;
-  const msg = document.getElementById('mensaje');
+  const form = e.target; const msg = document.getElementById('mensaje');
   msg.textContent = "⏳ Enviando...";
-  if(localStorage.getItem('acuerdoFirmado')!=='true'){ msg.textContent = translations[lang].acuerdo; return; }
+  if(localStorage.getItem('acuerdoFirmado')!=='true'){msg.textContent={'es':'Debes leer y aceptar el acuerdo antes de enviar la cita.','en':'You must sign the agreement before submitting the booking.','pt':'Você deve assinar o acordo antes de enviar a reserva.'}[lang]; return;}
   const data = Object.fromEntries(new FormData(form).entries());
-  const now = new Date();
-  const selected = new Date(data.Fecha + "T" + data.Hora);
-  if (!data.Fecha || !data.Hora || selected - now < 24*60*60*1000) { msg.textContent = translations[lang].error24; return; }
-  const aceiteSel = aceitesData.find(a => a.Tipo === data.TipoAceite && a.Marca === data.Marca);
-  data.Precio = aceiteSel ? aceiteSel.Precio : 0;
-
-  fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify(data), headers:{'Content-Type':'application/json'}})
-  .then(r=>r.text()).then(r=>{
-    msg.textContent = translations[lang].exito;
-    form.reset(); firmaInput.disabled=true; localStorage.removeItem('acuerdoFirmado');
-    // Mostrar recibo
-    document.getElementById('recibo').style.display='block';
-    document.getElementById('reciboNombre').textContent = data.Nombre;
-    document.getElementById('reciboTelefono').textContent = data.Telefono;
-    document.getElementById('reciboCorreo').textContent = data.Correo;
-    document.getElementById('reciboMarca').textContent = data.Marca;
-    document.getElementById('reciboModelo').textContent = data.Modelo;
-    document.getElementById('reciboAno').textContent = data.Ano;
-    document.getElementById('reciboAceite').textContent = data.TipoAceite + " - " + data.Marca;
-    document.getElementById('reciboDireccion').textContent = data.Direccion;
-    document.getElementById('reciboFecha').textContent = data.Fecha;
-    document.getElementById('reciboHora').textContent = data.Hora;
-    document.getElementById('reciboComentarios').textContent = data.Comentarios;
-    document.getElementById('reciboFirma').textContent = data.Firma;
-  }).catch(err=>{msg.textContent="❌ Error enviando la cita, intenta nuevamente."; console.error(err);});
+  const now = new Date(); const selected = new Date(data.Fecha+"T"+data.Hora);
+  if(!data.Fecha || !data.Hora || selected-now<24*60*60*1000){msg.textContent={'es':'❌ La cita debe agendarse con al menos 24 horas de anticipación','en':'❌ Appointments must be scheduled at least 24 hours in advance','pt':'❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência'}[lang]; return;}
+  const aceiteSel = aceitesData.find(a=>a.Tipo===data.TipoAceite && a.Marca===data.Marca); if(aceiteSel) data.PrecioAceite=aceiteSel.Precio;
+  const cbName="cb_"+Date.now()+"_"+Math.floor(Math.random()*10000);
+  window[cbName]=function(response){
+    try{
+      if(response && response.success){
+        msg.textContent={'es':'✅ Tu cita ha sido registrada correctamente','en':'✅ Your appointment has been successfully booked','pt':'✅ Sua reserva foi registrada com sucesso'}[lang];
+        document.getElementById('reciboNombre').innerText=data.Nombre;
+        document.getElementById('reciboTelefono').innerText=data.Telefono;
+        document.getElementById('reciboCorreo').innerText=data.Correo;
+        document.getElementById('reciboMarca').innerText=data.Marca;
+        document.getElementById('reciboModelo').innerText=data.Modelo;
+        document.getElementById('reciboAno').innerText=data.Ano;
+        document.getElementById('reciboAceite').innerText=`${data.TipoAceite} - ${data.Marca}`;
+        document.getElementById('reciboDireccion').innerText=data.Direccion;
+        document.getElementById('reciboFecha').innerText=data.Fecha;
+        document.getElementById('reciboHora').innerText=data.Hora;
+        document.getElementById('reciboComentarios').innerText=data.Comentarios;
+        document.getElementById('reciboFirma').innerText=data.Firma;
+        document.getElementById('recibo').style.display="block";
+        form.reset(); descArea.value="";
+      } else {msg.textContent="⚠️ "+(response.error || "Error al registrar la cita");}
+    } finally {const s=document.getElementById(cbName+"_script"); if(s && s.parentNode) s.parentNode.removeChild(s); delete window[cbName];}
+  };
+  const qs=new URLSearchParams(data); qs.append("callback",cbName);
+  const script=document.createElement('script'); script.src=SCRIPT_URL+"?"+qs.toString(); script.id=cbName+"_script";
+  script.onerror=function(){msg.textContent="⚠️ Error de conexión al servidor"; if(script.parentNode) script.parentNode.removeChild(script); delete window[cbName];};
+  document.body.appendChild(script);
 });
 </script>
 </body>
