@@ -7,19 +7,19 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
   *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-  body{background:linear-gradient(135deg,#0b5ed7,#121212);color:#e0e0e0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 10px;}
-  .container{background:#1e1e1e;border-radius:15px;box-shadow:0 12px 30px rgba(0,0,0,0.8);padding:40px 30px;max-width:600px;width:100%;transition:all 0.3s ease;}
-  h2{text-align:center;margin-bottom:30px;font-size:28px;color:#ffffff;text-shadow:0 2px 6px rgba(0,0,0,0.5);}
+  body{background-color:#121212;color:#e0e0e0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 10px;}
+  .container{background:#1e1e1e;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.7);padding:40px 30px;max-width:600px;width:100%;transition:all 0.3s;}
+  h2{text-align:center;margin-bottom:30px;font-size:28px;color:#ffffff;}
   .idiomas{text-align:right;margin-bottom:25px;}
-  .idiomas img{width:30px;height:20px;cursor:pointer;margin-left:8px;border-radius:3px;border:1px solid #333;transition:transform 0.3s;}
-  .idiomas img:hover{transform:scale(1.3);}
+  .idiomas img{width:30px;height:20px;cursor:pointer;margin-left:8px;border-radius:3px;border:1px solid #333;transition:transform 0.2s;}
+  .idiomas img:hover{transform:scale(1.2);}
   .form-group{position:relative;margin-bottom:25px;}
   .form-group i{position:absolute;top:50%;left:12px;transform:translateY(-50%);color:#888;font-size:16px;}
   .form-group input, .form-group select, .form-group textarea{
-    width:100%;padding:14px 12px 14px 38px;border-radius:10px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;transition:all 0.3s ease, box-shadow 0.3s ease;
+    width:100%;padding:14px 12px 14px 38px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;transition:all 0.3s ease;
   }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
-    outline:none;background-color:#333;box-shadow:0 0 12px #0b5ed7;
+    outline:none;background-color:#333;box-shadow:0 0 8px #0b5ed7;
   }
   .form-group textarea{min-height:80px;resize:vertical;}
   .form-group label{
@@ -29,24 +29,26 @@
   .form-group input:focus + label, .form-group input:not(:placeholder-shown) + label,
   .form-group select:focus + label, .form-group select:not([value=""]) + label,
   .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
-    top:-12px; left:10px; font-size:12px; color:#0b5ed7;
+    top:-10px; left:10px; font-size:12px; color:#0b5ed7;
   }
 
-  .agreement-container{margin-bottom:25px;text-align:left;background:#2a2a2a;padding:15px;border-radius:10px;box-shadow:inset 0 0 8px rgba(0,0,0,0.5);}
-  .agreement-container label{font-size:14px;cursor:default;display:flex;align-items:center;opacity:0.8;transition:opacity 0.3s;}
-  .agreement-container input{margin-right:12px;vertical-align:middle;cursor:not-allowed;transform:scale(1.2);}
+  .agreement-container{margin-bottom:20px;text-align:left;}
+  .agreement-container label{font-size:14px;cursor:default;display:flex;align-items:center;opacity:0.7;}
+  .agreement-container input{margin-right:10px;vertical-align:middle;pointer-events:none;}
   .agreement-container a{color:#0b5ed7;text-decoration:underline;font-size:13px;margin-top:5px;display:inline-block;}
+  .agreement-container button{margin-top:5px;padding:5px 10px;border:none;border-radius:5px;background:#0b5ed7;color:white;cursor:pointer;font-size:13px;transition:all 0.3s;}
+  .agreement-container button:hover{background:#084298;}
 
-  .firma-container{margin-bottom:25px;}
-  .firma-container input{width:100%;padding:14px;border-radius:10px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;box-shadow:0 0 6px rgba(0,0,0,0.5);transition:box-shadow 0.3s ease;}
+  .firma-container{margin-bottom:20px;opacity:0.5;transition:opacity 0.3s;}
+  .firma-container input{width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;transition:box-shadow 0.3s;}
   .firma-container input:disabled{background-color:#3a3a3a;cursor:not-allowed;}
   .firma-container input:focus{box-shadow:0 0 12px #0b5ed7;}
 
-  button{width:100%;padding:16px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:12px;cursor:pointer;font-weight:bold;transition:all 0.3s ease, transform 0.3s;}
-  button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,0.7);}
-  .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;opacity:0.9;}
-  #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:25px;border-radius:12px;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,0.6);}
-  #recibo h3{text-align:center;margin-bottom:20px;font-size:22px;}
+  button[type="submit"]{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
+  button[type="submit"]:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
+  .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
+  #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:20px;border-radius:10px;color:#fff;}
+  #recibo h3{text-align:center;margin-bottom:20px;}
   @media(max-width:600px){.container{padding:30px 20px;}h2{font-size:24px;}}
 </style>
 </head>
@@ -95,15 +97,15 @@
 
     <div class="agreement-container">
       <label>
-        <input type="checkbox" id="chkAgreement" disabled>
-        <span id="acuerdoTexto">Debes leer y aceptar el acuerdo antes de poder firmar.</span>
+        <input type="checkbox" id="chkAgreement" disabled required>
+        <span id="acuerdoTexto">Debes leer y aceptar el acuerdo antes de firmar.</span>
       </label>
       <a href="acuerdo.html" target="_blank" id="linkAcuerdo">Leer acuerdo completo</a>
-      <button type="button" id="btnAceptarAcuerdo" style="margin-top:10px;width:100%;padding:10px;background:#0b5ed7;color:white;border:none;border-radius:8px;cursor:pointer;">He leído y acepto el acuerdo</button>
+      <button type="button" id="btnAceptarAcuerdo">✅ He leído y acepto</button>
     </div>
 
-    <div class="firma-container">
-      <input type="text" name="Firma" placeholder="Escribe tu nombre como firma digital" required disabled>
+    <div class="firma-container" id="firmaContainer">
+      <input type="text" name="Firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" disabled required>
     </div>
 
     <input type="hidden" name="Estado" value="Pendiente">
@@ -131,15 +133,18 @@
 </div>
 
 <script>
-// === Traducciones ===
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg3dNWczFmzj_fxQWpHQ2451W62eCgFf8Oqfu8CVo8RPYM8ygnw/exec"; 
+
 const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes aceptar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
-  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must accept the agreement before submitting the booking.", recibo:"✅ Booking Receipt", link:"Read full agreement"},
-  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve aceitar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes leer y aceptar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
+  en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must sign the agreement before submitting the booking.", recibo:"✅ Booking Receipt", link:"Read full agreement"},
+  pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
 };
+
 let lang = navigator.language.slice(0,2);
 if(!translations[lang]) lang='es';
 applyLang(lang);
+
 function setLang(l){lang=l;applyLang(lang);}
 function applyLang(lang){
   const t=translations[lang];
@@ -151,21 +156,34 @@ function applyLang(lang){
   document.getElementById('langField').value=lang;
 }
 
-// === Checkbox y Firma ===
-const chkAgreement = document.getElementById('chkAgreement');
-const btnAceptarAcuerdo = document.getElementById('btnAceptarAcuerdo');
-const firmaInput = document.querySelector('.firma-container input');
+// Manejo de acuerdo y firma
+window.addEventListener('load', ()=>{
+  const chk = document.getElementById('chkAgreement');
+  const firma = document.getElementById('firmaInput');
+  const btnAceptar = document.getElementById('btnAceptarAcuerdo');
+  const firmaContainer = document.getElementById('firmaContainer');
 
-btnAceptarAcuerdo.addEventListener('click',()=>{
-  localStorage.setItem('acuerdoFirmado','true');
-  chkAgreement.checked = true;
-  chkAgreement.disabled = true;
-  firmaInput.disabled = false;
-  document.getElementById('acuerdoTexto').textContent = "✅ Acuerdo aceptado correctamente.";
-  btnAceptarAcuerdo.style.display='none';
+  if(localStorage.getItem('acuerdoFirmado')==='true'){
+    chk.checked = true;
+    chk.disabled = true;
+    firma.disabled = false;
+    firmaContainer.style.opacity = '1';
+    document.getElementById('acuerdoTexto').textContent = "✅ Acuerdo aceptado correctamente.";
+    btnAceptar.style.display = 'none';
+  }
+
+  btnAceptar.addEventListener('click', ()=>{
+    localStorage.setItem('acuerdoFirmado','true');
+    chk.checked = true;
+    chk.disabled = true;
+    firma.disabled = false;
+    firmaContainer.style.opacity = '1';
+    document.getElementById('acuerdoTexto').textContent = "✅ Acuerdo aceptado correctamente.";
+    btnAceptar.style.display='none';
+  });
 });
 
-// === Aceites ===
+// Datos de aceites
 const aceitesData = [
   {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
   {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
@@ -180,78 +198,96 @@ const aceitesData = [
   {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez a bajas temperaturas.", Precio:25},
   {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Aceite duradero con aditivos anti-desgaste avanzados.", Precio:27},
 ];
+
 const selectTipo = document.getElementById('selectTipoAceite');
 const selectMarca = document.getElementById('selectMarca');
 const descArea = document.getElementById('descripcionAceite');
 
-selectTipo.addEventListener('change',()=>{
+selectTipo.addEventListener('change', () => {
   const tipo = selectTipo.value;
-  selectMarca.innerHTML='<option value="">Selecciona marca de aceite</option>';
-  descArea.value="";
+  selectMarca.innerHTML = '<option value="">Selecciona marca de aceite</option>';
+  descArea.value = "";
   if(!tipo) return;
-  const marcas = aceitesData.filter(a=>a.Tipo===tipo).map(a=>a.Marca);
-  marcas.forEach(m=>{
-    const opt=document.createElement('option');
-    opt.value=m;
-    opt.textContent=m;
+  const marcas = aceitesData.filter(a => a.Tipo === tipo).map(a => a.Marca);
+  marcas.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = m;
     selectMarca.appendChild(opt);
   });
 });
-selectMarca.addEventListener('change',()=>{
+
+selectMarca.addEventListener('change', () => {
   const tipo = selectTipo.value;
   const marca = selectMarca.value;
-  const aceite = aceitesData.find(a=>a.Tipo===tipo && a.Marca===marca);
+  const aceite = aceitesData.find(a => a.Tipo === tipo && a.Marca === marca);
   descArea.value = aceite ? aceite.Descripcion : "";
 });
 
-// === Envío Formulario ===
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg3dNWczFmzj_fxQWpHQ2451W62eCgFf8Oqfu8CVo8RPYM8ygnw/exec"; 
+// Envío del formulario
 document.getElementById('formCita').addEventListener('submit', function(e){
   e.preventDefault();
-  const form=this;
-  const msg=document.getElementById('mensaje');
-  msg.textContent="⏳ Enviando...";
+  const form = e.target;
+  const msg = document.getElementById('mensaje');
+  msg.textContent = "⏳ Enviando...";
 
   if(localStorage.getItem('acuerdoFirmado')!=='true'){
     msg.textContent = translations[lang].acuerdo;
     return;
   }
 
-  const data=Object.fromEntries(new FormData(form).entries());
-  const now=new Date();
-  const selected=new Date(data.Fecha+"T"+data.Hora);
-  if(!data.Fecha || !data.Hora || selected-now<24*60*60*1000){
-    msg.textContent=translations[lang].error24;
+  const data = Object.fromEntries(new FormData(form).entries());
+  const now = new Date();
+  const selected = new Date(data.Fecha + "T" + data.Hora);
+  if (!data.Fecha || !data.Hora || selected - now < 24*60*60*1000) {
+    msg.textContent = translations[lang].error24;
     return;
   }
 
-  const aceiteSel=aceitesData.find(a=>a.Tipo===data.TipoAceite && a.Marca===data.Marca);
-  if(aceiteSel) data.PrecioAceite=aceiteSel.Precio;
+  const aceiteSel = aceitesData.find(a => a.Tipo === data.TipoAceite && a.Marca === data.Marca);
+  if(aceiteSel) data.PrecioAceite = aceiteSel.Precio;
 
-  fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(data)})
-    .then(r=>r.json())
-    .then(r=>{
-      if(r.result==="success"){
-        msg.textContent=translations[lang].exito;
-        document.getElementById('reciboNombre').textContent=data.Nombre;
-        document.getElementById('reciboTelefono').textContent=data.Telefono;
-        document.getElementById('reciboCorreo').textContent=data.Correo;
-        document.getElementById('reciboMarca').textContent=data.Marca;
-        document.getElementById('reciboModelo').textContent=data.Modelo;
-        document.getElementById('reciboAno').textContent=data.Ano;
-        document.getElementById('reciboAceite').textContent=data.TipoAceite+" "+data.Marca;
-        document.getElementById('reciboDireccion').textContent=data.Direccion;
-        document.getElementById('reciboFecha').textContent=data.Fecha;
-        document.getElementById('reciboHora').textContent=data.Hora;
-        document.getElementById('reciboComentarios').textContent=data.Comentarios;
-        document.getElementById('reciboFirma').textContent=data.Firma;
-        document.getElementById('recibo').style.display='block';
+  const cbName = "cb_" + Date.now() + "_" + Math.floor(Math.random()*10000);
+  window[cbName] = function(response){
+    try{
+      if(response && response.success){
+        msg.textContent = translations[lang].exito;
         form.reset();
-        chkAgreement.checked=false;
-        firmaInput.disabled=true;
-        btnAceptarAcuerdo.style.display='block';
-      }else msg.textContent="❌ Error al enviar la cita.";
-    }).catch(e=>{msg.textContent="❌ Error de conexión.";console.error(e);});
+        descArea.value = "";
+        document.getElementById('reciboNombre').innerText = data.Nombre;
+        document.getElementById('reciboTelefono').innerText = data.Telefono;
+        document.getElementById('reciboCorreo').innerText = data.Correo;
+        document.getElementById('reciboMarca').innerText = data.Marca;
+        document.getElementById('reciboModelo').innerText = data.Modelo;
+        document.getElementById('reciboAno').innerText = data.Ano;
+        document.getElementById('reciboAceite').innerText = `${data.TipoAceite} - ${data.Marca}`;
+        document.getElementById('reciboDireccion').innerText = data.Direccion;
+        document.getElementById('reciboFecha').innerText = data.Fecha;
+        document.getElementById('reciboHora').innerText = data.Hora;
+        document.getElementById('reciboComentarios').innerText = data.Comentarios;
+        document.getElementById('reciboFirma').innerText = data.Firma;
+        document.getElementById('recibo').style.display = "block";
+      } else {
+        msg.textContent = "⚠️ "+(response.error || "Error al registrar la cita");
+      }
+    } finally {
+      const s = document.getElementById(cbName+"_script");
+      if(s && s.parentNode) s.parentNode.removeChild(s);
+      delete window[cbName];
+    }
+  };
+
+  const qs = new URLSearchParams(data);
+  qs.append("callback", cbName);
+  const script = document.createElement('script');
+  script.src = SCRIPT_URL+"?"+qs.toString();
+  script.id = cbName+"_script";
+  script.onerror = function(){
+    msg.textContent = "⚠️ Error de conexión al servidor";
+    if(script.parentNode) script.parentNode.removeChild(script);
+    delete window[cbName];
+  };
+  document.body.appendChild(script);
 });
 </script>
 </body>
