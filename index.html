@@ -36,12 +36,13 @@
   .agreement-container label{font-size:14px;cursor:default;display:flex;align-items:center;opacity:0.7;}
   .agreement-container input{margin-right:10px;vertical-align:middle;pointer-events:none;}
   .agreement-container a{color:#0b5ed7;text-decoration:underline;font-size:13px;margin-top:5px;display:inline-block;}
+  .agreement-container button{margin-top:5px;padding:5px 10px;border:none;border-radius:5px;background:#0b5ed7;color:white;cursor:pointer;font-size:13px;}
 
   .firma-container{margin-bottom:20px;}
   .firma-container input{width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;}
 
-  button{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
-  button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
+  button[type="submit"]{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
+  button[type="submit"]:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
   .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
   #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:20px;border-radius:10px;color:#fff;}
   #recibo h3{text-align:center;margin-bottom:20px;}
@@ -94,16 +95,18 @@
     <div class="form-group"><i class="fas fa-clock"></i><input type="time" name="Hora" placeholder=" " required><label id="lblHora">Hora</label></div>
     <div class="form-group"><i class="fas fa-comment-dots"></i><textarea name="Comentarios" placeholder=" "></textarea><label id="lblComentarios">Comentarios adicionales</label></div>
 
+    <!-- ACUERDO Y FIRMA -->
     <div class="agreement-container">
       <label>
         <input type="checkbox" id="chkAgreement" disabled required>
-        <span id="acuerdoTexto">Debes firmar el acuerdo antes de enviar la cita.</span>
+        <span id="acuerdoTexto">Debes leer y aceptar el acuerdo antes de firmar.</span>
       </label>
       <a href="acuerdo.html" target="_blank" id="linkAcuerdo">Leer acuerdo completo</a>
+      <button type="button" id="btnAceptarAcuerdo">✅ He leído y acepto</button>
     </div>
 
     <div class="firma-container">
-      <input type="text" name="Firma" placeholder="Escribe tu nombre como firma digital" required>
+      <input type="text" name="Firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" disabled required>
     </div>
 
     <input type="hidden" name="Estado" value="Pendiente">
@@ -134,7 +137,7 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1Odn29AKsvgYwgnTpg3dNWczFmzj_fxQWpHQ2451W62eCgFf8Oqfu8CVo8RPYM8ygnw/exec"; 
 
 const translations = {
-  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes firmar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
+  es:{titulo:"Reserva de Servicio a Domicilio", enviar:"Enviar Reserva", exito:"✅ Tu cita ha sido registrada correctamente", error24:"❌ La cita debe agendarse con al menos 24 horas de anticipación", acuerdo:"Debes leer y aceptar el acuerdo antes de enviar la cita.", recibo:"✅ Recibo de Reserva", link:"Leer acuerdo completo"},
   en:{titulo:"Home Service Booking", enviar:"Submit Booking", exito:"✅ Your appointment has been successfully booked", error24:"❌ Appointments must be scheduled at least 24 hours in advance", acuerdo:"You must sign the agreement before submitting the booking.", recibo:"✅ Booking Receipt", link:"Read full agreement"},
   pt:{titulo:"Agendamento de Serviço Domiciliar", enviar:"Enviar Reserva", exito:"✅ Sua reserva foi registrada com sucesso", error24:"❌ As reservas devem ser feitas com pelo menos 24 horas de antecedência", acuerdo:"Você deve assinar o acordo antes de enviar a reserva.", recibo:"✅ Recibo de Reserva", link:"Ler o acordo completo"}
 };
@@ -154,18 +157,31 @@ function applyLang(lang){
   document.getElementById('langField').value=lang;
 }
 
-// Verifica si el acuerdo fue firmado antes
+// Manejo de acuerdo y firma
 window.addEventListener('load', ()=>{
   const chk = document.getElementById('chkAgreement');
+  const firma = document.getElementById('firmaInput');
+  const btnAceptar = document.getElementById('btnAceptarAcuerdo');
+
   if(localStorage.getItem('acuerdoFirmado')==='true'){
     chk.checked = true;
     chk.disabled = true;
-    document.querySelector('.agreement-container label').style.opacity = '1';
+    firma.disabled = false;
     document.getElementById('acuerdoTexto').textContent = "✅ Acuerdo aceptado correctamente.";
+    btnAceptar.style.display = 'none';
   }
+
+  btnAceptar.addEventListener('click', ()=>{
+    localStorage.setItem('acuerdoFirmado','true');
+    chk.checked = true;
+    chk.disabled = true;
+    firma.disabled = false;
+    document.getElementById('acuerdoTexto').textContent = "✅ Acuerdo aceptado correctamente.";
+    btnAceptar.style.display = 'none';
+  });
 });
 
-// Datos de aceites según tabla de precios
+// Datos de aceites
 const aceitesData = [
   {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
   {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
@@ -206,6 +222,7 @@ selectMarca.addEventListener('change', () => {
   descArea.value = aceite ? aceite.Descripcion : "";
 });
 
+// Envío del formulario
 document.getElementById('formCita').addEventListener('submit', function(e){
   e.preventDefault();
   const form = e.target;
@@ -225,7 +242,6 @@ document.getElementById('formCita').addEventListener('submit', function(e){
     return;
   }
 
-  // Precio del aceite
   const aceiteSel = aceitesData.find(a => a.Tipo === data.TipoAceite && a.Marca === data.Marca);
   if(aceiteSel) data.PrecioAceite = aceiteSel.Precio;
 
