@@ -187,79 +187,75 @@ const aceitesData = [
   {Tipo:"5W20", Marca:"Valvoline", Descripcion:"Buena durabilidad del motor, ideal para condiciones mixtas.", Precio:26},
   {Tipo:"5W30", Marca:"Mobil 1", Descripcion:"Excelente control de oxidación y protección del motor.", Precio:26},
   {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez en todo tipo de temperatura.", Precio:25},
-  {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Protección avanzada contra desgaste y corrosión.", Precio:27}
+  {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Protección avanzada contra desgaste y depósitos.", Precio:27}
 ];
 
-const tipoSelect = document.getElementById('selectTipoAceite');
-const marcaSelect = document.getElementById('selectMarca');
-const descripcionArea = document.getElementById('descripcionAceite');
+const selectTipoAceite = document.getElementById('selectTipoAceite');
+const selectMarca = document.getElementById('selectMarca');
+const descripcionAceite = document.getElementById('descripcionAceite');
 
-tipoSelect.addEventListener('change',()=>{
-  marcaSelect.innerHTML='<option value="">Selecciona marca de aceite</option>';
-  const tipo=tipoSelect.value;
-  const marcasFiltradas = aceitesData.filter(a=>a.Tipo===tipo);
-  marcasFiltradas.forEach(a=>{
-    const option=document.createElement('option');
-    option.value=a.Marca;
-    option.textContent=a.Marca;
-    marcaSelect.appendChild(option);
+selectTipoAceite.addEventListener('change', ()=>{
+  const tipo = selectTipoAceite.value;
+  selectMarca.innerHTML = `<option value="">Selecciona marca de aceite</option>`;
+  aceitesData.filter(a=>a.Tipo===tipo).forEach(a=>{
+    const opt = document.createElement('option');
+    opt.value = a.Marca;
+    opt.textContent = a.Marca;
+    selectMarca.appendChild(opt);
   });
-  descripcionArea.value='';
+  descripcionAceite.value='';
 });
 
-marcaSelect.addEventListener('change',()=>{
-  const tipo=tipoSelect.value;
-  const marca=marcaSelect.value;
-  const aceite=aceitesData.find(a=>a.Tipo===tipo && a.Marca===marca);
-  descripcionArea.value = aceite ? aceite.Descripcion : '';
+selectMarca.addEventListener('change', ()=>{
+  const tipo = selectTipoAceite.value;
+  const marca = selectMarca.value;
+  const aceite = aceitesData.find(a=>a.Tipo===tipo && a.Marca===marca);
+  descripcionAceite.value = aceite ? aceite.Descripcion : '';
 });
 
 const form = document.getElementById('formCita');
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxA0YNjTNPBJDbkmNx4_mkemBuO1Cag7SnB9ca9d9SQcrlVmsZ4QBYAJkG0n8FT8a7XIg/exec";
 const mensaje = document.getElementById('mensaje');
+const SCRIPT_URL = 'TU_GOOGLE_APPS_SCRIPT_URL_AQUI'; // Reemplaza con tu URL
 
 form.addEventListener('submit', e=>{
   e.preventDefault();
-  if(firmaInput.disabled){
-    alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);
-    return;
-  }
+  if(firmaInput.disabled){alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);return;}
 
   const data = Object.fromEntries(new FormData(form).entries());
-  data.callback = 'handleResponse';
+  data.callback='handleResponse';
 
   const script = document.createElement('script');
-  const params = new URLSearchParams(data).toString();
-  script.src = SCRIPT_URL + '?' + params;
+  script.src = SCRIPT_URL + '?' + new URLSearchParams(data).toString();
   document.body.appendChild(script);
+
+  window.ultimoEnvio = {...data};
 });
 
 function handleResponse(response){
   if(response.success){
-    mensaje.textContent = {'es':'Reserva enviada correctamente!','en':'Booking submitted successfully!','pt':'Reserva enviada com sucesso!'}[lang];
-    const data = Object.fromEntries(new FormData(form).entries());
+    mensaje.textContent = {'es':'✅ Reserva enviada correctamente!','en':'✅ Booking submitted successfully!','pt':'✅ Reserva enviada com sucesso!'}[lang];
+    mostrarRecibo(window.ultimoEnvio);
     form.reset();
     firmaInput.disabled=true;
     localStorage.removeItem('acuerdoFirmado');
-    mostrarRecibo(data);
-  } else {
-    mensaje.textContent = 'Error: ' + (response.error || 'Problema al enviar la reserva.');
+  }else{
+    mensaje.textContent='Error: '+(response.error||'Problema al enviar la reserva.');
   }
 }
 
 function mostrarRecibo(data){
-  document.getElementById('reciboNombre').innerText=data.Nombre;
-  document.getElementById('reciboTelefono').innerText=data.Telefono;
-  document.getElementById('reciboCorreo').innerText=data.Correo;
-  document.getElementById('reciboMarca').innerText=data.Marca;
-  document.getElementById('reciboModelo').innerText=data.Modelo;
-  document.getElementById('reciboAno').innerText=data.Ano;
-  document.getElementById('reciboAceite').innerText=data.TipoAceite+' - '+data.MarcaAceite;
-  document.getElementById('reciboDireccion').innerText=data.Direccion;
-  document.getElementById('reciboFecha').innerText=data.Fecha;
-  document.getElementById('reciboHora').innerText=data.Hora;
-  document.getElementById('reciboComentarios').innerText=data.Comentarios;
-  document.getElementById('reciboFirma').innerText=data.Firma;
+  document.getElementById('reciboNombre').innerText = data.Nombre || '';
+  document.getElementById('reciboTelefono').innerText = data.Telefono || '';
+  document.getElementById('reciboCorreo').innerText = data.Correo || '';
+  document.getElementById('reciboMarca').innerText = data.Marca || '';
+  document.getElementById('reciboModelo').innerText = data.Modelo || '';
+  document.getElementById('reciboAno').innerText = data.Ano || '';
+  document.getElementById('reciboAceite').innerText = (data.TipoAceite || '') + ' - ' + (data.MarcaAceite || '');
+  document.getElementById('reciboDireccion').innerText = data.Direccion || '';
+  document.getElementById('reciboFecha').innerText = data.Fecha || '';
+  document.getElementById('reciboHora').innerText = data.Hora || '';
+  document.getElementById('reciboComentarios').innerText = data.Comentarios || '';
+  document.getElementById('reciboFirma').innerText = data.Firma || '';
   document.getElementById('recibo').style.display='block';
 }
 </script>
