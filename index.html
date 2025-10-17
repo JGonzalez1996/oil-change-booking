@@ -453,7 +453,7 @@ selectMarcaVehiculo.addEventListener('change', ()=>{
 /* ************** ENVÍO GOOGLE SCRIPT ************** */
 const form = document.getElementById('formCita');
 const mensaje = document.getElementById('mensaje');
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwU41QbBNu1AeRVCswyBP5IpyMTWCpzDuHcbwL-9jXiZr0W6ET-PuCH9lD41yIjjgZNxQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytzUrdCjo9o3g3oyR0sb9Gn7FFKzx5_M2PeA1iO9wIsc8ZCpYIHTS_QdL8dPtVfAHuPw/exec';
 form.addEventListener('submit', e=>{
   e.preventDefault();
   if(firmaInput.disabled){alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);return;}
