@@ -64,9 +64,9 @@
     <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
     <div class="form-group"><i class="fas fa-phone"></i><input type="tel" name="Telefono" placeholder=" " required><label id="lblTelefono">Teléfono</label></div>
     <div class="form-group"><i class="fas fa-envelope"></i><input type="email" name="Correo" placeholder=" " required><label id="lblCorreo">Correo electrónico</label></div>
-    <div class="form-group"><i class="fas fa-car"></i><input type="text" name="Marca" placeholder=" " required><label id="lblMarca">Marca del vehículo</label></div>
-    <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" " required><label id="lblModelo">Modelo del vehículo</label></div>
-    <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" " required><label id="lblAno">Año del vehículo</label></div>
+    
+    <!-- Contenedor para Marca y Modelo dinámicos -->
+    <div id="contenedorVehiculos"></div>
 
     <div class="form-group"><i class="fas fa-oil-can"></i>
       <select name="TipoAceite" id="selectTipoAceite" required>
@@ -138,126 +138,195 @@
 </div>
 
 <script>
+// ================== ACUERDO ==================
 const acuerdoText = {
   es: `<p>Al solicitar nuestro servicio de cambio de aceite a domicilio, usted acepta los siguientes términos y condiciones:</p><ul><li>El cliente debe proporcionar información veraz sobre el vehículo y la ubicación del servicio.</li><li>Se requiere agendar la cita con al menos 24 horas de anticipación.</li><li>El técnico tiene derecho a reprogramar la cita en caso de condiciones climáticas adversas o emergencias.</li><li>Los precios pueden variar según el tipo de aceite, filtro y servicio adicional solicitado.</li><li>El cliente es responsable de asegurar el acceso adecuado al vehículo durante el servicio.</li><li>Todos los pagos deben completarse al finalizar el servicio.</li><li>El cliente acepta que la firma digital en este formulario es vinculante para aceptar los términos.</li></ul><p>Lea cuidadosamente estos términos antes de aceptar. Al hacer clic en "Aceptar y firmar acuerdo", confirma que ha leído, entendido y acepta estas condiciones.</p>`,
-  en: `<p>By requesting our home oil change service, you agree to the following terms and conditions:</p><ul><li>The client must provide accurate information about the vehicle and service location.</li><li>Appointments must be scheduled at least 24 hours in advance.</li><li>The technician reserves the right to reschedule in case of adverse weather or emergencies.</li><li>Prices may vary depending on the type of oil, filter, and additional services requested.</li><li>The client is responsible for ensuring proper access to the vehicle during service.</li><li>All payments must be completed upon service completion.</li><li>The client agrees that the digital signature on this form is binding to accept the terms.</li></ul><p>Read these terms carefully before accepting. By clicking "Accept and sign agreement," you confirm you have read, understood, and agree to these conditions.</p>`,
-  pt: `<p>Ao solicitar nosso serviço domiciliar de troca de óleo, você concorda com os seguintes termos e condições:</p><ul><li>O cliente deve fornecer informações precisas sobre o veículo e o local do serviço.</li><li>As reservas devem ser feitas com pelo menos 24 horas de antecedência.</li><li>O técnico reserva-se o direito de reagendar em caso de clima adverso ou emergências.</li><li>Os preços podem variar dependendo do tipo de óleo, filtro e serviços adicionais solicitados.</li><li>O cliente é responsável por garantir o acesso adequado ao veículo durante o serviço.</li><li>Todos os pagamentos devem ser concluídos após a conclusão do serviço.</li><li>O cliente concorda que a assinatura digital neste formulário é vinculativa para aceitar os termos.</li></ul><p>Leia atentamente estes termos antes de aceitar. Ao clicar em "Aceitar e assinar acordo", você confirma que leu, entendeu e concorda com estas condições.</p>`
+  en: `<p>By requesting our home oil change service, you agree to the following terms and conditions:</p><ul><li>The client must provide accurate information about the vehicle and service location.</li><li>Appointments must be scheduled at least 24 hours in advance.</li><li>The technician reserves the right to reschedule in case of adverse weather or emergencies.</li><li>Prices may vary depending on the type of oil, filter, and additional services requested.</li><li>The client is responsible for ensuring proper access to the vehicle during service.</li><li>All payments must be completed upon service completion.</li><li>The client agrees that the digital signature on this form is binding to accept the terms.</li></ul><p>Read these terms carefully before accepting. By clicking "Accept and sign agreement," you confirm you have read, understood, and accept these conditions.</p>`,
+  pt: `<p>Ao solicitar nosso serviço de troca de óleo em domicílio, você concorda com os seguintes termos e condições:</p><ul><li>O cliente deve fornecer informações precisas sobre o veículo e local de serviço.</li><li>Os agendamentos devem ser feitos com pelo menos 24 horas de antecedência.</li><li>O técnico reserva-se o direito de reagendar em caso de condições climáticas adversas ou emergências.</li><li>Os preços podem variar dependendo do tipo de óleo, filtro e serviços adicionais solicitados.</li><li>O cliente é responsável por garantir o acesso adequado ao veículo durante o serviço.</li><li>Todos os pagamentos devem ser concluídos ao final do serviço.</li><li>O cliente concorda que a assinatura digital neste formulário é vinculativa para aceitar os termos.</li></ul><p>Leia atentamente estes termos antes de aceitar. Ao clicar em "Aceitar e assinar acordo", você confirma que leu, entendeu e aceita estas condições.</p>`
 };
 
-let lang = navigator.language.slice(0,2);
-if(!['es','en','pt'].includes(lang)) lang='es';
-applyLang(lang);
-
-function setLang(l){lang=l;applyLang(lang);}
-function applyLang(lang){
-  document.getElementById('titulo').innerText = {'es':'Reserva de Servicio a Domicilio','en':'Home Service Booking','pt':'Agendamento de Serviço Domiciliar'}[lang];
-  document.getElementById('btnEnviar').innerText = {'es':'Enviar Reserva','en':'Submit Booking','pt':'Enviar Reserva'}[lang];
-  document.getElementById('langField').value = lang;
-  document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
-}
-
 const modal = document.getElementById('modalAcuerdo');
-const link = document.getElementById('linkAcuerdo');
-const spanClose = document.querySelector('.modal-close');
-const btnAceptar = document.querySelector('.modal-accept');
+const linkAcuerdo = document.getElementById('linkAcuerdo');
+const modalClose = document.querySelector('.modal-close');
+const modalAccept = document.querySelector('.modal-accept');
 const firmaInput = document.getElementById('firmaInput');
+const textoAcuerdo = document.getElementById('textoAcuerdo');
 
-link.onclick = ()=>{modal.style.display='block';}
-spanClose.onclick = ()=>{modal.style.display='none';}
-window.onclick = (e)=>{if(e.target==modal) modal.style.display='none';}
+linkAcuerdo.onclick = () => { modal.style.display = 'block'; };
+modalClose.onclick = () => { modal.style.display = 'none'; };
+modalAccept.onclick = () => { modal.style.display = 'none'; firmaInput.disabled=false; };
 
-btnAceptar.onclick = ()=>{
-  firmaInput.disabled=false;
-  localStorage.setItem('acuerdoFirmado','true');
-  modal.style.display='none';
-  alert({'es':'✅ Acuerdo aceptado. Ahora puede firmar su reserva.','en':'✅ Agreement accepted. You can now sign your booking.','pt':'✅ Acordo aceito. Agora você pode assinar sua reserva.'}[lang]);
+// ================== IDIOMAS ==================
+let idioma = navigator.language.slice(0,2);
+const langField = document.getElementById('langField');
+
+function setLang(l){
+  idioma=l;
+  langField.value=idioma;
+  textoAcuerdo.innerHTML=acuerdoText[idioma]||acuerdoText['es'];
 }
+setLang(idioma);
 
-window.addEventListener('load', ()=>{if(localStorage.getItem('acuerdoFirmado')==='true'){firmaInput.disabled=false;}});
-
-const aceitesData = [
-  {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
-  {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
-  {Tipo:"0W20", Marca:"Valvoline", Descripcion:"Protección avanzada contra el desgaste, buen rendimiento en frío.", Precio:27},
-  {Tipo:"0W30", Marca:"Mobil 1", Descripcion:"Totalmente sintético, excelente viscosidad en climas fríos.", Precio:25},
-  {Tipo:"0W30", Marca:"Pennzoil", Descripcion:"Reduce la fricción interna del motor y mejora la eficiencia.", Precio:25},
-  {Tipo:"0W30", Marca:"Valvoline", Descripcion:"Formulado para máxima protección en motores exigentes.", Precio:27},
-  {Tipo:"5W20", Marca:"Mobil 1", Descripcion:"Tecnología avanzada anti-desgaste, rendimiento óptimo.", Precio:25},
-  {Tipo:"5W20", Marca:"Pennzoil", Descripcion:"Mantiene el motor limpio y eficiente, buena resistencia térmica.", Precio:24},
-  {Tipo:"5W20", Marca:"Valvoline", Descripcion:"Buena durabilidad del motor, ideal para condiciones mixtas.", Precio:26},
-  {Tipo:"5W30", Marca:"Mobil 1", Descripcion:"Excelente control de oxidación y protección del motor.", Precio:26},
-  {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez en todo tipo de temperatura.", Precio:25},
-  {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Protección avanzada contra desgaste y depósitos.", Precio:27}
-];
+// ================== ACEITES ==================
+const aceites = {
+  '0W20': 'Aceite sintético 0W20, recomendado para motores modernos, reduce fricción y mejora eficiencia.',
+  '0W30': 'Aceite sintético 0W30, mayor protección a temperaturas extremas.',
+  '5W20': 'Aceite semisintético 5W20, buena opción para motores con uso moderado.',
+  '5W30': 'Aceite semisintético 5W30, equilibrio entre protección y ahorro de combustible.'
+};
 
 const selectTipoAceite = document.getElementById('selectTipoAceite');
-const selectMarca = document.getElementById('selectMarca');
 const descripcionAceite = document.getElementById('descripcionAceite');
 
-selectTipoAceite.addEventListener('change', ()=>{
-  const tipo = selectTipoAceite.value;
-  selectMarca.innerHTML = `<option value="">Selecciona marca de aceite</option>`;
-  aceitesData.filter(a=>a.Tipo===tipo).forEach(a=>{
-    const opt = document.createElement('option');
-    opt.value = a.Marca;
-    opt.textContent = a.Marca;
-    selectMarca.appendChild(opt);
-  });
-  descripcionAceite.value='';
+selectTipoAceite.addEventListener('change',()=>{ descripcionAceite.value=aceites[selectTipoAceite.value]||''; });
+
+// Marcas y modelos basados en tu hoja completa
+const vehiculosData = {
+  "Acura": [
+    "ILX 2.4L",
+    "MDX 3.5L",
+    "MDX SH-AWD 3.5L",
+    "MDX Sport Hybrid 3.0L",
+    "NSX 3.5L Turbo",
+    "RDX 2WD 2.0L Turbo",
+    "RDX AWD 2.0L Turbo",
+    "RLX 3.5L",
+    "RLX Sport Hybrid 3.5L",
+    "TLX 2.0L Turbo",
+    "TLX SH-AWD 3.5L"
+  ],
+  "Chevrolet": [
+    "Aveo","Cruze","Cruze","Malibu","Malibu","Impala","Camaro","Camaro","Camaro",
+    "Corvette","Corvette Z06","Trax","Equinox","Equinox","Blazer","Blazer","Traverse",
+    "Colorado","Colorado","Silverado 1500","Silverado 1500","Silverado 1500",
+    "Silverado 2500HD","Tahoe","Suburban","Trailblazer","Trailblazer","Spark","Sonic"
+  ],
+  "Dodge": [
+    "Dart","Dart","Neon","Caliber","Caliber","Caliber","Journey","Journey",
+    "Avenger","Avenger","Charger","Charger","Charger","Charger","Challenger","Challenger",
+    "Challenger","Challenger","Durango","Durango","Durango","Grand Caravan","Grand Caravan",
+    "Nitro","Nitro","Dakota","Dakota","Dakota","Ram 1500","Ram 1500","Ram 2500/3500","Viper"
+  ],
+  "Honda": [
+    "Civic","Civic","Civic","Accord","Accord","Accord","Accord Hybrid","CR-V","CR-V",
+    "HR-V","Fit","Pilot","Odyssey","Ridgeline","Insight","Passport","Pilot Hybrid","CR-V Hybrid"
+  ],
+  "Toyota": [
+    "Yaris 1.5L","Corolla 1.8L","Corolla 2.0L","Camry 2.5L","Camry 3.5L","Avalon 3.5L",
+    "Prius 1.8L","RAV4 2.5L","RAV4 2.5L Turbo","Highlander 3.5L","Sequoia 5.7L",
+    "4Runner 4.0L","Tacoma 2.7L","Tacoma 3.5L V6","Tundra 4.6L","Tundra 5.7L","Sienna 3.5L"
+  ],
+  "Ford": [
+    "Fiesta 1.0L Turbo","Focus 2.0L","Focus 1.0L EcoBoost","Fusion 2.5L","Fusion 1.5L EcoBoost",
+    "Mustang 2.3L","Mustang 5.0L","Explorer 3.5L","Explorer 2.3L EcoBoost","F-150 3.3L",
+    "F-150 2.7L Turbo","F-150 3.5L V6","F-150 5.0L V8","Edge 2.0L Turbo","Edge 3.5L V6",
+    "Expedition 3.5L V6","Escape 1.5L EcoBoost","Escape 2.0L EcoBoost"
+  ],
+  "GMC": [
+    "Sierra 1500 4.3L","Sierra 1500 5.3L","Sierra 1500 6.2L","Sierra 2500HD 6.6L","Canyon 2.5L",
+    "Canyon 3.6L V6","Yukon 5.3L","Yukon 6.2L","Acadia 2.5L","Acadia 3.6L V6","Terrain 1.5L Turbo",
+    "Terrain 2.0L Turbo","Terrain 2.5L"
+  ],
+  "Hyundai": [
+    "Sonata 2.5L","Sonata 1.6L Turbo","Sonata 2.5L Turbo","Tucson 2.0L","Palisade 3.8L",
+    "Venue 1.6L","Kona 2.0L","Santa Fe 2.5L Turbo","Creta 1.5L","Creta 1.5L Turbo"
+  ],
+  "Jeep": [
+    "Renegade 1.3L Turbo","Renegade 2.4L","Compass 1.3L Turbo","Compass 2.4L","Cherokee 2.0L Turbo",
+    "Cherokee 2.4L","Cherokee 3.2L V6","Grand Cherokee 3.6L V6","Grand Cherokee 5.7L V8",
+    "Grand Cherokee 6.4L V8","Wrangler 2.0L Turbo","Wrangler 3.6L V6","Wrangler 3.8L V6","Gladiator 3.6L V6"
+  ],
+  "Infiniti": [
+    "Q50 2.0L Turbo","Q50 3.0L Twin Turbo","Q60 2.0L Turbo","Q60 3.0L Twin Turbo","QX50 2.0L Turbo",
+    "QX55 2.0L Turbo","QX60 3.5L V6","QX80 5.6L V8","QX70 3.7L V6","M35/M37 3.5L V6",
+    "M45 4.5L V8","FX35 3.5L V6","FX50 5.0L V8"
+  ],
+  "Kia": [
+    "Rio 1.6L","Forte 2.0L","Forte 1.6L Turbo","Optima/K5 2.4L","Optima/K5 1.6L Turbo","Stinger 2.0L Turbo",
+    "Stinger 3.3L Twin Turbo","Soul 2.0L","Soul 1.6L Turbo","Sportage 2.4L","Sportage 2.0L Turbo",
+    "Sorento 2.4L","Sorento 3.3L V6","Telluride 3.8L"
+  ],
+  "Lexus": [
+    "IS 200t/300","ES 250/350","GS 350","GS 450h","RX 350","RX 450h","NX 300","NX 300h","LX 570",
+    "GX 460","LC 500","LS 500","LS 500h"
+  ],
+  "Mazda": [
+    "Mazda2 1.5L","Mazda3 2.0L","Mazda3 2.5L","Mazda6 2.5L","CX-3 2.0L","CX-30 2.5L","CX-5 2.5L",
+    "CX-9 2.5L Turbo","MX-5 Miata 2.0L","MX-5 Miata 2.0L Turbo"
+  ],
+  "Nissan": [
+    "Versa 1.6L","Sentra 2.0L","Sentra 1.6L Turbo","Altima 2.5L","Altima 2.0L Turbo","Maxima 3.5L",
+    "Leaf 0L Electric","Kicks 1.6L","Rogue 2.5L","Rogue 1.5L Turbo","Murano 3.5L","Pathfinder 3.5L",
+    "Armada 5.6L","Frontier 3.8L","Titan 5.6L"
+  ],
+  "Volvo": [
+    "S60 2.0L Turbo","S60 T5","S60 T6","S60 Recharge","S90 2.0L Turbo","S90 T6","S90 Recharge",
+    "V60 2.0L Turbo","V60 T6","V60 Recharge","XC40 2.0L Turbo","XC40 T5","XC60 2.0L Turbo",
+    "XC60 T6","XC60 Recharge","XC90 2.0L Turbo","XC90 T6","XC90 Recharge"
+  ]
+};
+
+// Población inicial del select de marcas
+const selectMarcaVehiculo = document.createElement('select');
+selectMarcaVehiculo.id = 'selectMarcaVehiculo';
+selectMarcaVehiculo.innerHTML = '<option value="">Selecciona marca</option>';
+Object.keys(vehiculosData).forEach(marca=>{
+  const opt = document.createElement('option');
+  opt.value = marca;
+  opt.textContent = marca;
+  selectMarcaVehiculo.appendChild(opt);
 });
 
-selectMarca.addEventListener('change', ()=>{
-  const tipo = selectTipoAceite.value;
-  const marca = selectMarca.value;
-  const aceite = aceitesData.find(a=>a.Tipo===tipo && a.Marca===marca);
-  descripcionAceite.value = aceite ? aceite.Descripcion : '';
-});
+// Filtrado de modelos según marca seleccionada
+const selectModeloVehiculo = document.createElement('select');
+selectModeloVehiculo.id = 'selectModeloVehiculo';
+selectModeloVehiculo.innerHTML = '<option value="">Selecciona modelo</option>';
 
-const form = document.getElementById('formCita');
-const mensaje = document.getElementById('mensaje');
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvo3-d9yp3fMbmEuAVCCa82qv7IhidH3z-gEtPlGHu8sT_ddm0LauGCup-GQUArxOhTA/exec'; // Reemplaza con tu URL
-
-form.addEventListener('submit', e=>{
-  e.preventDefault();
-  if(firmaInput.disabled){alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);return;}
-
-  const data = Object.fromEntries(new FormData(form).entries());
-  data.callback='handleResponse';
-
-  const script = document.createElement('script');
-  script.src = SCRIPT_URL + '?' + new URLSearchParams(data).toString();
-  document.body.appendChild(script);
-
-  window.ultimoEnvio = {...data};
-});
-
-function handleResponse(response){
-  if(response.success){
-    mensaje.textContent = {'es':'✅ Reserva enviada correctamente!','en':'✅ Booking submitted successfully!','pt':'✅ Reserva enviada com sucesso!'}[lang];
-    mostrarRecibo(window.ultimoEnvio);
-    form.reset();
-    firmaInput.disabled=true;
-    localStorage.removeItem('acuerdoFirmado');
-  }else{
-    mensaje.textContent='Error: '+(response.error||'Problema al enviar la reserva.');
+selectMarcaVehiculo.addEventListener('change', ()=>{
+  const marca = selectMarcaVehiculo.value;
+  selectModeloVehiculo.innerHTML = '<option value="">Selecciona modelo</option>';
+  if(marca && vehiculosData[marca]){
+    vehiculosData[marca].forEach(modelo=>{
+      const opt = document.createElement('option');
+      opt.value = modelo;
+      opt.textContent = modelo;
+      selectModeloVehiculo.appendChild(opt);
+    });
   }
-}
+});
 
-function mostrarRecibo(data){
-  document.getElementById('reciboNombre').innerText = data.Nombre || '';
-  document.getElementById('reciboTelefono').innerText = data.Telefono || '';
-  document.getElementById('reciboCorreo').innerText = data.Correo || '';
-  document.getElementById('reciboMarca').innerText = data.Marca || '';
-  document.getElementById('reciboModelo').innerText = data.Modelo || '';
-  document.getElementById('reciboAno').innerText = data.Ano || '';
-  document.getElementById('reciboAceite').innerText = (data.TipoAceite || '') + ' - ' + (data.MarcaAceite || '');
-  document.getElementById('reciboDireccion').innerText = data.Direccion || '';
-  document.getElementById('reciboFecha').innerText = data.Fecha || '';
-  document.getElementById('reciboHora').innerText = data.Hora || '';
-  document.getElementById('reciboComentarios').innerText = data.Comentarios || '';
-  document.getElementById('reciboFirma').innerText = data.Firma || '';
-  document.getElementById('recibo').style.display='block';
-}
+
+// ================== ENVÍO FORMULARIO ==================
+const formCita=document.getElementById('formCita');
+const mensaje=document.getElementById('mensaje');
+formCita.addEventListener('submit',e=>{
+  e.preventDefault();
+  const datos=new FormData(formCita);
+  fetch("https://script.google.com/macros/s/AKfycbyRdgkH4niFB8LtYEhZujedWBYn5-lOQ8Es06aiFMZBY2gtcZoT7PoS0jBc2THluEXtMw/exec",{
+    method:"POST",body:datos
+  }).then(r=>{
+    mensaje.textContent="✅ Reserva enviada correctamente!";
+    formCita.reset();
+    descripcionAceite.value='';
+    selectModeloVehiculo.innerHTML='<option value="">Selecciona modelo</option>';
+    firmaInput.disabled=true;
+    document.getElementById('recibo').style.display='block';
+    document.getElementById('reciboNombre').textContent=datos.get('Nombre');
+    document.getElementById('reciboTelefono').textContent=datos.get('Telefono');
+    document.getElementById('reciboCorreo').textContent=datos.get('Correo');
+    document.getElementById('reciboMarca').textContent=datos.get('Marca') || selectMarcaVehiculo.value;
+    document.getElementById('reciboModelo').textContent=datos.get('Modelo') || selectModeloVehiculo.value;
+    document.getElementById('reciboAceite').textContent=datos.get('TipoAceite');
+    document.getElementById('reciboDireccion').textContent=datos.get('Direccion');
+    document.getElementById('reciboFecha').textContent=datos.get('Fecha');
+    document.getElementById('reciboHora').textContent=datos.get('Hora');
+    document.getElementById('reciboComentarios').textContent=datos.get('Comentarios');
+    document.getElementById('reciboFirma').textContent=datos.get('Firma');
+  }).catch(err=>{
+    mensaje.textContent="❌ Error al enviar la reserva.";
+    console.error(err);
+  });
+});
 </script>
 </body>
 </html>
