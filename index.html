@@ -64,8 +64,22 @@
     <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
     <div class="form-group"><i class="fas fa-phone"></i><input type="tel" name="Telefono" placeholder=" " required><label id="lblTelefono">Teléfono</label></div>
     <div class="form-group"><i class="fas fa-envelope"></i><input type="email" name="Correo" placeholder=" " required><label id="lblCorreo">Correo electrónico</label></div>
-    <div class="form-group"><i class="fas fa-car"></i><input type="text" name="Marca" placeholder=" " required><label id="lblMarca">Marca del vehículo</label></div>
-    <div class="form-group"><i class="fas fa-car-side"></i><input type="text" name="Modelo" placeholder=" " required><label id="lblModelo">Modelo del vehículo</label></div>
+    
+    <!-- Marca dinámica -->
+    <div class="form-group"><i class="fas fa-car"></i>
+      <select name="Marca" id="selectMarcaVehiculo" required>
+        <option value="">Selecciona marca</option>
+      </select>
+      <label id="lblMarca">Marca del vehículo</label>
+    </div>
+    <!-- Modelo dinámico -->
+    <div class="form-group"><i class="fas fa-car-side"></i>
+      <select name="Modelo" id="selectModeloVehiculo" required>
+        <option value="">Selecciona modelo</option>
+      </select>
+      <label id="lblModelo">Modelo del vehículo</label>
+    </div>
+
     <div class="form-group"><i class="fas fa-calendar-alt"></i><input type="number" name="Ano" placeholder=" " required><label id="lblAno">Año del vehículo</label></div>
 
     <div class="form-group"><i class="fas fa-oil-can"></i>
@@ -138,16 +152,15 @@
 </div>
 
 <script>
+/* ************** MULTI-IDIOMA ************** */
 const acuerdoText = {
-  es: `<p>Al solicitar nuestro servicio de cambio de aceite a domicilio, usted acepta los siguientes términos y condiciones:</p><ul><li>El cliente debe proporcionar información veraz sobre el vehículo y la ubicación del servicio.</li><li>Se requiere agendar la cita con al menos 24 horas de anticipación.</li><li>El técnico tiene derecho a reprogramar la cita en caso de condiciones climáticas adversas o emergencias.</li><li>Los precios pueden variar según el tipo de aceite, filtro y servicio adicional solicitado.</li><li>El cliente es responsable de asegurar el acceso adecuado al vehículo durante el servicio.</li><li>Todos los pagos deben completarse al finalizar el servicio.</li><li>El cliente acepta que la firma digital en este formulario es vinculante para aceptar los términos.</li></ul><p>Lea cuidadosamente estos términos antes de aceptar. Al hacer clic en "Aceptar y firmar acuerdo", confirma que ha leído, entendido y acepta estas condiciones.</p>`,
-  en: `<p>By requesting our home oil change service, you agree to the following terms and conditions:</p><ul><li>The client must provide accurate information about the vehicle and service location.</li><li>Appointments must be scheduled at least 24 hours in advance.</li><li>The technician reserves the right to reschedule in case of adverse weather or emergencies.</li><li>Prices may vary depending on the type of oil, filter, and additional services requested.</li><li>The client is responsible for ensuring proper access to the vehicle during service.</li><li>All payments must be completed upon service completion.</li><li>The client agrees that the digital signature on this form is binding to accept the terms.</li></ul><p>Read these terms carefully before accepting. By clicking "Accept and sign agreement," you confirm you have read, understood, and agree to these conditions.</p>`,
-  pt: `<p>Ao solicitar nosso serviço domiciliar de troca de óleo, você concorda com os seguintes termos e condições:</p><ul><li>O cliente deve fornecer informações precisas sobre o veículo e o local do serviço.</li><li>As reservas devem ser feitas com pelo menos 24 horas de antecedência.</li><li>O técnico reserva-se o direito de reagendar em caso de clima adverso ou emergências.</li><li>Os preços podem variar dependendo do tipo de óleo, filtro e serviços adicionais solicitados.</li><li>O cliente é responsável por garantir o acesso adequado ao veículo durante o serviço.</li><li>Todos os pagamentos devem ser concluídos após a conclusão do serviço.</li><li>O cliente concorda que a assinatura digital neste formulário é vinculativa para aceitar os termos.</li></ul><p>Leia atentamente estes termos antes de aceitar. Ao clicar em "Aceitar e assinar acordo", você confirma que leu, entendeu e concorda com estas condições.</p>`
+  es: `<p>Al solicitar nuestro servicio...</p>`,
+  en: `<p>By requesting our home oil change service...</p>`,
+  pt: `<p>Ao solicitar nosso serviço domiciliar...</p>`
 };
-
 let lang = navigator.language.slice(0,2);
 if(!['es','en','pt'].includes(lang)) lang='es';
 applyLang(lang);
-
 function setLang(l){lang=l;applyLang(lang);}
 function applyLang(lang){
   document.getElementById('titulo').innerText = {'es':'Reserva de Servicio a Domicilio','en':'Home Service Booking','pt':'Agendamento de Serviço Domiciliar'}[lang];
@@ -156,25 +169,24 @@ function applyLang(lang){
   document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
 }
 
+/* ************** MODAL Y FIRMA ************** */
 const modal = document.getElementById('modalAcuerdo');
 const link = document.getElementById('linkAcuerdo');
 const spanClose = document.querySelector('.modal-close');
 const btnAceptar = document.querySelector('.modal-accept');
 const firmaInput = document.getElementById('firmaInput');
-
 link.onclick = ()=>{modal.style.display='block';}
 spanClose.onclick = ()=>{modal.style.display='none';}
 window.onclick = (e)=>{if(e.target==modal) modal.style.display='none';}
-
 btnAceptar.onclick = ()=>{
   firmaInput.disabled=false;
   localStorage.setItem('acuerdoFirmado','true');
   modal.style.display='none';
   alert({'es':'✅ Acuerdo aceptado. Ahora puede firmar su reserva.','en':'✅ Agreement accepted. You can now sign your booking.','pt':'✅ Acordo aceito. Agora você pode assinar sua reserva.'}[lang]);
 }
-
 window.addEventListener('load', ()=>{if(localStorage.getItem('acuerdoFirmado')==='true'){firmaInput.disabled=false;}});
 
+/* ************** ACEITES ************** */
 const aceitesData = [
   {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
   {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
@@ -189,60 +201,276 @@ const aceitesData = [
   {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez en todo tipo de temperatura.", Precio:25},
   {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Protección avanzada contra desgaste y depósitos.", Precio:27}
 ];
-
 const selectTipoAceite = document.getElementById('selectTipoAceite');
-const selectMarca = document.getElementById('selectMarca');
+const selectMarcaAceite = document.getElementById('selectMarca');
 const descripcionAceite = document.getElementById('descripcionAceite');
-
 selectTipoAceite.addEventListener('change', ()=>{
   const tipo = selectTipoAceite.value;
-  selectMarca.innerHTML = `<option value="">Selecciona marca de aceite</option>`;
+  selectMarcaAceite.innerHTML = `<option value="">Selecciona marca de aceite</option>`;
   aceitesData.filter(a=>a.Tipo===tipo).forEach(a=>{
     const opt = document.createElement('option');
-    opt.value = a.Marca;
-    opt.textContent = a.Marca;
-    selectMarca.appendChild(opt);
+    opt.value = a.Marca; opt.textContent = a.Marca; selectMarcaAceite.appendChild(opt);
   });
   descripcionAceite.value='';
 });
-
-selectMarca.addEventListener('change', ()=>{
+selectMarcaAceite.addEventListener('change', ()=>{
   const tipo = selectTipoAceite.value;
-  const marca = selectMarca.value;
+  const marca = selectMarcaAceite.value;
   const aceite = aceitesData.find(a=>a.Tipo===tipo && a.Marca===marca);
   descripcionAceite.value = aceite ? aceite.Descripcion : '';
 });
 
+/* ************** MARCAS Y MODELOS DINÁMICOS ************** */
+const marcasModelos = [
+  {Marca:"Acura", Modelo:"ILX 2.4L"},
+  {Marca:"Acura", Modelo:"MDX 3.5L"},
+  {Marca:"Acura", Modelo:"MDX SH-AWD 3.5L"},
+  {Marca:"Acura", Modelo:"MDX Sport Hybrid 3.0L"},
+  {Marca:"Acura", Modelo:"NSX 3.5L Turbo"},
+  {Marca:"Acura", Modelo:"RDX 2WD 2.0L Turbo"},
+  {Marca:"Acura", Modelo:"RDX AWD 2.0L Turbo"},
+  {Marca:"Acura", Modelo:"RLX 3.5L"},
+  {Marca:"Acura", Modelo:"RLX Sport Hybrid 3.5L"},
+  {Marca:"Acura", Modelo:"TLX 2.0L Turbo"},
+  {Marca:"Acura", Modelo:"TLX SH-AWD 3.5L"},
+  {Marca:"Chevrolet", Modelo:"Aveo"},
+  {Marca:"Chevrolet", Modelo:"Cruze"},
+  {Marca:"Chevrolet", Modelo:"Malibu"},
+  {Marca:"Chevrolet", Modelo:"Impala"},
+  {Marca:"Chevrolet", Modelo:"Camaro"},
+  {Marca:"Chevrolet", Modelo:"Corvette"},
+  {Marca:"Chevrolet", Modelo:"Corvette Z06"},
+  {Marca:"Chevrolet", Modelo:"Trax"},
+  {Marca:"Chevrolet", Modelo:"Equinox"},
+  {Marca:"Chevrolet", Modelo:"Blazer"},
+  {Marca:"Chevrolet", Modelo:"Traverse"},
+  {Marca:"Chevrolet", Modelo:"Colorado"},
+  {Marca:"Chevrolet", Modelo:"Silverado 1500"},
+  {Marca:"Chevrolet", Modelo:"Silverado 2500HD"},
+  {Marca:"Chevrolet", Modelo:"Tahoe"},
+  {Marca:"Chevrolet", Modelo:"Suburban"},
+  {Marca:"Chevrolet", Modelo:"Trailblazer"},
+  {Marca:"Chevrolet", Modelo:"Spark"},
+  {Marca:"Chevrolet", Modelo:"Sonic"},
+  {Marca:"Dodge", Modelo:"Dart"},
+  {Marca:"Dodge", Modelo:"Neon"},
+  {Marca:"Dodge", Modelo:"Caliber"},
+  {Marca:"Dodge", Modelo:"Journey"},
+  {Marca:"Dodge", Modelo:"Avenger"},
+  {Marca:"Dodge", Modelo:"Charger"},
+  {Marca:"Dodge", Modelo:"Challenger"},
+  {Marca:"Dodge", Modelo:"Durango"},
+  {Marca:"Dodge", Modelo:"Grand Caravan"},
+  {Marca:"Dodge", Modelo:"Nitro"},
+  {Marca:"Dodge", Modelo:"Dakota"},
+  {Marca:"Dodge", Modelo:"Ram 1500"},
+  {Marca:"Dodge", Modelo:"Ram 2500/3500"},
+  {Marca:"Dodge", Modelo:"Viper"},
+  {Marca:"Honda", Modelo:"Civic"},
+  {Marca:"Honda", Modelo:"Accord"},
+  {Marca:"Honda", Modelo:"Accord Hybrid"},
+  {Marca:"Honda", Modelo:"CR-V"},
+  {Marca:"Honda", Modelo:"HR-V"},
+  {Marca:"Honda", Modelo:"Fit"},
+  {Marca:"Honda", Modelo:"Pilot"},
+  {Marca:"Honda", Modelo:"Odyssey"},
+  {Marca:"Honda", Modelo:"Ridgeline"},
+  {Marca:"Honda", Modelo:"Insight"},
+  {Marca:"Honda", Modelo:"Passport"},
+  {Marca:"Honda", Modelo:"Pilot Hybrid"},
+  {Marca:"Honda", Modelo:"CR-V Hybrid"},
+  {Marca:"Toyota", Modelo:"Yaris 1.5L"},
+  {Marca:"Toyota", Modelo:"Corolla 1.8L"},
+  {Marca:"Toyota", Modelo:"Corolla 2.0L"},
+  {Marca:"Toyota", Modelo:"Camry 2.5L"},
+  {Marca:"Toyota", Modelo:"Camry 3.5L"},
+  {Marca:"Toyota", Modelo:"Avalon 3.5L"},
+  {Marca:"Toyota", Modelo:"Prius 1.8L"},
+  {Marca:"Toyota", Modelo:"RAV4 2.5L"},
+  {Marca:"Toyota", Modelo:"RAV4 2.5L Turbo"},
+  {Marca:"Toyota", Modelo:"Highlander 3.5L"},
+  {Marca:"Toyota", Modelo:"Sequoia 5.7L"},
+  {Marca:"Toyota", Modelo:"4Runner 4.0L"},
+  {Marca:"Toyota", Modelo:"Tacoma 2.7L"},
+  {Marca:"Toyota", Modelo:"Tacoma 3.5L V6"},
+  {Marca:"Toyota", Modelo:"Tundra 4.6L"},
+  {Marca:"Toyota", Modelo:"Tundra 5.7L"},
+  {Marca:"Toyota", Modelo:"Sienna 3.5L"},
+  {Marca:"Ford", Modelo:"Fiesta 1.0L Turbo"},
+  {Marca:"Ford", Modelo:"Focus 2.0L"},
+  {Marca:"Ford", Modelo:"Focus 1.0L EcoBoost"},
+  {Marca:"Ford", Modelo:"Fusion 2.5L"},
+  {Marca:"Ford", Modelo:"Fusion 1.5L EcoBoost"},
+  {Marca:"Ford", Modelo:"Mustang 2.3L"},
+  {Marca:"Ford", Modelo:"Mustang 5.0L"},
+  {Marca:"Ford", Modelo:"Explorer 3.5L"},
+  {Marca:"Ford", Modelo:"Explorer 2.3L EcoBoost"},
+  {Marca:"Ford", Modelo:"F-150 3.3L"},
+  {Marca:"Ford", Modelo:"F-150 2.7L Turbo"},
+  {Marca:"Ford", Modelo:"F-150 3.5L V6"},
+  {Marca:"Ford", Modelo:"F-150 5.0L V8"},
+  {Marca:"Ford", Modelo:"Edge 2.0L Turbo"},
+  {Marca:"Ford", Modelo:"Edge 3.5L V6"},
+  {Marca:"Ford", Modelo:"Expedition 3.5L V6"},
+  {Marca:"Ford", Modelo:"Escape 1.5L EcoBoost"},
+  {Marca:"Ford", Modelo:"Escape 2.0L EcoBoost"},
+  {Marca:"GMC", Modelo:"Sierra 1500 4.3L"},
+  {Marca:"GMC", Modelo:"Sierra 1500 5.3L"},
+  {Marca:"GMC", Modelo:"Sierra 1500 6.2L"},
+  {Marca:"GMC", Modelo:"Sierra 2500HD 6.6L"},
+  {Marca:"GMC", Modelo:"Canyon 2.5L"},
+  {Marca:"GMC", Modelo:"Canyon 3.6L V6"},
+  {Marca:"GMC", Modelo:"Yukon 5.3L"},
+  {Marca:"GMC", Modelo:"Yukon 6.2L"},
+  {Marca:"GMC", Modelo:"Acadia 2.5L"},
+  {Marca:"GMC", Modelo:"Acadia 3.6L V6"},
+  {Marca:"GMC", Modelo:"Terrain 1.5L Turbo"},
+  {Marca:"GMC", Modelo:"Terrain 2.0L Turbo"},
+  {Marca:"GMC", Modelo:"Terrain 2.5L"},
+  {Marca:"Hyundai", Modelo:"Sonata 2.5L"},
+  {Marca:"Hyundai", Modelo:"Sonata 1.6L Turbo"},
+  {Marca:"Hyundai", Modelo:"Sonata 2.5L Turbo"},
+  {Marca:"Hyundai", Modelo:"Tucson 2.0L"},
+  {Marca:"Hyundai", Modelo:"Palisade 3.8L"},
+  {Marca:"Hyundai", Modelo:"Venue 1.6L"},
+  {Marca:"Hyundai", Modelo:"Kona 2.0L"},
+  {Marca:"Hyundai", Modelo:"Santa Fe 2.5L Turbo"},
+  {Marca:"Hyundai", Modelo:"Creta 1.5L"},
+  {Marca:"Hyundai", Modelo:"Creta 1.5L Turbo"},
+  {Marca:"Jeep", Modelo:"Renegade 1.3L Turbo"},
+  {Marca:"Jeep", Modelo:"Renegade 2.4L"},
+  {Marca:"Jeep", Modelo:"Compass 1.3L Turbo"},
+  {Marca:"Jeep", Modelo:"Compass 2.4L"},
+  {Marca:"Jeep", Modelo:"Cherokee 2.0L Turbo"},
+  {Marca:"Jeep", Modelo:"Cherokee 2.4L"},
+  {Marca:"Jeep", Modelo:"Cherokee 3.2L V6"},
+  {Marca:"Jeep", Modelo:"Grand Cherokee 3.6L V6"},
+  {Marca:"Jeep", Modelo:"Grand Cherokee 5.7L V8"},
+  {Marca:"Jeep", Modelo:"Grand Cherokee 6.4L V8"},
+  {Marca:"Jeep", Modelo:"Wrangler 2.0L Turbo"},
+  {Marca:"Jeep", Modelo:"Wrangler 3.6L V6"},
+  {Marca:"Jeep", Modelo:"Wrangler 3.8L V6"},
+  {Marca:"Jeep", Modelo:"Gladiator 3.6L V6"},
+  {Marca:"Infiniti", Modelo:"Q50 2.0L Turbo"},
+  {Marca:"Infiniti", Modelo:"Q50 3.0L Twin Turbo"},
+  {Marca:"Infiniti", Modelo:"Q60 2.0L Turbo"},
+  {Marca:"Infiniti", Modelo:"Q60 3.0L Twin Turbo"},
+  {Marca:"Infiniti", Modelo:"QX50 2.0L Turbo"},
+  {Marca:"Infiniti", Modelo:"QX55 2.0L Turbo"},
+  {Marca:"Infiniti", Modelo:"QX60 3.5L V6"},
+  {Marca:"Infiniti", Modelo:"QX80 5.6L V8"},
+  {Marca:"Infiniti", Modelo:"QX70 3.7L V6"},
+  {Marca:"Infiniti", Modelo:"M35/M37 3.5L V6"},
+  {Marca:"Infiniti", Modelo:"M45 4.5L V8"},
+  {Marca:"Infiniti", Modelo:"FX35 3.5L V6"},
+  {Marca:"Infiniti", Modelo:"FX50 5.0L V8"},
+  {Marca:"Kia", Modelo:"Rio 1.6L"},
+  {Marca:"Kia", Modelo:"Forte 2.0L"},
+  {Marca:"Kia", Modelo:"Forte 1.6L Turbo"},
+  {Marca:"Kia", Modelo:"Optima/K5 2.4L"},
+  {Marca:"Kia", Modelo:"Optima/K5 1.6L Turbo"},
+  {Marca:"Kia", Modelo:"Stinger 2.0L Turbo"},
+  {Marca:"Kia", Modelo:"Stinger 3.3L Twin Turbo"},
+  {Marca:"Kia", Modelo:"Soul 2.0L"},
+  {Marca:"Kia", Modelo:"Soul 1.6L Turbo"},
+  {Marca:"Kia", Modelo:"Sportage 2.4L"},
+  {Marca:"Kia", Modelo:"Sportage 2.0L Turbo"},
+  {Marca:"Kia", Modelo:"Sorento 2.4L"},
+  {Marca:"Kia", Modelo:"Sorento 3.3L V6"},
+  {Marca:"Kia", Modelo:"Telluride 3.8L"},
+  {Marca:"Lexus", Modelo:"IS 200t/300"},
+  {Marca:"Lexus", Modelo:"ES 250/350"},
+  {Marca:"Lexus", Modelo:"GS 350"},
+  {Marca:"Lexus", Modelo:"GS 450h"},
+  {Marca:"Lexus", Modelo:"RX 350"},
+  {Marca:"Lexus", Modelo:"RX 450h"},
+  {Marca:"Lexus", Modelo:"NX 300"},
+  {Marca:"Lexus", Modelo:"NX 300h"},
+  {Marca:"Lexus", Modelo:"LX 570"},
+  {Marca:"Lexus", Modelo:"GX 460"},
+  {Marca:"Lexus", Modelo:"LC 500"},
+  {Marca:"Lexus", Modelo:"LS 500"},
+  {Marca:"Lexus", Modelo:"LS 500h"},
+  {Marca:"Mazda", Modelo:"Mazda2 1.5L"},
+  {Marca:"Mazda", Modelo:"Mazda3 2.0L"},
+  {Marca:"Mazda", Modelo:"Mazda3 2.5L"},
+  {Marca:"Mazda", Modelo:"Mazda6 2.5L"},
+  {Marca:"Mazda", Modelo:"CX-3 2.0L"},
+  {Marca:"Mazda", Modelo:"CX-30 2.5L"},
+  {Marca:"Mazda", Modelo:"CX-5 2.5L"},
+  {Marca:"Mazda", Modelo:"CX-9 2.5L Turbo"},
+  {Marca:"Mazda", Modelo:"MX-5 Miata 2.0L"},
+  {Marca:"Mazda", Modelo:"MX-5 Miata 2.0L Turbo"},
+  {Marca:"Nissan", Modelo:"Versa 1.6L"},
+  {Marca:"Nissan", Modelo:"Sentra 2.0L"},
+  {Marca:"Nissan", Modelo:"Sentra 1.6L Turbo"},
+  {Marca:"Nissan", Modelo:"Altima 2.5L"},
+  {Marca:"Nissan", Modelo:"Altima 2.0L Turbo"},
+  {Marca:"Nissan", Modelo:"Maxima 3.5L"},
+  {Marca:"Nissan", Modelo:"Leaf 0L Electric"},
+  {Marca:"Nissan", Modelo:"Kicks 1.6L"},
+  {Marca:"Nissan", Modelo:"Rogue 2.5L"},
+  {Marca:"Nissan", Modelo:"Rogue 1.5L Turbo"},
+  {Marca:"Nissan", Modelo:"Murano 3.5L"},
+  {Marca:"Nissan", Modelo:"Pathfinder 3.5L"},
+  {Marca:"Nissan", Modelo:"Armada 5.6L"},
+  {Marca:"Nissan", Modelo:"Frontier 3.8L"},
+  {Marca:"Nissan", Modelo:"Titan 5.6L"},
+  {Marca:"Volvo", Modelo:"S60 2.0L Turbo"},
+  {Marca:"Volvo", Modelo:"S60 T5"},
+  {Marca:"Volvo", Modelo:"S60 T6"},
+  {Marca:"Volvo", Modelo:"S60 Recharge"},
+  {Marca:"Volvo", Modelo:"S90 2.0L Turbo"},
+  {Marca:"Volvo", Modelo:"S90 T6"},
+  {Marca:"Volvo", Modelo:"S90 Recharge"},
+  {Marca:"Volvo", Modelo:"V60 2.0L Turbo"},
+  {Marca:"Volvo", Modelo:"V60 T6"},
+  {Marca:"Volvo", Modelo:"V60 Recharge"},
+  {Marca:"Volvo", Modelo:"XC40 2.0L Turbo"},
+  {Marca:"Volvo", Modelo:"XC40 T5"},
+  {Marca:"Volvo", Modelo:"XC60 2.0L Turbo"},
+  {Marca:"Volvo", Modelo:"XC60 T6"},
+  {Marca:"Volvo", Modelo:"XC60 Recharge"},
+  {Marca:"Volvo", Modelo:"XC90 2.0L Turbo"},
+  {Marca:"Volvo", Modelo:"XC90 T6"},
+  {Marca:"Volvo", Modelo:"XC90 Recharge"}
+];
+
+const selectMarcaVehiculo = document.getElementById('selectMarcaVehiculo');
+const selectModeloVehiculo = document.getElementById('selectModeloVehiculo');
+const marcasUnicas = [...new Set(marcasModelos.map(m=>m.Marca))];
+marcasUnicas.forEach(marca=>{
+  const opt = document.createElement('option'); opt.value=marca; opt.textContent=marca; selectMarcaVehiculo.appendChild(opt);
+});
+selectMarcaVehiculo.addEventListener('change', ()=>{
+  const marca = selectMarcaVehiculo.value;
+  selectModeloVehiculo.innerHTML = `<option value="">Selecciona modelo</option>`;
+  marcasModelos.filter(m=>m.Marca===marca).forEach(m=>{
+    const opt = document.createElement('option'); opt.value=m.Modelo; opt.textContent=m.Modelo; selectModeloVehiculo.appendChild(opt);
+  });
+});
+
+/* ************** ENVÍO GOOGLE SCRIPT ************** */
 const form = document.getElementById('formCita');
 const mensaje = document.getElementById('mensaje');
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWrsfEKxC1s1vYY_yQUY3___ooAI58E-aJQCqSFU6-9Z6hAB7eQ_ZwILNyQyc9UY3QZw/exec'; // Reemplaza con tu URL
-
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwU41QbBNu1AeRVCswyBP5IpyMTWCpzDuHcbwL-9jXiZr0W6ET-PuCH9lD41yIjjgZNxQ/exec';
 form.addEventListener('submit', e=>{
   e.preventDefault();
   if(firmaInput.disabled){alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);return;}
-
   const data = Object.fromEntries(new FormData(form).entries());
   data.callback='handleResponse';
-
   const script = document.createElement('script');
   script.src = SCRIPT_URL + '?' + new URLSearchParams(data).toString();
   document.body.appendChild(script);
-
   window.ultimoEnvio = {...data};
 });
-
 function handleResponse(response){
   if(response.success){
     mensaje.textContent = {'es':'✅ Reserva enviada correctamente!','en':'✅ Booking submitted successfully!','pt':'✅ Reserva enviada com sucesso!'}[lang];
     mostrarRecibo(window.ultimoEnvio);
-    form.reset();
-    firmaInput.disabled=true;
-    localStorage.removeItem('acuerdoFirmado');
-  }else{
-    mensaje.textContent='Error: '+(response.error||'Problema al enviar la reserva.');
-  }
+    form.reset(); firmaInput.disabled=true; localStorage.removeItem('acuerdoFirmado');
+  }else{mensaje.textContent='Error: '+(response.error||'Problema al enviar la reserva.');}
 }
-
 function mostrarRecibo(data){
   document.getElementById('reciboNombre').innerText = data.Nombre || '';
   document.getElementById('reciboTelefono').innerText = data.Telefono || '';
