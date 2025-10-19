@@ -154,19 +154,50 @@
 <script>
 /* ************** MULTI-IDIOMA ************** */
 const acuerdoText = {
-  es: `<p>Al solicitar nuestro servicio...</p>`,
-  en: `<p>By requesting our home oil change service...</p>`,
-  pt: `<p>Ao solicitar nosso serviço domiciliar...</p>`
+  es: `
+    <p>Al solicitar nuestro servicio de cambio de aceite a domicilio, usted acepta los siguientes términos y condiciones:</p>
+    <ul>
+      <li>El cliente debe proporcionar información veraz sobre el vehículo y la ubicación del servicio.</li>
+      <li>Se requiere agendar la cita con al menos 24 horas de anticipación.</li>
+      <li>El técnico tiene derecho a reprogramar la cita en caso de condiciones climáticas adversas o emergencias.</li>
+      <li>Los precios pueden variar según el tipo de aceite, filtro y servicio adicional solicitado.</li>
+      <li>El cliente es responsable de asegurar el acceso adecuado al vehículo durante el servicio.</li>
+      <li>Todos los pagos deben completarse al finalizar el servicio.</li>
+      <li>El cliente acepta que la firma digital en este formulario es vinculante para aceptar los términos.</li>
+    </ul>
+    <p>Lea cuidadosamente estos términos antes de aceptar. Al hacer clic en "Aceptar y firmar acuerdo", confirma que ha leído, entendido y acepta estas condiciones.</p>
+  `,
+  en: `
+    <p>By requesting our home oil change service, you agree to the following terms and conditions:</p>
+    <ul>
+      <li>The client must provide accurate information about the vehicle and service location.</li>
+      <li>Appointments must be scheduled at least 24 hours in advance.</li>
+      <li>The technician reserves the right to reschedule in case of adverse weather or emergencies.</li>
+      <li>Prices may vary depending on the type of oil, filter, and additional services requested.</li>
+      <li>The client is responsible for ensuring proper access to the vehicle during service.</li>
+      <li>All payments must be completed upon service completion.</li>
+      <li>The client agrees that the digital signature on this form is binding to accept the terms.</li>
+    </ul>
+    <p>Read these terms carefully before accepting. By clicking "Accept and sign agreement," you confirm you have read, understood, and agree to these conditions.</p>
+  `,
+  pt: `
+    <p>Ao solicitar nosso serviço domiciliar de troca de óleo, você concorda com os seguintes termos e condições:</p>
+    <ul>
+      <li>O cliente deve fornecer informações precisas sobre o veículo e o local do serviço.</li>
+      <li>As reservas devem ser feitas com pelo menos 24 horas de antecedência.</li>
+      <li>O técnico reserva-se o direito de reagendar em caso de clima adverso ou emergências.</li>
+      <li>Os preços podem variar dependendo do tipo de óleo, filtro e serviços adicionais solicitados.</li>
+      <li>O cliente é responsável por garantir o acesso adequado ao veículo durante o serviço.</li>
+      <li>Todos os pagamentos devem ser concluídos após a conclusão do serviço.</li>
+      <li>O cliente concorda que a assinatura digital neste formulário é vinculativa para aceitar os termos.</li>
+    </ul>
+    <p>Leia atentamente estes termos antes de aceitar. Ao clicar em "Aceitar e assinar acordo", você confirma que leu, entendeu e concorda com estas condições.</p>
+  `
 };
+
+// 🌍 Detectar idioma del navegador
 let lang = navigator.language.slice(0,2);
-if(!['es','en','pt'].includes(lang)) lang='es';
-applyLang(lang);
-function setLang(l){lang=l;applyLang(lang);}
-function applyLang(lang){
-  document.getElementById('titulo').innerText = {'es':'Reserva de Servicio a Domicilio','en':'Home Service Booking','pt':'Agendamento de Serviço Domiciliar'}[lang];
-  document.getElementById('btnEnviar').innerText = {'es':'Enviar Reserva','en':'Submit Booking','pt':'Enviar Reserva'}[lang];
-  document.getElementById('langField').value = lang;
-  document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
+if(!acuerdoText[lang]) lang='es';
 }
 
 /* ************** MODAL Y FIRMA ************** */
