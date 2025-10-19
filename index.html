@@ -194,12 +194,6 @@ const acuerdoText = {
     <p>Leia atentamente estes termos antes de aceitar. Ao clicar em "Aceitar e assinar acordo", você confirma que leu, entendeu e concorda com estas condições.</p>
   `
 };
-
-// 🌍 Detectar idioma del navegador
-let lang = navigator.language.slice(0,2);
-if(!acuerdoText[lang]) lang='es';
-}
-
 /* ************** MODAL Y FIRMA ************** */
 const modal = document.getElementById('modalAcuerdo');
 const link = document.getElementById('linkAcuerdo');
