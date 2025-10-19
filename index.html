@@ -153,21 +153,21 @@
 
 <script>
 /* ************** MULTI-IDIOMA ************** */
-const acuerdoText = {
-  es: `<p>Al solicitar nuestro servicio...</p>`,
-  en: `<p>By requesting our home oil change service...</p>`,
-  pt: `<p>Ao solicitar nosso serviço domiciliar...</p>`
-};
-let lang = navigator.language.slice(0,2);
-if(!['es','en','pt'].includes(lang)) lang='es';
-applyLang(lang);
-function setLang(l){lang=l;applyLang(lang);}
-function applyLang(lang){
-  document.getElementById('titulo').innerText = {'es':'Reserva de Servicio a Domicilio','en':'Home Service Booking','pt':'Agendamento de Serviço Domiciliar'}[lang];
-  document.getElementById('btnEnviar').innerText = {'es':'Enviar Reserva','en':'Submit Booking','pt':'Enviar Reserva'}[lang];
-  document.getElementById('langField').value = lang;
-  document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
+/* ************** CARGA DEL ACUERDO.HTML ************** */
+function cargarAcuerdo(){
+  fetch('acuerdo.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('textoAcuerdo').innerHTML = html;
+    })
+    .catch(err => {
+      console.error('Error cargando acuerdo.html:', err);
+      document.getElementById('textoAcuerdo').innerHTML = '<p>No se pudo cargar el acuerdo.</p>';
+    });
 }
+
+// Llamar al cargar la página
+window.addEventListener('load', cargarAcuerdo);
 
 /* ************** MODAL Y FIRMA ************** */
 const modal = document.getElementById('modalAcuerdo');
