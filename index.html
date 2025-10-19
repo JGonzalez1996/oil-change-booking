@@ -158,7 +158,16 @@ function cargarAcuerdo(){
   fetch('acuerdo.html')
     .then(response => response.text())
     .then(html => {
-      document.getElementById('textoAcuerdo').innerHTML = html;
+      // Crear un parser temporal para extraer solo el contenido dentro del div.container
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const contenido = doc.querySelector('.container');
+      
+      if (contenido) {
+        document.getElementById('textoAcuerdo').innerHTML = contenido.innerHTML;
+      } else {
+        document.getElementById('textoAcuerdo').innerHTML = '<p>No se encontró el contenido del acuerdo.</p>';
+      }
     })
     .catch(err => {
       console.error('Error cargando acuerdo.html:', err);
@@ -168,6 +177,7 @@ function cargarAcuerdo(){
 
 // Llamar al cargar la página
 window.addEventListener('load', cargarAcuerdo);
+
 
 /* ************** MODAL Y FIRMA ************** */
 const modal = document.getElementById('modalAcuerdo');
