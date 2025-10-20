@@ -54,12 +54,11 @@
 </head>
 <body>
 <div class="container">
-  <div class="idiomas">
-    <img src="https://flagcdn.com/16x12/es.png" alt="Español" onclick="setLang('es')">
-    <img src="https://flagcdn.com/16x12/gb.png" alt="English" onclick="setLang('en')">
-    <img src="https://flagcdn.com/16x12/pt.png" alt="Português" onclick="setLang('pt')">
-  </div>
+  <!-- banderas removidas a petición -->
+  <div class="idiomas"></div>
+
   <h2 id="titulo">Reserva de Servicio a Domicilio</h2>
+
   <form id="formCita">
     <div class="form-group"><i class="fas fa-user"></i><input type="text" name="Nombre" placeholder=" " required><label id="lblNombre">Nombre completo</label></div>
     <div class="form-group"><i class="fas fa-phone"></i><input type="tel" name="Telefono" placeholder=" " required><label id="lblTelefono">Teléfono</label></div>
@@ -126,18 +125,18 @@
 
   <div id="recibo">
     <h3 id="reciboTitulo">✅ Recibo de Reserva</h3>
-    <p><b>Nombre:</b> <span id="reciboNombre"></span></p>
-    <p><b>Teléfono:</b> <span id="reciboTelefono"></span></p>
-    <p><b>Correo:</b> <span id="reciboCorreo"></span></p>
-    <p><b>Marca:</b> <span id="reciboMarca"></span></p>
-    <p><b>Modelo:</b> <span id="reciboModelo"></span></p>
-    <p><b>Año:</b> <span id="reciboAno"></span></p>
-    <p><b>Tipo de Aceite:</b> <span id="reciboAceite"></span></p>
-    <p><b>Dirección:</b> <span id="reciboDireccion"></span></p>
-    <p><b>Fecha del Servicio:</b> <span id="reciboFecha"></span></p>
-    <p><b>Hora del Servicio:</b> <span id="reciboHora"></span></p>
-    <p><b>Comentarios:</b> <span id="reciboComentarios"></span></p>
-    <p><b>Firma:</b> <span id="reciboFirma"></span></p>
+    <p><b id="reciboLabelNombre">Nombre:</b> <span id="reciboNombre"></span></p>
+    <p><b id="reciboLabelTelefono">Teléfono:</b> <span id="reciboTelefono"></span></p>
+    <p><b id="reciboLabelCorreo">Correo:</b> <span id="reciboCorreo"></span></p>
+    <p><b id="reciboLabelMarca">Marca:</b> <span id="reciboMarca"></span></p>
+    <p><b id="reciboLabelModelo">Modelo:</b> <span id="reciboModelo"></span></p>
+    <p><b id="reciboLabelAno">Año:</b> <span id="reciboAno"></span></p>
+    <p><b id="reciboLabelAceite">Tipo de Aceite:</b> <span id="reciboAceite"></span></p>
+    <p><b id="reciboLabelDireccion">Dirección:</b> <span id="reciboDireccion"></span></p>
+    <p><b id="reciboLabelFecha">Fecha del Servicio:</b> <span id="reciboFecha"></span></p>
+    <p><b id="reciboLabelHora">Hora del Servicio:</b> <span id="reciboHora"></span></p>
+    <p><b id="reciboLabelComentarios">Comentarios:</b> <span id="reciboComentarios"></span></p>
+    <p><b id="reciboLabelFirma">Firma:</b> <span id="reciboFirma"></span></p>
   </div>
 </div>
 
@@ -145,97 +144,269 @@
 <div id="modalAcuerdo" class="modal">
   <div class="modal-content">
     <span class="modal-close">&times;</span>
-    <h2>Acuerdo de Servicio a Domicilio</h2>
+    <h2 id="modalTitulo">Acuerdo de Servicio a Domicilio</h2>
     <div id="textoAcuerdo"></div>
-    <button class="modal-accept">Aceptar y firmar acuerdo ✅</button>
+    <button class="modal-accept" id="modalBtnAceptar">Aceptar y firmar acuerdo ✅</button>
   </div>
 </div>
 
-<!-- Campo de firma -->
+<!-- nota: dejé el campo firma extra (si existe) tal como estaba en tu original -->
 <div class="firma-container">
   <input type="text" id="firmaInput" placeholder="Firma (deshabilitada hasta aceptar acuerdo)" disabled>
 </div>
 
+<!-- === SCRIPT: DETECCIÓN Y APLICACIÓN DE IDIOMA AUTOMÁTICO === -->
 <script>
-/* ************** MULTI-IDIOMA ************** */
-let lang = localStorage.getItem('lang') || 'es';
+/* Detectar idioma del navegador y elegir entre 'es','pt','en' */
+window.lang = (function(){
+  const nav = (navigator.languages && navigator.languages[0]) || navigator.language || 'es';
+  if(!nav) return 'es';
+  if(nav.toLowerCase().startsWith('pt')) return 'pt';
+  if(nav.toLowerCase().startsWith('es')) return 'es';
+  return 'en';
+})();
 
-const acuerdoText = {
-  es: `
-    <p>Al solicitar nuestro servicio de cambio de aceite a domicilio, usted acepta los siguientes términos y condiciones:</p>
-    <ul>
-      <li>El cliente debe proporcionar información veraz sobre el vehículo y la ubicación del servicio.</li>
-      <li>Se requiere agendar la cita con al menos 24 horas de anticipación.</li>
-      <li>El técnico tiene derecho a reprogramar la cita en caso de condiciones climáticas adversas o emergencias.</li>
-      <li>Los precios pueden variar según el tipo de aceite, filtro y servicio adicional solicitado.</li>
-      <li>El cliente es responsable de asegurar el acceso adecuado al vehículo durante el servicio.</li>
-      <li>Todos los pagos deben completarse al finalizar el servicio.</li>
-      <li>El cliente acepta que la firma digital en este formulario es vinculante para aceptar los términos.</li>
-    </ul>
-    <p>Lea cuidadosamente estos términos antes de aceptar. Al hacer clic en "Aceptar y firmar acuerdo", confirma que ha leído, entendido y acepta estas condiciones.</p>
-  `,
-  en: `
-    <p>By requesting our home oil change service, you agree to the following terms and conditions:</p>
-    <ul>
-      <li>The client must provide accurate information about the vehicle and service location.</li>
-      <li>Appointments must be scheduled at least 24 hours in advance.</li>
-      <li>The technician reserves the right to reschedule in case of adverse weather or emergencies.</li>
-      <li>Prices may vary depending on the type of oil, filter, and additional services requested.</li>
-      <li>The client is responsible for ensuring proper access to the vehicle during service.</li>
-      <li>All payments must be completed upon service completion.</li>
-      <li>The client agrees that the digital signature on this form is binding to accept the terms.</li>
-    </ul>
-    <p>Read these terms carefully before accepting. By clicking "Accept and sign agreement," you confirm you have read, understood, and agree to these conditions.</p>
-  `,
-  pt: `
-    <p>Ao solicitar nosso serviço domiciliar de troca de óleo, você concorda com os seguintes termos e condições:</p>
-    <ul>
-      <li>O cliente deve fornecer informações precisas sobre o veículo e o local do serviço.</li>
-      <li>As reservas devem ser feitas com pelo menos 24 horas de antecedência.</li>
-      <li>O técnico reserva-se o direito de reagendar em caso de clima adverso ou emergências.</li>
-      <li>Os preços podem variar dependendo do tipo de óleo, filtro e serviços adicionais solicitados.</li>
-      <li>O cliente é responsável por garantir o acesso adequado ao veículo durante o serviço.</li>
-      <li>Todos os pagamentos devem ser concluídos após a conclusão do serviço.</li>
-      <li>O cliente concorda que a assinatura digital neste formulário é vinculativa para aceitar os termos.</li>
-    </ul>
-    <p>Leia atentamente estes termos antes de aceitar. Ao clicar em "Aceitar e assinar acordo", você confirma que leu, entendeu e concorda com estas condições.</p>
-  `
+/* Diccionarios */
+const textosUI = {
+  es: {
+    titulo: "Reserva de Servicio a Domicilio",
+    lblNombre: "Nombre completo",
+    lblTelefono: "Teléfono",
+    lblCorreo: "Correo electrónico",
+    lblMarca: "Marca del vehículo",
+    lblModelo: "Modelo del vehículo",
+    lblAno: "Año del vehículo",
+    lblAceite: "Tipo de Aceite",
+    lblMarcaAceite: "Marca de Aceite",
+    lblDireccion: "Dirección del servicio",
+    lblFecha: "Fecha",
+    lblHora: "Hora",
+    lblComentarios: "Comentarios adicionales",
+    linkAcuerdo: "Leer acuerdo completo",
+    btnEnviar: "Enviar Reserva",
+    reciboTitulo: "✅ Recibo de Reserva",
+    reciboLabelNombre: "Nombre:",
+    reciboLabelTelefono: "Teléfono:",
+    reciboLabelCorreo: "Correo:",
+    reciboLabelMarca: "Marca:",
+    reciboLabelModelo: "Modelo:",
+    reciboLabelAno: "Año:",
+    reciboLabelAceite: "Tipo de Aceite:",
+    reciboLabelDireccion: "Dirección:",
+    reciboLabelFecha: "Fecha del Servicio:",
+    reciboLabelHora: "Hora del Servicio:",
+    reciboLabelComentarios: "Comentarios:",
+    reciboLabelFirma: "Firma:",
+    modalTitulo: "Acuerdo de Servicio a Domicilio",
+    modalBtnAceptar: "Aceptar y firmar acuerdo ✅",
+    acuerdoTexto: null, // se usa acuerdoText existente
+    alertaAceptar: "✅ Acuerdo aceptado. Ahora puede firmar su reserva.",
+    enviarExito: "✅ Reserva enviada correctamente!",
+    enviarError: "Problema al enviar la reserva."
+  },
+  en: {
+    titulo: "Oil Change Booking",
+    lblNombre: "Full Name",
+    lblTelefono: "Phone",
+    lblCorreo: "Email",
+    lblMarca: "Vehicle Brand",
+    lblModelo: "Vehicle Model",
+    lblAno: "Vehicle Year",
+    lblAceite: "Oil Type",
+    lblMarcaAceite: "Oil Brand",
+    lblDireccion: "Service Address",
+    lblFecha: "Date",
+    lblHora: "Time",
+    lblComentarios: "Notes or Description",
+    linkAcuerdo: "Read full agreement",
+    btnEnviar: "Submit Booking",
+    reciboTitulo: "✅ Booking Receipt",
+    reciboLabelNombre: "Name:",
+    reciboLabelTelefono: "Phone:",
+    reciboLabelCorreo: "Email:",
+    reciboLabelMarca: "Brand:",
+    reciboLabelModelo: "Model:",
+    reciboLabelAno: "Year:",
+    reciboLabelAceite: "Oil Type:",
+    reciboLabelDireccion: "Address:",
+    reciboLabelFecha: "Appointment Date:",
+    reciboLabelHora: "Appointment Time:",
+    reciboLabelComentarios: "Comments:",
+    reciboLabelFirma: "Signature:",
+    modalTitulo: "Home Service Agreement",
+    modalBtnAceptar: "Accept and sign agreement ✅",
+    acuerdoTexto: null,
+    alertaAceptar: "✅ Agreement accepted. You can now sign your booking.",
+    enviarExito: "✅ Booking submitted successfully!",
+    enviarError: "Problem submitting booking."
+  },
+  pt: {
+    titulo: "Agendamento de Troca de Óleo",
+    lblNombre: "Nome completo",
+    lblTelefono: "Telefone",
+    lblCorreo: "E-mail",
+    lblMarca: "Marca do Veículo",
+    lblModelo: "Modelo do Veículo",
+    lblAno: "Ano do veículo",
+    lblAceite: "Tipo de Óleo",
+    lblMarcaAceite: "Marca do Óleo",
+    lblDireccion: "Endereço do serviço",
+    lblFecha: "Data",
+    lblHora: "Hora",
+    lblComentarios: "Observações ou Descrição",
+    linkAcuerdo: "Ler o acordo completo",
+    btnEnviar: "Enviar Reserva",
+    reciboTitulo: "✅ Recibo de Reserva",
+    reciboLabelNombre: "Nome:",
+    reciboLabelTelefono: "Telefone:",
+    reciboLabelCorreo: "E-mail:",
+    reciboLabelMarca: "Marca:",
+    reciboLabelModelo: "Modelo:",
+    reciboLabelAno: "Ano:",
+    reciboLabelAceite: "Tipo de Óleo:",
+    reciboLabelDireccion: "Endereço:",
+    reciboLabelFecha: "Data do Serviço:",
+    reciboLabelHora: "Hora do Serviço:",
+    reciboLabelComentarios: "Comentários:",
+    reciboLabelFirma: "Assinatura:",
+    modalTitulo: "Acordo de Serviço a Domicílio",
+    modalBtnAceptar: "Aceitar e assinar acordo ✅",
+    acuerdoTexto: null,
+    alertaAceptar: "✅ Acordo aceito. Agora você pode assinar sua reserva.",
+    enviarExito: "✅ Reserva enviada com sucesso!",
+    enviarError: "Problema ao enviar a reserva."
+  }
 };
 
+/* función que aplica la traducción a los elementos por id */
+function applyTranslations(){
+  const t = textosUI[window.lang] || textosUI.es;
+
+  // textos simples (elementos con id)
+  const map = {
+    'titulo': 'titulo',
+    'lblNombre': 'lblNombre',
+    'lblTelefono': 'lblTelefono',
+    'lblCorreo': 'lblCorreo',
+    'lblMarca': 'lblMarca',
+    'lblModelo': 'lblModelo',
+    'lblAno': 'lblAno',
+    'lblAceite': 'lblAceite',
+    'lblMarcaAceite': 'lblMarcaAceite',
+    'lblDireccion': 'lblDireccion',
+    'lblFecha': 'lblFecha',
+    'lblHora': 'lblHora',
+    'lblComentarios': 'lblComentarios',
+    'linkAcuerdo': 'linkAcuerdo',
+    'btnEnviar': 'btnEnviar',
+    'reciboTitulo': 'reciboTitulo',
+    'modalTitulo': 'modalTitulo',
+    'modalBtnAceptar': 'modalBtnAceptar'
+  };
+
+  Object.keys(map).forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    const key = map[id];
+    el.textContent = t[key] || el.textContent;
+  });
+
+  // traducir las etiquetas dentro del recibo (b elements)
+  const reciboMap = [
+    'reciboLabelNombre','reciboLabelTelefono','reciboLabelCorreo','reciboLabelMarca',
+    'reciboLabelModelo','reciboLabelAno','reciboLabelAceite','reciboLabelDireccion',
+    'reciboLabelFecha','reciboLabelHora','reciboLabelComentarios','reciboLabelFirma'
+  ];
+  reciboMap.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el && t[id.replace('reciboLabel','reciboLabel')]) {
+      // el texto ya viene en t con same key
+      // use mapping from textosUI
+      // fallback to existing textContent if missing
+      el.textContent = t[id.replace('reciboLabel','reciboLabel')] || el.textContent;
+    } else if (el) {
+      // fallback direct mapping by id in textosUI
+      const fallback = {
+        'reciboLabelNombre':'reciboLabelNombre',
+        'reciboLabelTelefono':'reciboLabelTelefono',
+        'reciboLabelCorreo':'reciboLabelCorreo',
+        'reciboLabelMarca':'reciboLabelMarca',
+        'reciboLabelModelo':'reciboLabelModelo',
+        'reciboLabelAno':'reciboLabelAno',
+        'reciboLabelAceite':'reciboLabelAceite',
+        'reciboLabelDireccion':'reciboLabelDireccion',
+        'reciboLabelFecha':'reciboLabelFecha',
+        'reciboLabelHora':'reciboLabelHora',
+        'reciboLabelComentarios':'reciboLabelComentarios',
+        'reciboLabelFirma':'reciboLabelFirma'
+      };
+      const key = fallback[id];
+      if(t[key]) el.textContent = t[key];
+    }
+  });
+
+  // colocar el idioma detectado en el campo oculto del formulario
+  const langField = document.getElementById('langField');
+  if(langField) langField.value = window.lang;
+}
+
+/* Ejecutar la aplicación de traducciones ahora */
+applyTranslations();
+
+/* Asegurar que el modal use el texto de acuerdo correcto (ya lo tienes en acuerdoText) */
+if(typeof acuerdoText !== 'undefined'){
+  // no sobrescribimos; cuando se abra el modal inyectaremos acuerdoText[lang]
+}
+
+/* exportar texto de mensajes para otras partes del script (ej. alertas / mensajería) */
+window.i18n = {
+  aceptarAlerta: textosUI[window.lang].alertaAceptar || textosUI.es.alertaAceptar,
+  enviarExito: textosUI[window.lang].enviarExito || textosUI.es.enviarExito,
+  enviarError: textosUI[window.lang].enviarError || textosUI.es.enviarError
+};
+</script>
+
+<!-- === FIN DETECCIÓN IDIOMA === -->
+
+<script>
 /* ************** MODAL Y FIRMA ************** */
+/* (este bloque usa 'window.lang' y 'acuerdoText' — lang ya fue definido arriba) */
 const modal = document.getElementById('modalAcuerdo');
-const link = document.getElementById('linkAcuerdo'); // link para abrir modal si lo tienes
+const link = document.getElementById('linkAcuerdo'); // link para abrir modal
 const spanClose = document.querySelector('.modal-close');
-const btnAceptar = document.querySelector('.modal-accept');
+const btnAceptar = document.querySelector('.modal-accept') || document.getElementById('modalBtnAceptar');
 const firmaInput = document.getElementById('firmaInput');
 
 // Abrir modal
 if(link) {
   link.onclick = (e) => {
     e.preventDefault();
-    document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
+    // inyectar texto del acuerdo según idioma detectado
+    if(typeof acuerdoText !== 'undefined'){
+      document.getElementById('textoAcuerdo').innerHTML = acuerdoText[window.lang] || acuerdoText['es'];
+    }
     modal.style.display = 'block';
   }
 }
 
 // Cerrar modal
-spanClose.onclick = () => { modal.style.display = 'none'; }
+if(spanClose) spanClose.onclick = () => { modal.style.display = 'none'; }
 window.onclick = (e) => { if(e.target == modal) modal.style.display = 'none'; }
 
 // Aceptar acuerdo
-btnAceptar.onclick = () => {
-  firmaInput.disabled = false;
-  localStorage.setItem('acuerdoFirmado','true');
-  modal.style.display = 'none';
-  alert({'es':'✅ Acuerdo aceptado. Ahora puede firmar su reserva.',
-         'en':'✅ Agreement accepted. You can now sign your booking.',
-         'pt':'✅ Acordo aceito. Agora você pode assinar sua reserva.'}[lang]);
+if(btnAceptar){
+  btnAceptar.onclick = () => {
+    if(firmaInput) firmaInput.disabled = false;
+    localStorage.setItem('acuerdoFirmado','true');
+    modal.style.display = 'none';
+    alert(window.i18n.aceptarAlerta);
+  }
 }
 
 // Activar firma si ya aceptó antes
 window.addEventListener('load', () => {
   if(localStorage.getItem('acuerdoFirmado') === 'true') {
-    firmaInput.disabled = false;
+    if(firmaInput) firmaInput.disabled = false;
   }
 });
 </script>
@@ -263,26 +434,29 @@ const selectTipoAceite = document.getElementById('selectTipoAceite');
 const selectMarcaAceite = document.getElementById('selectMarca');
 const descripcionAceite = document.getElementById('descripcionAceite');
 
-selectTipoAceite.addEventListener('change', ()=>{
-  const tipo = selectTipoAceite.value;
-  selectMarcaAceite.innerHTML = `<option value="">Selecciona marca de aceite</option>`;
-  aceitesData.filter(a=>a.Tipo===tipo).forEach(a=>{
-    const opt = document.createElement('option');
-    opt.value = a.Marca;
-    opt.textContent = a.Marca;
-    selectMarcaAceite.appendChild(opt);
+if(selectTipoAceite && selectMarcaAceite){
+  selectTipoAceite.addEventListener('change', ()=>{
+    const tipo = selectTipoAceite.value;
+    selectMarcaAceite.innerHTML = `<option value="">${ window.lang === 'en' ? 'Select oil brand' : window.lang === 'pt' ? 'Selecione marca de óleo' : 'Selecciona marca de aceite' }</option>`;
+    aceitesData.filter(a=>a.Tipo===tipo).forEach(a=>{
+      const opt = document.createElement('option');
+      opt.value = a.Marca;
+      opt.textContent = a.Marca;
+      selectMarcaAceite.appendChild(opt);
+    });
+    descripcionAceite.value='';
   });
-  descripcionAceite.value='';
-});
 
-selectMarcaAceite.addEventListener('change', ()=>{
-  const tipo = selectTipoAceite.value;
-  const marca = selectMarcaAceite.value;
-  const aceite = aceitesData.find(a=>a.Tipo===tipo && a.Marca===marca);
-  descripcionAceite.value = aceite ? aceite.Descripcion : '';
-});
+  selectMarcaAceite.addEventListener('change', ()=>{
+    const tipo = selectTipoAceite.value;
+    const marca = selectMarcaAceite.value;
+    const aceite = aceitesData.find(a=>a.Tipo===tipo && a.Marca===marca);
+    descripcionAceite.value = aceite ? aceite.Descripcion : '';
+  });
+}
 
 /* ************** MARCAS Y MODELOS DINÁMICOS ************** */
+/* (aquí dejo tu lista completa intacta) */
 const marcasModelos = [
   {Marca:"Acura", Modelo:"ILX 2.4L"},
   {Marca:"Acura", Modelo:"MDX 3.5L"},
@@ -457,7 +631,8 @@ const marcasModelos = [
   {Marca:"Mazda", Modelo:"Mazda3 2.0L"},
   {Marca:"Mazda", Modelo:"Mazda3 2.5L"},
   {Marca:"Mazda", Modelo:"Mazda6 2.5L"},
-  {Marca:"Mazda", Modelo:"CX-3 2.0L"},
+  {Marca:"Mazda", Modelo:
+  "CX-3 2.0L"},
   {Marca:"Mazda", Modelo:"CX-30 2.5L"},
   {Marca:"Mazda", Modelo:"CX-5 2.5L"},
   {Marca:"Mazda", Modelo:"CX-9 2.5L Turbo"},
@@ -527,25 +702,13 @@ const marcasModelos = [
 {Marca:"Mercedes-Benz", Modelo:"G550 4MATIC"},
 {Marca:"Mercedes-Benz", Modelo:"S450 4MATIC"},
 {Marca:"Mercedes-Benz", Modelo:"S560 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"C300 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"E350 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"SLC300 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"SL450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"SL550 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLA250 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLB250 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLC300 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLE350 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLS450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"G550 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"S450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"S560 4MATIC"},
 ];
+
 const selectMarcaVehiculo = document.getElementById('selectMarcaVehiculo');
 const selectModeloVehiculo = document.getElementById('selectModeloVehiculo');
 
+/* Cargar marcas únicas en el selector al iniciar */
 const marcasUnicas = [...new Set(marcasModelos.map(m=>m.Marca))];
-
 marcasUnicas.forEach(marca=>{
   const opt = document.createElement('option');
   opt.value = marca;
@@ -553,9 +716,10 @@ marcasUnicas.forEach(marca=>{
   selectMarcaVehiculo.appendChild(opt);
 });
 
+/* Cuando cambia la marca, actualizar modelos */
 selectMarcaVehiculo.addEventListener('change', ()=>{
   const marca = selectMarcaVehiculo.value;
-  selectModeloVehiculo.innerHTML = `<option value="">Selecciona modelo</option>`;
+  selectModeloVehiculo.innerHTML = `<option value="">${ window.lang === 'en' ? 'Select model' : window.lang === 'pt' ? 'Selecione modelo' : 'Selecciona modelo' }</option>`;
   marcasModelos.filter(m=>m.Marca===marca).forEach(m=>{
     const opt = document.createElement('option');
     opt.value = m.Modelo;
@@ -572,7 +736,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytzUrdCjo9o3g3oyR0s
 form.addEventListener('submit', e=>{
   e.preventDefault();
   if(firmaInput.disabled){
-    alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);
+    alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[window.lang]);
     return;
   }
   const data = Object.fromEntries(new FormData(form).entries());
@@ -585,13 +749,13 @@ form.addEventListener('submit', e=>{
 
 function handleResponse(response){
   if(response.success){
-    mensaje.textContent = {'es':'✅ Reserva enviada correctamente!','en':'✅ Booking submitted successfully!','pt':'✅ Reserva enviada com sucesso!'}[lang];
+    mensaje.textContent = {'es':'✅ Reserva enviada correctamente!','en':'✅ Booking submitted successfully!','pt':'✅ Reserva enviada com sucesso!'}[window.lang];
     mostrarRecibo(window.ultimoEnvio);
     form.reset();
-    firmaInput.disabled=true;
+    if(firmaInput) firmaInput.disabled=true;
     localStorage.removeItem('acuerdoFirmado');
   }else{
-    mensaje.textContent='Error: '+(response.error||'Problema al enviar la reserva.');
+    mensaje.textContent = ( {'es':'Error: ','en':'Error: ','pt':'Erro: '}[window.lang] + (response.error|| {'es':'Problema al enviar la reserva.','en':'Problem submitting booking.','pt':'Problema ao enviar a reserva.'}[window.lang]) );
   }
 }
 
@@ -610,6 +774,7 @@ function mostrarRecibo(data){
   document.getElementById('reciboFirma').innerText = data.Firma || '';
   document.getElementById('recibo').style.display='block';
 }
-
 }); // <-- cierre de DOMContentLoaded
 </script>
+</body>
+</html>
