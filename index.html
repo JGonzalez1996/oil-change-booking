@@ -151,8 +151,15 @@
   </div>
 </div>
 
+<!-- Campo de firma -->
+<div class="firma-container">
+  <input type="text" id="firmaInput" placeholder="Firma (deshabilitada hasta aceptar acuerdo)" disabled>
+</div>
+
 <script>
 /* ************** MULTI-IDIOMA ************** */
+let lang = localStorage.getItem('lang') || 'es';
+
 const acuerdoText = {
   es: `
     <p>Al solicitar nuestro servicio de cambio de aceite a domicilio, usted acepta los siguientes términos y condiciones:</p>
@@ -194,22 +201,47 @@ const acuerdoText = {
     <p>Leia atentamente estes termos antes de aceitar. Ao clicar em "Aceitar e assinar acordo", você confirma que leu, entendeu e concorda com estas condições.</p>
   `
 };
+
 /* ************** MODAL Y FIRMA ************** */
 const modal = document.getElementById('modalAcuerdo');
-const link = document.getElementById('linkAcuerdo');
+const link = document.getElementById('linkAcuerdo'); // link para abrir modal si lo tienes
 const spanClose = document.querySelector('.modal-close');
 const btnAceptar = document.querySelector('.modal-accept');
 const firmaInput = document.getElementById('firmaInput');
-link.onclick = ()=>{modal.style.display='block';}
-spanClose.onclick = ()=>{modal.style.display='none';}
-window.onclick = (e)=>{if(e.target==modal) modal.style.display='none';}
-btnAceptar.onclick = ()=>{
-  firmaInput.disabled=false;
-  localStorage.setItem('acuerdoFirmado','true');
-  modal.style.display='none';
-  alert({'es':'✅ Acuerdo aceptado. Ahora puede firmar su reserva.','en':'✅ Agreement accepted. You can now sign your booking.','pt':'✅ Acordo aceito. Agora você pode assinar sua reserva.'}[lang]);
+
+// Abrir modal
+if(link) {
+  link.onclick = (e) => {
+    e.preventDefault();
+    document.getElementById('textoAcuerdo').innerHTML = acuerdoText[lang];
+    modal.style.display = 'block';
+  }
 }
-window.addEventListener('load', ()=>{if(localStorage.getItem('acuerdoFirmado')==='true'){firmaInput.disabled=false;}});
+
+// Cerrar modal
+spanClose.onclick = () => { modal.style.display = 'none'; }
+window.onclick = (e) => { if(e.target == modal) modal.style.display = 'none'; }
+
+// Aceptar acuerdo
+btnAceptar.onclick = () => {
+  firmaInput.disabled = false;
+  localStorage.setItem('acuerdoFirmado','true');
+  modal.style.display = 'none';
+  alert({'es':'✅ Acuerdo aceptado. Ahora puede firmar su reserva.',
+         'en':'✅ Agreement accepted. You can now sign your booking.',
+         'pt':'✅ Acordo aceito. Agora você pode assinar sua reserva.'}[lang]);
+}
+
+// Activar firma si ya aceptó antes
+window.addEventListener('load', () => {
+  if(localStorage.getItem('acuerdoFirmado') === 'true') {
+    firmaInput.disabled = false;
+  }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
 
 /* ************** ACEITES ************** */
 const aceitesData = [
@@ -226,18 +258,23 @@ const aceitesData = [
   {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez en todo tipo de temperatura.", Precio:25},
   {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Protección avanzada contra desgaste y depósitos.", Precio:27}
 ];
+
 const selectTipoAceite = document.getElementById('selectTipoAceite');
 const selectMarcaAceite = document.getElementById('selectMarca');
 const descripcionAceite = document.getElementById('descripcionAceite');
+
 selectTipoAceite.addEventListener('change', ()=>{
   const tipo = selectTipoAceite.value;
   selectMarcaAceite.innerHTML = `<option value="">Selecciona marca de aceite</option>`;
   aceitesData.filter(a=>a.Tipo===tipo).forEach(a=>{
     const opt = document.createElement('option');
-    opt.value = a.Marca; opt.textContent = a.Marca; selectMarcaAceite.appendChild(opt);
+    opt.value = a.Marca;
+    opt.textContent = a.Marca;
+    selectMarcaAceite.appendChild(opt);
   });
   descripcionAceite.value='';
 });
+
 selectMarcaAceite.addEventListener('change', ()=>{
   const tipo = selectTipoAceite.value;
   const marca = selectMarcaAceite.value;
@@ -246,6 +283,7 @@ selectMarcaAceite.addEventListener('change', ()=>{
 });
 
 /* ************** MARCAS Y MODELOS DINÁMICOS ************** */
+const marcasModelos = [ ...tu lista completa aquí... ];
 const marcasModelos = [
   {Marca:"Acura", Modelo:"ILX 2.4L"},
   {Marca:"Acura", Modelo:"MDX 3.5L"},
@@ -504,18 +542,26 @@ const marcasModelos = [
 {Marca:"Mercedes-Benz", Modelo:"S450 4MATIC"},
 {Marca:"Mercedes-Benz", Modelo:"S560 4MATIC"},
 ];
-
 const selectMarcaVehiculo = document.getElementById('selectMarcaVehiculo');
 const selectModeloVehiculo = document.getElementById('selectModeloVehiculo');
+
 const marcasUnicas = [...new Set(marcasModelos.map(m=>m.Marca))];
+
 marcasUnicas.forEach(marca=>{
-  const opt = document.createElement('option'); opt.value=marca; opt.textContent=marca; selectMarcaVehiculo.appendChild(opt);
+  const opt = document.createElement('option');
+  opt.value = marca;
+  opt.textContent = marca;
+  selectMarcaVehiculo.appendChild(opt);
 });
+
 selectMarcaVehiculo.addEventListener('change', ()=>{
   const marca = selectMarcaVehiculo.value;
   selectModeloVehiculo.innerHTML = `<option value="">Selecciona modelo</option>`;
   marcasModelos.filter(m=>m.Marca===marca).forEach(m=>{
-    const opt = document.createElement('option'); opt.value=m.Modelo; opt.textContent=m.Modelo; selectModeloVehiculo.appendChild(opt);
+    const opt = document.createElement('option');
+    opt.value = m.Modelo;
+    opt.textContent = m.Modelo;
+    selectModeloVehiculo.appendChild(opt);
   });
 });
 
@@ -523,9 +569,13 @@ selectMarcaVehiculo.addEventListener('change', ()=>{
 const form = document.getElementById('formCita');
 const mensaje = document.getElementById('mensaje');
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbytzUrdCjo9o3g3oyR0sb9Gn7FFKzx5_M2PeA1iO9wIsc8ZCpYIHTS_QdL8dPtVfAHuPw/exec';
+
 form.addEventListener('submit', e=>{
   e.preventDefault();
-  if(firmaInput.disabled){alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);return;}
+  if(firmaInput.disabled){
+    alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[lang]);
+    return;
+  }
   const data = Object.fromEntries(new FormData(form).entries());
   data.callback='handleResponse';
   const script = document.createElement('script');
@@ -533,13 +583,19 @@ form.addEventListener('submit', e=>{
   document.body.appendChild(script);
   window.ultimoEnvio = {...data};
 });
+
 function handleResponse(response){
   if(response.success){
     mensaje.textContent = {'es':'✅ Reserva enviada correctamente!','en':'✅ Booking submitted successfully!','pt':'✅ Reserva enviada com sucesso!'}[lang];
     mostrarRecibo(window.ultimoEnvio);
-    form.reset(); firmaInput.disabled=true; localStorage.removeItem('acuerdoFirmado');
-  }else{mensaje.textContent='Error: '+(response.error||'Problema al enviar la reserva.');}
+    form.reset();
+    firmaInput.disabled=true;
+    localStorage.removeItem('acuerdoFirmado');
+  }else{
+    mensaje.textContent='Error: '+(response.error||'Problema al enviar la reserva.');
+  }
 }
+
 function mostrarRecibo(data){
   document.getElementById('reciboNombre').innerText = data.Nombre || '';
   document.getElementById('reciboTelefono').innerText = data.Telefono || '';
@@ -555,6 +611,6 @@ function mostrarRecibo(data){
   document.getElementById('reciboFirma').innerText = data.Firma || '';
   document.getElementById('recibo').style.display='block';
 }
+
+}); // <-- cierre de DOMContentLoaded
 </script>
-</body>
-</html>
