@@ -616,8 +616,7 @@ const marcasModelos = [
 {Marca:"BMW", Modelo:"M5 (E60/F90)"},
 {Marca:"BMW", Modelo:"M6 (E63/F13)"},
 {Marca:"BMW", Modelo:"Z4 2.0i"},
-{Marca:"BMW", Modelo:"Z4 3.0i"},
-  // 🔁 Agrega aquí el resto de tu lista completa
+{Marca:"BMW", Modelo:"Z4 3.0i"}
 ];
 
 /* Poblar marcas únicas */
@@ -632,7 +631,6 @@ marcasUnicas.forEach(marca => {
   selectMarcaVehiculo.appendChild(opt);
 });
 
-/* Cuando cambia la marca, poblar modelos */
 selectMarcaVehiculo.addEventListener('change', () => {
   const marca = selectMarcaVehiculo.value;
   selectModeloVehiculo.innerHTML = `
