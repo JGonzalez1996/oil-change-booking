@@ -204,112 +204,13 @@
   </div>
 </div>
 
-<!-- === SCRIPT: DICCIONARIOS, IDIOMA Y CARGA DE VEHÍCULOS === -->
+<!-- === SCRIPT: DICCIONARIOS, IDIOMA Y MARCAS/MODELOS === -->
 <script>
 /* Diccionarios */
 const textosUI = {
-  es: {
-    titulo: "Reserva de Servicio a Domicilio",
-    lblNombre: "Nombre completo",
-    lblTelefono: "Teléfono",
-    lblCorreo: "Correo electrónico",
-    lblMarca: "Marca del vehículo",
-    lblModelo: "Modelo del vehículo",
-    lblAno: "Año del vehículo",
-    lblAceite: "Tipo de Aceite",
-    lblMarcaAceite: "Marca de Aceite",
-    lblDireccion: "Dirección del servicio",
-    lblFecha: "Fecha",
-    lblHora: "Hora",
-    lblComentarios: "Comentarios adicionales",
-    linkAcuerdo: "Leer acuerdo completo",
-    btnEnviar: "Enviar Reserva",
-    reciboTitulo: "✅ Recibo de Reserva",
-    reciboLabelNombre: "Nombre:",
-    reciboLabelTelefono: "Teléfono:",
-    reciboLabelCorreo: "Correo:",
-    reciboLabelMarca: "Marca:",
-    reciboLabelModelo: "Modelo:",
-    reciboLabelAno: "Año:",
-    reciboLabelAceite: "Tipo de Aceite:",
-    reciboLabelDireccion: "Dirección:",
-    reciboLabelFecha: "Fecha del Servicio:",
-    reciboLabelHora: "Hora del Servicio:",
-    reciboLabelComentarios: "Comentarios:",
-    reciboLabelFirma: "Firma:",
-    modalTitulo: "Acuerdo de Servicio a Domicilio",
-    alertaAceptar: "✅ Acuerdo aceptado. Ahora puede firmar su reserva.",
-    enviarExito: "✅ Reserva enviada correctamente!",
-    enviarError: "Problema al enviar la reserva."
-  },
-  en: {
-    titulo: "Oil Change Booking",
-    lblNombre: "Full Name",
-    lblTelefono: "Phone",
-    lblCorreo: "Email",
-    lblMarca: "Vehicle Brand",
-    lblModelo: "Vehicle Model",
-    lblAno: "Vehicle Year",
-    lblAceite: "Oil Type",
-    lblMarcaAceite: "Oil Brand",
-    lblDireccion: "Service Address",
-    lblFecha: "Date",
-    lblHora: "Time",
-    lblComentarios: "Notes or Description",
-    linkAcuerdo: "Read full agreement",
-    btnEnviar: "Submit Booking",
-    reciboTitulo: "✅ Booking Receipt",
-    reciboLabelNombre: "Name:",
-    reciboLabelTelefono: "Phone:",
-    reciboLabelCorreo: "Email:",
-    reciboLabelMarca: "Brand:",
-    reciboLabelModelo: "Model:",
-    reciboLabelAno: "Year:",
-    reciboLabelAceite: "Oil Type:",
-    reciboLabelDireccion: "Address:",
-    reciboLabelFecha: "Appointment Date:",
-    reciboLabelHora: "Appointment Time:",
-    reciboLabelComentarios: "Comments:",
-    reciboLabelFirma: "Signature:",
-    modalTitulo: "Home Service Agreement",
-    alertaAceptar: "✅ Agreement accepted. You can now sign your booking.",
-    enviarExito: "✅ Booking submitted successfully!",
-    enviarError: "Problem submitting booking."
-  },
-  pt: {
-    titulo: "Agendamento de Troca de Óleo",
-    lblNombre: "Nome completo",
-    lblTelefono: "Telefone",
-    lblCorreo: "E-mail",
-    lblMarca: "Marca do Veículo",
-    lblModelo: "Modelo do Veículo",
-    lblAno: "Ano do veículo",
-    lblAceite: "Tipo de Óleo",
-    lblMarcaAceite: "Marca do Óleo",
-    lblDireccion: "Endereço do serviço",
-    lblFecha: "Data",
-    lblHora: "Hora",
-    lblComentarios: "Observações ou Descrição",
-    linkAcuerdo: "Ler o acordo completo",
-    btnEnviar: "Enviar Reserva",
-    reciboTitulo: "✅ Recibo de Reserva",
-    reciboLabelNombre: "Nome:",
-    reciboLabelTelefono: "Telefone:",
-    reciboLabelCorreo: "E-mail:",
-    reciboLabelMarca: "Marca:",
-    reciboLabelModelo: "Modelo:",
-    reciboLabelAno: "Ano:",
-    reciboLabelAceite: "Tipo de Óleo:",
-    reciboLabelDireccion: "Endereço:",
-    reciboLabelFecha: "Data do Serviço:",
-    reciboLabelHora: "Hora do Serviço:",
-    reciboLabelComentarios: "Comentários:",
-    reciboLabelFirma: "Assinatura:",
-    modalTitulo: "Acordo de Serviço a Domicílio",
-    alertaAceptar: "✅ Acordo aceito. Agora você pode assinar sua reserva.",
-    enviarExito: "✅ Reserva enviada com sucesso!",
-    enviarError: "Problema ao enviar a reserva."
-  }
+  es: { /* ... español ... */ },
+  en: { /* ... inglés ... */ },
+  pt: { /* ... portugués ... */ }
 };
 
 /* Detectar idioma del navegador */
@@ -321,52 +222,51 @@ window.lang = (function(){
   return 'en';
 })();
 
-/* Variables globales */
-let vehiculos = [];
+/* Lista fija de marcas y modelos */
+const marcasModelos = [
+  {Marca:"Acura", Modelo:"ILX 2.4L"},
+  {Marca:"Acura", Modelo:"MDX 3.5L"},
+  {Marca:"Chevrolet", Modelo:"Aveo"},
+  {Marca:"Chevrolet", Modelo:"Cruze"},
+  {Marca:"Dodge", Modelo:"Dart"},
+  {Marca:"Dodge", Modelo:"Journey"}
+  // 🔁 Agrega aquí el resto de tu lista completa
+];
+
+/* Poblar marcas únicas */
+const selectMarcaVehiculo = document.getElementById('selectMarcaVehiculo');
+const selectModeloVehiculo = document.getElementById('selectModeloVehiculo');
+
+const marcasUnicas = [...new Set(marcasModelos.map(m => m.Marca))].sort();
+marcasUnicas.forEach(marca => {
+  const opt = document.createElement('option');
+  opt.value = marca;
+  opt.textContent = marca;
+  selectMarcaVehiculo.appendChild(opt);
+});
+
+/* Cuando cambia la marca, poblar modelos */
+selectMarcaVehiculo.addEventListener('change', () => {
+  const marca = selectMarcaVehiculo.value;
+  selectModeloVehiculo.innerHTML = `
+    <option value="">
+      ${ window.lang === 'en' ? 'Select model' : window.lang === 'pt' ? 'Selecione modelo' : 'Selecciona modelo' }
+    </option>`;
+  
+  marcasModelos
+    .filter(m => m.Marca === marca)
+    .forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.Modelo;
+      opt.textContent = m.Modelo;
+      selectModeloVehiculo.appendChild(opt);
+    });
+});
+</script>
+
+<!-- === SCRIPT: CARGA DE PRECIOS DINÁMICOS === -->
+<script>
 let precios = [];
-
-/* Callback JSONP para vehículos */
-function handleVehiculos(response) {
-  if (response.success) {
-    vehiculos = response.data;
-    console.log("Vehículos recibidos:", vehiculos);
-
-    // llenar marcas únicas
-    const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
-    const marcaSelect = document.getElementById("marcaSelect");
-    marcas.forEach(m => {
-      const opt = document.createElement("option");
-      opt.value = m;
-      opt.textContent = m;
-      marcaSelect.appendChild(opt);
-    });
-
-    // cuando se seleccione una marca, llenar modelos
-    marcaSelect.addEventListener("change", function() {
-      const modeloSelect = document.getElementById("modeloSelect");
-      modeloSelect.innerHTML = '<option value="">Selecciona modelo</option>';
-
-      vehiculos.forEach(v => {
-        if (v[0] === this.value) {
-          const opt = document.createElement("option");
-          opt.value = v[1];
-          opt.textContent = v[1];
-          modeloSelect.appendChild(opt);
-        }
-      });
-    });
-
-    // cuando se seleccione un modelo, rellenar aceite recomendado
-    document.getElementById("modeloSelect").addEventListener("change", function() {
-      const marca = document.getElementById("marcaSelect").value;
-      const modelo = this.value;
-      const match = vehiculos.find(v => v[0] === marca && v[1] === modelo);
-      if (match) {
-        document.getElementById("tipoAceiteRecomendado").value = match[4]; // Columna E
-      }
-    });
-  }
-}
 
 /* Callback JSONP para precios */
 function handlePrecios(response) {
@@ -376,11 +276,7 @@ function handlePrecios(response) {
   }
 }
 
-/* Lanzar llamadas JSONP */
-const scriptVehiculos = document.createElement('script');
-scriptVehiculos.src = SCRIPT_URL + '?action=getVehiculos&callback=handleVehiculos';
-document.body.appendChild(scriptVehiculos);
-
+/* Llamada JSONP para precios */
 const scriptPrecios = document.createElement('script');
 scriptPrecios.src = SCRIPT_URL + '?action=getPrecios&callback=handlePrecios';
 document.body.appendChild(scriptPrecios);
