@@ -37,6 +37,14 @@
   .modal-content{background:#1e1e1e;margin:50px auto;padding:20px;border-radius:12px;width:90%;max-width:700px;color:#e0e0e0;max-height:80vh;overflow-y:auto;}
   .modal-close{float:right;font-size:24px;color:#888;cursor:pointer;transition:color 0.2s;}
   .modal-close:hover{color:#fff;}
+  .form-group select {
+  padding-left: 38px; /* espacio para ícono */
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg fill='white' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
 </style>
 
 
@@ -68,50 +76,50 @@
     </div>
     
     <!-- Marca dinámica -->
-    <div class="form-group">
-      <i class="fas fa-car"></i>
-      <select name="Marca" id="marcaSelect" required>
-        <option value="">Selecciona marca</option>
-      </select>
-      <label id="lblMarca">Marca del vehículo</label>
-    </div>
+<div class="form-group">
+  <i class="fas fa-car"></i>
+  <select name="marca" id="marcaSelect" required>
+    <option value="">Selecciona marca</option>
+  </select>
+  <label id="lblMarca">Marca del vehículo</label>
+</div>
 
-    <!-- Modelo dinámico -->
-    <div class="form-group">
-      <i class="fas fa-car-side"></i>
-      <select name="Modelo" id="modeloSelect" required>
-        <option value="">Selecciona modelo</option>
-      </select>
-      <label id="lblModelo">Modelo del vehículo</label>
-    </div>
+<!-- Modelo dinámico -->
+<div class="form-group">
+  <i class="fas fa-car-side"></i>
+  <select name="modelo" id="modeloSelect" required>
+    <option value="">Selecciona modelo</option>
+  </select>
+  <label id="lblModelo">Modelo del vehículo</label>
+</div>
 
-    <!-- Año -->
-    <div class="form-group">
-      <i class="fas fa-calendar-alt"></i>
-      <input type="number" name="Ano" id="anoInput" placeholder=" " required>
-      <label id="lblAno">Año del vehículo</label>
-    </div>
+<!-- Año -->
+<div class="form-group">
+  <i class="fas fa-calendar-alt"></i>
+  <input type="number" name="ano" id="anoInput" placeholder=" " required>
+  <label id="lblAno">Año del vehículo</label>
+</div>
 
-    <!-- Aceite recomendado (automático) -->
-    <div class="form-group">
-      <i class="fas fa-oil-can"></i>
-      <input type="text" id="tipoAceiteRecomendado" name="tipoAceiteRecomendado" readonly placeholder="Tipo de aceite recomendado">
-      <label id="lblAceite">Aceite recomendado</label>
-    </div>
+<!-- Aceite recomendado (automático) -->
+<div class="form-group">
+  <i class="fas fa-oil-can"></i>
+  <input type="text" id="tipoAceiteRecomendado" name="aceiteRecomendado" readonly placeholder="Tipo de aceite recomendado">
+  <label id="lblAceite">Aceite recomendado</label>
+</div>
 
-    <!-- Marca de Aceite -->
-    <div class="form-group">
-      <i class="fas fa-industry"></i>
-      <select name="MarcaAceite" id="selectMarcaAceite" required>
-        <option value="">Selecciona marca de aceite</option>
-        <option value="Mobil 1">Mobil 1</option>
-        <option value="Pennzoil">Pennzoil</option>
-        <option value="Valvoline">Valvoline</option>
-        <option value="Castrol EDGE">Castrol EDGE</option>
-        <option value="Shell Helix">Shell Helix</option>
-      </select>
-      <label id="lblMarcaAceite">Marca de Aceite</label>
-    </div>
+<!-- Marca de Aceite -->
+<div class="form-group">
+  <i class="fas fa-industry"></i>
+  <select name="marcaAceite" id="selectMarcaAceite" required>
+    <option value="">Selecciona marca de aceite</option>
+    <option value="Mobil 1">Mobil 1</option>
+    <option value="Pennzoil">Pennzoil</option>
+    <option value="Valvoline">Valvoline</option>
+    <option value="Castrol EDGE">Castrol EDGE</option>
+    <option value="Shell Helix">Shell Helix</option>
+  </select>
+  <label id="lblMarcaAceite">Marca de Aceite</label>
+</div>
 
     <!-- Descripción del aceite -->
     <div class="form-group">
