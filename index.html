@@ -623,9 +623,11 @@ const marcasModelos = [
 ];
 
 /* Poblar marcas únicas */
+<script>
 const selectMarcaVehiculo = document.getElementById('selectMarcaVehiculo');
 const selectModeloVehiculo = document.getElementById('selectModeloVehiculo');
 
+// Poblar marcas únicas
 const marcasUnicas = [...new Set(marcasModelos.map(m => m.Marca))].sort();
 marcasUnicas.forEach(marca => {
   const opt = document.createElement('option');
@@ -634,23 +636,25 @@ marcasUnicas.forEach(marca => {
   selectMarcaVehiculo.appendChild(opt);
 });
 
+// Poblar modelos según la marca seleccionada
 selectMarcaVehiculo.addEventListener('change', () => {
   const marca = selectMarcaVehiculo.value;
-  selectModeloVehiculo.innerHTML = `
-    <option value="">
-      ${ window.lang === 'en' ? 'Select model' : window.lang === 'pt' ? 'Selecione modelo' : 'Selecciona modelo' }
-    </option>`;
-  
-  marcasModelos
-    .filter(m => m.Marca === marca)
-    .forEach(m => {
-      const opt = document.createElement('option');
-      opt.value = m.Modelo;
-      opt.textContent = m.Modelo;
-      selectModeloVehiculo.appendChild(opt);
-    });
+  selectModeloVehiculo.innerHTML = `<option value="">Selecciona modelo</option>`;
+
+  // Usamos Set para evitar duplicados
+  const modelosUnicos = [...new Set(
+    marcasModelos.filter(m => m.Marca === marca).map(m => m.Modelo)
+  )];
+
+  modelosUnicos.forEach(modelo => {
+    const opt = document.createElement('option');
+    opt.value = modelo;
+    opt.textContent = modelo;
+    selectModeloVehiculo.appendChild(opt);
+  });
 });
 </script>
+
 
 <!-- === SCRIPT: CARGA DE PRECIOS DINÁMICOS === -->
 <script>
