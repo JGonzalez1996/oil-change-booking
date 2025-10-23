@@ -76,7 +76,7 @@
     <!-- Marca dinámica -->
     <div class="form-group">
       <i class="fas fa-car"></i>
-      <select name="Marca" id="selectMarcaVehiculo" required>
+      <select name="Marca" id="marcaSelect" required>
         <option value="">Selecciona marca</option>
       </select>
       <label id="lblMarca">Marca del vehículo</label>
@@ -85,46 +85,51 @@
     <!-- Modelo dinámico -->
     <div class="form-group">
       <i class="fas fa-car-side"></i>
-      <select name="Modelo" id="selectModeloVehiculo" required>
+      <select name="Modelo" id="modeloSelect" required>
         <option value="">Selecciona modelo</option>
       </select>
       <label id="lblModelo">Modelo del vehículo</label>
     </div>
 
+    <!-- Año (manual por el cliente) -->
     <div class="form-group">
       <i class="fas fa-calendar-alt"></i>
-      <input type="number" name="Ano" placeholder=" " required>
+      <input type="number" name="Ano" id="anoInput" placeholder=" " required>
       <label id="lblAno">Año del vehículo</label>
     </div>
 
-  <!-- Marca de Aceite -->
-<div class="form-group">
-  <i class="fas fa-oil-can"></i>
-  <select name="MarcaAceite" id="selectMarcaAceite" required>
-    <option value="">Selecciona marca de aceite</option>
-    <option value="Mobil 1">Mobil 1</option>
-    <option value="Pennzoil">Pennzoil</option>
-    <option value="Valvoline">Valvoline</option>
-    <option value="Castrol EDGE">Castrol EDGE</option>
-    <option value="Shell Helix">Shell Helix</option>
-  </select>
-  <label id="lblMarcaAceite">Marca de Aceite</label>
-</div>
+    <!-- Tipo de Aceite Recomendado (readonly, automático) -->
+    <div class="form-group">
+      <i class="fas fa-oil-can"></i>
+      <input type="text" id="tipoAceiteRecomendado" name="tipoAceiteRecomendado" readonly placeholder="Tipo de aceite recomendado">
+      <label id="lblAceite">Aceite recomendado</label>
+    </div>
 
-<!-- Tipo de Aceite (automático, solo informativo) -->
-<div class="form-group">
-  <input type="text" id="tipoAceiteRecomendado" readonly placeholder="Tipo de aceite recomendado">
-</div>
+    <!-- Marca de Aceite -->
+    <div class="form-group">
+      <i class="fas fa-industry"></i>
+      <select name="MarcaAceite" id="selectMarcaAceite" required>
+        <option value="">Selecciona marca de aceite</option>
+        <option value="Mobil 1">Mobil 1</option>
+        <option value="Pennzoil">Pennzoil</option>
+        <option value="Valvoline">Valvoline</option>
+        <option value="Castrol EDGE">Castrol EDGE</option>
+        <option value="Shell Helix">Shell Helix</option>
+      </select>
+      <label id="lblMarcaAceite">Marca de Aceite</label>
+    </div>
 
-<!-- Descripción del aceite -->
-<div class="form-group">
-  <textarea id="descripcionAceite" readonly placeholder="Descripción del aceite seleccionado"></textarea>
-</div>
+    <!-- Descripción del aceite -->
+    <div class="form-group">
+      <i class="fas fa-info-circle"></i>
+      <textarea id="descripcionAceite" name="DescripcionAceite" readonly placeholder="Descripción del aceite seleccionado"></textarea>
+    </div>
 
-<!-- Precio estimado -->
-<div class="form-group">
-  <input type="text" id="precioEstimado" readonly placeholder="Precio estimado del servicio">
-</div>
+    <!-- Precio estimado -->
+    <div class="form-group">
+      <i class="fas fa-dollar-sign"></i>
+      <input type="text" id="precioEstimado" name="PrecioEstimado" readonly placeholder="Precio estimado del servicio">
+    </div>
 
     <div class="form-group">
       <i class="fas fa-map-marker-alt"></i>
@@ -162,24 +167,32 @@
     <input type="hidden" id="langField" name="Idioma">
     <button type="submit" id="btnEnviar">Enviar Reserva</button>
   </form>
-
+</div>
   <div class="mensaje" id="mensaje"></div>
 
-  <div id="recibo">
-    <h3 id="reciboTitulo">✅ Recibo de Reserva</h3>
-    <p><b id="reciboLabelNombre">Nombre:</b> <span id="reciboNombre"></span></p>
-    <p><b id="reciboLabelTelefono">Teléfono:</b> <span id="reciboTelefono"></span></p>
-    <p><b id="reciboLabelCorreo">Correo:</b> <span id="reciboCorreo"></span></p>
-    <p><b id="reciboLabelMarca">Marca:</b> <span id="reciboMarca"></span></p>
-    <p><b id="reciboLabelModelo">Modelo:</b> <span id="reciboModelo"></span></p>
-    <p><b id="reciboLabelAno">Año:</b> <span id="reciboAno"></span></p>
-    <p><b id="reciboLabelAceite">Tipo de Aceite:</b> <span id="reciboAceite"></span></p>
-    <p><b id="reciboLabelDireccion">Dirección:</b> <span id="reciboDireccion"></span></p>
-    <p><b id="reciboLabelFecha">Fecha del Servicio:</b> <span id="reciboFecha"></span></p>
-    <p><b id="reciboLabelHora">Hora del Servicio:</b> <span id="reciboHora"></span></p>
-    <p><b id="reciboLabelComentarios">Comentarios:</b> <span id="reciboComentarios"></span></p>
-    <p><b id="reciboLabelFirma">Firma:</b> <span id="reciboFirma"></span></p>
-  </div>
+ <div id="recibo">
+  <h3 id="reciboTitulo">✅ Recibo de Reserva</h3>
+  <p><b id="reciboLabelNombre">Nombre:</b> <span id="reciboNombre"></span></p>
+  <p><b id="reciboLabelTelefono">Teléfono:</b> <span id="reciboTelefono"></span></p>
+  <p><b id="reciboLabelCorreo">Correo:</b> <span id="reciboCorreo"></span></p>
+  <p><b id="reciboLabelMarca">Marca (vehículo):</b> <span id="reciboMarca"></span></p>
+  <p><b id="reciboLabelModelo">Modelo:</b> <span id="reciboModelo"></span></p>
+  <p><b id="reciboLabelAno">Año:</b> <span id="reciboAno"></span></p>
+  <p><b id="reciboLabelMarcaAceite">Marca de Aceite:</b> <span id="reciboMarcaAceite"></span></p>
+  <p><b id="reciboLabelAceite">Aceite recomendado:</b> <span id="reciboAceite"></span></p>
+  <p><b id="reciboLabelDireccion">Dirección:</b> <span id="reciboDireccion"></span></p>
+  <p><b id="reciboLabelFecha">Fecha del Servicio:</b> <span id="reciboFecha"></span></p>
+  <p><b id="reciboLabelHora">Hora del Servicio:</b> <span id="reciboHora"></span></p>
+  <p><b id="reciboLabelComentarios">Comentarios:</b> <span id="reciboComentarios"></span></p>
+  <p><b id="reciboLabelFirma">Firma:</b> <span id="reciboFirma"></span></p>
+
+  <!-- Nuevo: sección de precio estimado -->
+  <h4 id="reciboLabelPrecio">💲 Precio estimado:</h4>
+  <p><b>Aceite:</b> <span id="reciboAceiteCosto"></span></p>
+  <p><b>Filtro:</b> <span id="reciboFiltro"></span></p>
+  <p><b>Mano de Obra:</b> <span id="reciboManoObra"></span></p>
+  <p><b>Desecho:</b> <span id="reciboDesecho"></span></p>
+  <p><b>Total:</b> <span id="reciboTotal"></span></p>
 </div>
 
 <!-- Modal del acuerdo -->
@@ -419,438 +432,412 @@ window.addEventListener('load', () => {
 
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
-
-  /* ************** ACEITES ************** */
-  const aceitesData = [
-    {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
-    {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
-    {Tipo:"0W20", Marca:"Valvoline", Descripcion:"Protección avanzada contra el desgaste, buen rendimiento en frío.", Precio:27},
-    {Tipo:"0W30", Marca:"Mobil 1", Descripcion:"Totalmente sintético, excelente viscosidad en climas fríos.", Precio:25},
-    {Tipo:"0W30", Marca:"Pennzoil", Descripcion:"Reduce la fricción interna del motor y mejora la eficiencia.", Precio:25},
-    {Tipo:"0W30", Marca:"Valvoline", Descripcion:"Formulado para máxima protección en motores exigentes.", Precio:27},
-    {Tipo:"5W20", Marca:"Mobil 1", Descripcion:"Tecnología avanzada anti-desgaste, rendimiento óptimo.", Precio:25},
-    {Tipo:"5W20", Marca:"Pennzoil", Descripcion:"Mantiene el motor limpio y eficiente, buena resistencia térmica.", Precio:24},
-    {Tipo:"5W20", Marca:"Valvoline", Descripcion:"Buena durabilidad del motor, ideal para condiciones mixtas.", Precio:26},
-    {Tipo:"5W30", Marca:"Mobil 1", Descripcion:"Excelente control de oxidación y protección del motor.", Precio:26},
-    {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez en todo tipo de temperatura.", Precio:25},
-    {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Protección avanzada contra desgaste y depósitos.", Precio:27}
-  ];
-
-  const selectTipoAceite = document.getElementById('selectTipoAceite');
-  const selectMarcaAceite = document.getElementById('selectMarca');
-  const descripcionAceite = document.getElementById('descripcionAceite');
-
-  if(selectTipoAceite && selectMarcaAceite){
-    selectTipoAceite.addEventListener('change', ()=>{
-      const tipo = selectTipoAceite.value;
-      selectMarcaAceite.innerHTML = `<option value="">${
-        window.lang === 'en' ? 'Select oil brand' :
-        window.lang === 'pt' ? 'Selecione marca de óleo' :
-        'Selecciona marca de aceite'
-      }</option>`;
-      aceitesData.filter(a=>a.Tipo===tipo).forEach(a=>{
-        const opt = document.createElement('option');
-        opt.value = a.Marca;
-        opt.textContent = a.Marca;
-        selectMarcaAceite.appendChild(opt);
-      });
-      descripcionAceite.value='';
-    });
-
-    selectMarcaAceite.addEventListener('change', ()=>{
-      const tipo = selectTipoAceite.value;
-      const marca = selectMarcaAceite.value;
-      const aceite = aceitesData.find(a=>a.Tipo===tipo && a.Marca===marca);
-      descripcionAceite.value = aceite ? aceite.Descripcion : '';
-    });
-  }
-
-}); // 👈 este cierre faltaba
-
-/* ************** MARCAS Y MODELOS DINÁMICOS ************** */
-/* (aquí dejo tu lista completa intacta) */
-const marcasModelos = [
-  {Marca:"Acura", Modelo:"ILX 2.4L"},
-  {Marca:"Acura", Modelo:"MDX 3.5L"},
-  {Marca:"Acura", Modelo:"MDX SH-AWD 3.5L"},
-  {Marca:"Acura", Modelo:"MDX Sport Hybrid 3.0L"},
-  {Marca:"Acura", Modelo:"NSX 3.5L Turbo"},
-  {Marca:"Acura", Modelo:"RDX 2WD 2.0L Turbo"},
-  {Marca:"Acura", Modelo:"RDX AWD 2.0L Turbo"},
-  {Marca:"Acura", Modelo:"RLX 3.5L"},
-  {Marca:"Acura", Modelo:"RLX Sport Hybrid 3.5L"},
-  {Marca:"Acura", Modelo:"TLX 2.0L Turbo"},
-  {Marca:"Acura", Modelo:"TLX SH-AWD 3.5L"},
-  {Marca:"Chevrolet", Modelo:"Aveo"},
-  {Marca:"Chevrolet", Modelo:"Cruze"},
-  {Marca:"Chevrolet", Modelo:"Malibu"},
-  {Marca:"Chevrolet", Modelo:"Impala"},
-  {Marca:"Chevrolet", Modelo:"Camaro"},
-  {Marca:"Chevrolet", Modelo:"Corvette"},
-  {Marca:"Chevrolet", Modelo:"Corvette Z06"},
-  {Marca:"Chevrolet", Modelo:"Trax"},
-  {Marca:"Chevrolet", Modelo:"Equinox"},
-  {Marca:"Chevrolet", Modelo:"Blazer"},
-  {Marca:"Chevrolet", Modelo:"Traverse"},
-  {Marca:"Chevrolet", Modelo:"Colorado"},
-  {Marca:"Chevrolet", Modelo:"Silverado 1500"},
-  {Marca:"Chevrolet", Modelo:"Silverado 2500HD"},
-  {Marca:"Chevrolet", Modelo:"Tahoe"},
-  {Marca:"Chevrolet", Modelo:"Suburban"},
-  {Marca:"Chevrolet", Modelo:"Trailblazer"},
-  {Marca:"Chevrolet", Modelo:"Spark"},
-  {Marca:"Chevrolet", Modelo:"Sonic"},
-  {Marca:"Dodge", Modelo:"Dart"},
-  {Marca:"Dodge", Modelo:"Neon"},
-  {Marca:"Dodge", Modelo:"Caliber"},
-  {Marca:"Dodge", Modelo:"Journey"},
-  {Marca:"Dodge", Modelo:"Avenger"},
-  {Marca:"Dodge", Modelo:"Charger"},
-  {Marca:"Dodge", Modelo:"Challenger"},
-  {Marca:"Dodge", Modelo:"Durango"},
-  {Marca:"Dodge", Modelo:"Grand Caravan"},
-  {Marca:"Dodge", Modelo:"Nitro"},
-  {Marca:"Dodge", Modelo:"Dakota"},
-  {Marca:"Dodge", Modelo:"Ram 1500"},
-  {Marca:"Dodge", Modelo:"Ram 2500/3500"},
-  {Marca:"Dodge", Modelo:"Viper"},
-  {Marca:"Honda", Modelo:"Civic"},
-  {Marca:"Honda", Modelo:"Accord"},
-  {Marca:"Honda", Modelo:"Accord Hybrid"},
-  {Marca:"Honda", Modelo:"CR-V"},
-  {Marca:"Honda", Modelo:"HR-V"},
-  {Marca:"Honda", Modelo:"Fit"},
-  {Marca:"Honda", Modelo:"Pilot"},
-  {Marca:"Honda", Modelo:"Odyssey"},
-  {Marca:"Honda", Modelo:"Ridgeline"},
-  {Marca:"Honda", Modelo:"Insight"},
-  {Marca:"Honda", Modelo:"Passport"},
-  {Marca:"Honda", Modelo:"Pilot Hybrid"},
-  {Marca:"Honda", Modelo:"CR-V Hybrid"},
-  {Marca:"Toyota", Modelo:"Yaris 1.5L"},
-  {Marca:"Toyota", Modelo:"Corolla 1.8L"},
-  {Marca:"Toyota", Modelo:"Corolla 2.0L"},
-  {Marca:"Toyota", Modelo:"Camry 2.5L"},
-  {Marca:"Toyota", Modelo:"Camry 3.5L"},
-  {Marca:"Toyota", Modelo:"Avalon 3.5L"},
-  {Marca:"Toyota", Modelo:"Prius 1.8L"},
-  {Marca:"Toyota", Modelo:"RAV4 2.5L"},
-  {Marca:"Toyota", Modelo:"RAV4 2.5L Turbo"},
-  {Marca:"Toyota", Modelo:"Highlander 3.5L"},
-  {Marca:"Toyota", Modelo:"Sequoia 5.7L"},
-  {Marca:"Toyota", Modelo:"4Runner 4.0L"},
-  {Marca:"Toyota", Modelo:"Tacoma 2.7L"},
-  {Marca:"Toyota", Modelo:"Tacoma 3.5L V6"},
-  {Marca:"Toyota", Modelo:"Tundra 4.6L"},
-  {Marca:"Toyota", Modelo:"Tundra 5.7L"},
-  {Marca:"Toyota", Modelo:"Sienna 3.5L"},
-  {Marca:"Ford", Modelo:"Fiesta 1.0L Turbo"},
-  {Marca:"Ford", Modelo:"Focus 2.0L"},
-  {Marca:"Ford", Modelo:"Focus 1.0L EcoBoost"},
-  {Marca:"Ford", Modelo:"Fusion 2.5L"},
-  {Marca:"Ford", Modelo:"Fusion 1.5L EcoBoost"},
-  {Marca:"Ford", Modelo:"Mustang 2.3L"},
-  {Marca:"Ford", Modelo:"Mustang 5.0L"},
-  {Marca:"Ford", Modelo:"Explorer 3.5L"},
-  {Marca:"Ford", Modelo:"Explorer 2.3L EcoBoost"},
-  {Marca:"Ford", Modelo:"F-150 3.3L"},
-  {Marca:"Ford", Modelo:"F-150 2.7L Turbo"},
-  {Marca:"Ford", Modelo:"F-150 3.5L V6"},
-  {Marca:"Ford", Modelo:"F-150 5.0L V8"},
-  {Marca:"Ford", Modelo:"Edge 2.0L Turbo"},
-  {Marca:"Ford", Modelo:"Edge 3.5L V6"},
-  {Marca:"Ford", Modelo:"Expedition 3.5L V6"},
-  {Marca:"Ford", Modelo:"Escape 1.5L EcoBoost"},
-  {Marca:"Ford", Modelo:"Escape 2.0L EcoBoost"},
-  {Marca:"GMC", Modelo:"Sierra 1500 4.3L"},
-  {Marca:"GMC", Modelo:"Sierra 1500 5.3L"},
-  {Marca:"GMC", Modelo:"Sierra 1500 6.2L"},
-  {Marca:"GMC", Modelo:"Sierra 2500HD 6.6L"},
-  {Marca:"GMC", Modelo:"Canyon 2.5L"},
-  {Marca:"GMC", Modelo:"Canyon 3.6L V6"},
-  {Marca:"GMC", Modelo:"Yukon 5.3L"},
-  {Marca:"GMC", Modelo:"Yukon 6.2L"},
-  {Marca:"GMC", Modelo:"Acadia 2.5L"},
-  {Marca:"GMC", Modelo:"Acadia 3.6L V6"},
-  {Marca:"GMC", Modelo:"Terrain 1.5L Turbo"},
-  {Marca:"GMC", Modelo:"Terrain 2.0L Turbo"},
-  {Marca:"GMC", Modelo:"Terrain 2.5L"},
-  {Marca:"Hyundai", Modelo:"Sonata 2.5L"},
-  {Marca:"Hyundai", Modelo:"Sonata 1.6L Turbo"},
-  {Marca:"Hyundai", Modelo:"Sonata 2.5L Turbo"},
-  {Marca:"Hyundai", Modelo:"Tucson 2.0L"},
-  {Marca:"Hyundai", Modelo:"Palisade 3.8L"},
-  {Marca:"Hyundai", Modelo:"Venue 1.6L"},
-  {Marca:"Hyundai", Modelo:"Kona 2.0L"},
-  {Marca:"Hyundai", Modelo:"Santa Fe 2.5L Turbo"},
-  {Marca:"Hyundai", Modelo:"Creta 1.5L"},
-  {Marca:"Hyundai", Modelo:"Creta 1.5L Turbo"},
-  {Marca:"Jeep", Modelo:"Renegade 1.3L Turbo"},
-  {Marca:"Jeep", Modelo:"Renegade 2.4L"},
-  {Marca:"Jeep", Modelo:"Compass 1.3L Turbo"},
-  {Marca:"Jeep", Modelo:"Compass 2.4L"},
-  {Marca:"Jeep", Modelo:"Cherokee 2.0L Turbo"},
-  {Marca:"Jeep", Modelo:"Cherokee 2.4L"},
-  {Marca:"Jeep", Modelo:"Cherokee 3.2L V6"},
-  {Marca:"Jeep", Modelo:"Grand Cherokee 3.6L V6"},
-  {Marca:"Jeep", Modelo:"Grand Cherokee 5.7L V8"},
-  {Marca:"Jeep", Modelo:"Grand Cherokee 6.4L V8"},
-  {Marca:"Jeep", Modelo:"Wrangler 2.0L Turbo"},
-  {Marca:"Jeep", Modelo:"Wrangler 3.6L V6"},
-  {Marca:"Jeep", Modelo:"Wrangler 3.8L V6"},
-  {Marca:"Jeep", Modelo:"Gladiator 3.6L V6"},
-  {Marca:"Infiniti", Modelo:"Q50 2.0L Turbo"},
-  {Marca:"Infiniti", Modelo:"Q50 3.0L Twin Turbo"},
-  {Marca:"Infiniti", Modelo:"Q60 2.0L Turbo"},
-  {Marca:"Infiniti", Modelo:"Q60 3.0L Twin Turbo"},
-  {Marca:"Infiniti", Modelo:"QX50 2.0L Turbo"},
-  {Marca:"Infiniti", Modelo:"QX55 2.0L Turbo"},
-  {Marca:"Infiniti", Modelo:"QX60 3.5L V6"},
-  {Marca:"Infiniti", Modelo:"QX80 5.6L V8"},
-  {Marca:"Infiniti", Modelo:"QX70 3.7L V6"},
-  {Marca:"Infiniti", Modelo:"M35/M37 3.5L V6"},
-  {Marca:"Infiniti", Modelo:"M45 4.5L V8"},
-  {Marca:"Infiniti", Modelo:"FX35 3.5L V6"},
-  {Marca:"Infiniti", Modelo:"FX50 5.0L V8"},
-  {Marca:"Kia", Modelo:"Rio 1.6L"},
-  {Marca:"Kia", Modelo:"Forte 2.0L"},
-  {Marca:"Kia", Modelo:"Forte 1.6L Turbo"},
-  {Marca:"Kia", Modelo:"Optima/K5 2.4L"},
-  {Marca:"Kia", Modelo:"Optima/K5 1.6L Turbo"},
-  {Marca:"Kia", Modelo:"Stinger 2.0L Turbo"},
-  {Marca:"Kia", Modelo:"Stinger 3.3L Twin Turbo"},
-  {Marca:"Kia", Modelo:"Soul 2.0L"},
-  {Marca:"Kia", Modelo:"Soul 1.6L Turbo"},
-  {Marca:"Kia", Modelo:"Sportage 2.4L"},
-  {Marca:"Kia", Modelo:"Sportage 2.0L Turbo"},
-  {Marca:"Kia", Modelo:"Sorento 2.4L"},
-  {Marca:"Kia", Modelo:"Sorento 3.3L V6"},
-  {Marca:"Kia", Modelo:"Telluride 3.8L"},
-  {Marca:"Lexus", Modelo:"IS 200t/300"},
-  {Marca:"Lexus", Modelo:"ES 250/350"},
-  {Marca:"Lexus", Modelo:"GS 350"},
-  {Marca:"Lexus", Modelo:"GS 450h"},
-  {Marca:"Lexus", Modelo:"RX 350"},
-  {Marca:"Lexus", Modelo:"RX 450h"},
-  {Marca:"Lexus", Modelo:"NX 300"},
-  {Marca:"Lexus", Modelo:"NX 300h"},
-  {Marca:"Lexus", Modelo:"LX 570"},
-  {Marca:"Lexus", Modelo:"GX 460"},
-  {Marca:"Lexus", Modelo:"LC 500"},
-  {Marca:"Lexus", Modelo:"LS 500"},
-  {Marca:"Lexus", Modelo:"LS 500h"},
-  {Marca:"Mazda", Modelo:"Mazda2 1.5L"},
-  {Marca:"Mazda", Modelo:"Mazda3 2.0L"},
-  {Marca:"Mazda", Modelo:"Mazda3 2.5L"},
-  {Marca:"Mazda", Modelo:"Mazda6 2.5L"},
-  {Marca:"Mazda", Modelo:
-  "CX-3 2.0L"},
-  {Marca:"Mazda", Modelo:"CX-30 2.5L"},
-  {Marca:"Mazda", Modelo:"CX-5 2.5L"},
-  {Marca:"Mazda", Modelo:"CX-9 2.5L Turbo"},
-  {Marca:"Mazda", Modelo:"MX-5 Miata 2.0L"},
-  {Marca:"Mazda", Modelo:"MX-5 Miata 2.0L Turbo"},
-  {Marca:"Nissan", Modelo:"Versa 1.6L"},
-  {Marca:"Nissan", Modelo:"Sentra 2.0L"},
-  {Marca:"Nissan", Modelo:"Sentra 1.6L Turbo"},
-  {Marca:"Nissan", Modelo:"Altima 2.5L"},
-  {Marca:"Nissan", Modelo:"Altima 2.0L Turbo"},
-  {Marca:"Nissan", Modelo:"Maxima 3.5L"},
-  {Marca:"Nissan", Modelo:"Leaf 0L Electric"},
-  {Marca:"Nissan", Modelo:"Kicks 1.6L"},
-  {Marca:"Nissan", Modelo:"Rogue 2.5L"},
-  {Marca:"Nissan", Modelo:"Rogue 1.5L Turbo"},
-  {Marca:"Nissan", Modelo:"Murano 3.5L"},
-  {Marca:"Nissan", Modelo:"Pathfinder 3.5L"},
-  {Marca:"Nissan", Modelo:"Armada 5.6L"},
-  {Marca:"Nissan", Modelo:"Frontier 3.8L"},
-  {Marca:"Nissan", Modelo:"Titan 5.6L"},
-  {Marca:"Volvo", Modelo:"S60 2.0L Turbo"},
-  {Marca:"Volvo", Modelo:"S60 T5"},
-  {Marca:"Volvo", Modelo:"S60 T6"},
-  {Marca:"Volvo", Modelo:"S60 Recharge"},
-  {Marca:"Volvo", Modelo:"S90 2.0L Turbo"},
-  {Marca:"Volvo", Modelo:"S90 T6"},
-  {Marca:"Volvo", Modelo:"S90 Recharge"},
-  {Marca:"Volvo", Modelo:"V60 2.0L Turbo"},
-  {Marca:"Volvo", Modelo:"V60 T6"},
-  {Marca:"Volvo", Modelo:"V60 Recharge"},
-  {Marca:"Volvo", Modelo:"XC40 2.0L Turbo"},
-  {Marca:"Volvo", Modelo:"XC40 T5"},
-  {Marca:"Volvo", Modelo:"XC60 2.0L Turbo"},
-  {Marca:"Volvo", Modelo:"XC60 T6"},
-  {Marca:"Volvo", Modelo:"XC60 Recharge"},
-  {Marca:"Volvo", Modelo:"XC90 2.0L Turbo"},
-  {Marca:"Volvo", Modelo:"XC90 T6"},
-  {Marca:"Volvo", Modelo:"XC90 Recharge"},
- {Marca:"Mercedes-Benz", Modelo:"A220"},
-{Marca:"Mercedes-Benz", Modelo:"CLA250"},
-{Marca:"Mercedes-Benz", Modelo:"GLA250"},
-{Marca:"Mercedes-Benz", Modelo:"GLB250"},
-{Marca:"Mercedes-Benz", Modelo:"GLC300"},
-{Marca:"Mercedes-Benz", Modelo:"GLE350"},
-{Marca:"Mercedes-Benz", Modelo:"GLS450"},
-{Marca:"Mercedes-Benz", Modelo:"G550"},
-{Marca:"Mercedes-Benz", Modelo:"E350"},
-{Marca:"Mercedes-Benz", Modelo:"S450"},
-{Marca:"Mercedes-Benz", Modelo:"S560"},
-{Marca:"Mercedes-Benz", Modelo:"C300"},
-{Marca:"Mercedes-Benz", Modelo:"C43 AMG"},
-{Marca:"Mercedes-Benz", Modelo:"E450"},
-{Marca:"Mercedes-Benz", Modelo:"GLE450"},
-{Marca:"Mercedes-Benz", Modelo:"GLS580"},
-{Marca:"Mercedes-Benz", Modelo:"G-Class (G550)"},
-{Marca:"Mercedes-Benz", Modelo:"G-Class (G63 AMG)"},
-{Marca:"Mercedes-Benz", Modelo:"GLK350"},
-{Marca:"Mercedes-Benz", Modelo:"GL550"},
-{Marca:"Mercedes-Benz", Modelo:"SLC300"},
-{Marca:"Mercedes-Benz", Modelo:"SL450"},
-{Marca:"Mercedes-Benz", Modelo:"SL550"},
-{Marca:"Mercedes-Benz", Modelo:"GLA250 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLB250 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLC300 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLE350 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLS450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"G550 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"S450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"S560 4MATIC"},
-{Marca:"Audi", Modelo:"A1 1.0 TFSI"},
-{Marca:"Audi", Modelo:"A1 1.2 TFSI"},
-{Marca:"Audi", Modelo:"A1 1.4 TFSI"},
-{Marca:"Audi", Modelo:"A3 1.6"},
-{Marca:"Audi", Modelo:"A4 1.8 T"},
-{Marca:"Audi", Modelo:"A4 2.0 TFSI"},
-{Marca:"Audi", Modelo:"A5 2.0 TFSI"},
-{Marca:"Audi", Modelo:"A5 2.0 TSI"},
-{Marca:"Audi", Modelo:"A7 3.0 TFSI"},
-{Marca:"Audi", Modelo:"A8 3.0 TFSI"},
-{Marca:"Audi", Modelo:"A8 4.0 TFSI"},
-{Marca:"Audi", Modelo:"Q2 1.0 TFSI"},
-{Marca:"Audi", Modelo:"Q3 1.5 TFSI"},
-{Marca:"Audi", Modelo:"Q3 2.0 TFSI"},
-{Marca:"Audi", Modelo:"Q3 Sportback 1.5 TFSI"},
-{Marca:"Audi", Modelo:"Q3 Sportback 2.0 TFSI"},
-{Marca:"Audi", Modelo:"Q5 2.0 TFSI"},
-{Marca:"Audi", Modelo:"Q8 3.0 TFSI"},
-{Marca:"Audi", Modelo:"TT 1.8 T"},
-{Marca:"Audi", Modelo:"TT 2.0 TFSI"},
-{Marca:"Audi", Modelo:"R8 4.2 V8"},
-{Marca:"Audi", Modelo:"R8 5.2 V10"},
-{Marca:"Audi", Modelo:"RS3 2.5 TFSI"},
-{Marca:"Audi", Modelo:"RS4 4.2 V8"},
-{Marca:"Audi", Modelo:"RS5 2.9 TFSI"},
-{Marca:"Audi", Modelo:"RS6 4.0 TFSI"},
-{Marca:"Audi", Modelo:"RS7 4.0 TFSI"},
-{Marca:"Audi", Modelo:"S3 2.0 TFSI"},
-{Marca:"Audi", Modelo:"S4 3.0 TFSI"},
-{Marca:"Audi", Modelo:"S5 3.0 TFSI"},
-{Marca:"Audi", Modelo:"S6 4.0 TFSI"},
-{Marca:"Audi", Modelo:"S7 4.0 TFSI"},
-{Marca:"Audi", Modelo:"S8 4.0 TFSI"},
-{Marca:"Audi", Modelo:"SQ5 3.0 TFSI"},
-{Marca:"BMW", Modelo:"116i (E87)"},
-{Marca:"BMW", Modelo:"118i (F20)"},
-{Marca:"BMW", Modelo:"120i (E87/F20)"},
-{Marca:"BMW", Modelo:"125i (F20)"},
-{Marca:"BMW", Modelo:"316i (E90)"},
-{Marca:"BMW", Modelo:"318i (E90/F30)"},
-{Marca:"BMW", Modelo:"320i (E90/F30)"},
-{Marca:"BMW", Modelo:"325i (E90)"},
-{Marca:"BMW", Modelo:"328i (F30)"},
-{Marca:"BMW", Modelo:"330i (F30/G20)"},
-{Marca:"BMW", Modelo:"335i (E90/F30)"},
-{Marca:"BMW", Modelo:"340i (F30/G20)"},
-{Marca:"BMW", Modelo:"520i (F10)"},
-{Marca:"BMW", Modelo:"528i (F10)"},
-{Marca:"BMW", Modelo:"530i (G30)"},
-{Marca:"BMW", Modelo:"535i (F10)"},
-{Marca:"BMW", Modelo:"540i (G30)"},
-{Marca:"BMW", Modelo:"730i (G11)"},
-{Marca:"BMW", Modelo:"740i (G11)"},
-{Marca:"BMW", Modelo:"M2 (F87)"},
-{Marca:"BMW", Modelo:"M3 (E90/F80)"},
-{Marca:"BMW", Modelo:"M4 (F82/G82)"},
-{Marca:"BMW", Modelo:"M5 (E60/F90)"},
-{Marca:"BMW", Modelo:"M6 (E63/F13)"},
-{Marca:"BMW", Modelo:"Z4 2.0i"},
-{Marca:"BMW", Modelo:"Z4 3.0i"},
+ 
+<script>
+/* ************** ACEITES ************** */
+const aceitesData = [
+  {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
+  {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
+  {Tipo:"0W20", Marca:"Valvoline", Descripcion:"Protección avanzada contra el desgaste, buen rendimiento en frío.", Precio:27},
+  {Tipo:"0W30", Marca:"Mobil 1", Descripcion:"Totalmente sintético, excelente viscosidad en climas fríos.", Precio:25},
+  {Tipo:"0W30", Marca:"Pennzoil", Descripcion:"Reduce la fricción interna del motor y mejora la eficiencia.", Precio:25},
+  {Tipo:"0W30", Marca:"Valvoline", Descripcion:"Formulado para máxima protección en motores exigentes.", Precio:27},
+  {Tipo:"5W20", Marca:"Mobil 1", Descripcion:"Tecnología avanzada anti-desgaste, rendimiento óptimo.", Precio:25},
+  {Tipo:"5W20", Marca:"Pennzoil", Descripcion:"Mantiene el motor limpio y eficiente, buena resistencia térmica.", Precio:24},
+  {Tipo:"5W20", Marca:"Valvoline", Descripcion:"Buena durabilidad del motor, ideal para condiciones mixtas.", Precio:26},
+  {Tipo:"5W30", Marca:"Mobil 1", Descripcion:"Excelente control de oxidación y protección del motor.", Precio:26},
+  {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez en todo tipo de temperatura.", Precio:25},
+  {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Protección avanzada contra desgaste y depósitos.", Precio:27}
 ];
 
-const selectMarcaVehiculo = document.getElementById('selectMarcaVehiculo');
-const selectModeloVehiculo = document.getElementById('selectModeloVehiculo');
+// Referencias a los elementos del formulario
+const marcaSelect = document.getElementById("marcaSelect");
+const modeloSelect = document.getElementById("modeloSelect");
+const tipoAceiteInput = document.getElementById("tipoAceiteRecomendado");
+const marcaAceiteSelect = document.getElementById("selectMarcaAceite");
+const descripcionAceite = document.getElementById("descripcionAceite");
 
-/* Cargar marcas únicas en el selector al iniciar */
-const marcasUnicas = [...new Set(marcasModelos.map(m=>m.Marca))];
-marcasUnicas.forEach(marca=>{
-  const opt = document.createElement('option');
-  opt.value = marca;
-  opt.textContent = marca;
-  selectMarcaVehiculo.appendChild(opt);
-});
+// Cuando el cliente elige Marca + Modelo, autocompletar tipo de aceite
+function actualizarTipoAceite() {
+  const marca = marcaSelect.value;
+  const modelo = modeloSelect.value;
+  if (!marca || !modelo) return;
 
-/* Cuando cambia la marca, actualizar modelos */
-selectMarcaVehiculo.addEventListener('change', ()=>{
-  const marca = selectMarcaVehiculo.value;
-  const placeholder = window.lang === 'en' ? 'Select model' :
-                      window.lang === 'pt' ? 'Selecione modelo' :
-                      'Selecciona modelo';
-  selectModeloVehiculo.innerHTML = `<option value="">${placeholder}</option>`;
-  if(marca){
-    marcasModelos.filter(m=>m.Marca===marca).forEach(m=>{
-      const opt = document.createElement('option');
-      opt.value = m.Modelo;
-      opt.textContent = m.Modelo;
-      selectModeloVehiculo.appendChild(opt);
-    });
+  const vehiculo = vehiculos.find(v => v[0] === marca && v[1] === modelo);
+  if (vehiculo) {
+    tipoAceiteInput.value = vehiculo[2]; // Columna tipo de aceite en Vehiculos2
   }
+}
+marcaSelect.addEventListener("change", actualizarTipoAceite);
+modeloSelect.addEventListener("change", actualizarTipoAceite);
+
+// Cuando el cliente elige la marca de aceite, mostrar descripción
+marcaAceiteSelect.addEventListener("change", function() {
+  const tipo = tipoAceiteInput.value;
+  const marca = this.value;
+  const aceite = aceitesData.find(a => a.Tipo === tipo && a.Marca === marca);
+  descripcionAceite.value = aceite ? aceite.Descripcion : "";
 });
+</script>
+ <script>
+// ************** CÁLCULO DE PRECIOS EN TIEMPO REAL **************
 
-/* ************** ENVÍO GOOGLE SCRIPT ************** */
-const form = document.getElementById('formCita');
-const mensaje = document.getElementById('mensaje');
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrD4EgQrlVf0N9Bm5dJ6uhllGBOvQHzpu5BJiLLZIEbM246Qqqw6TtwnXmeOiZSTislA/exec';
+// Referencias
+const precioEstimadoInput = document.getElementById("precioEstimado");
 
-form.addEventListener('submit', e=>{
-  e.preventDefault();
-  if(firmaInput.disabled){
-    alert({'es':'Debe aceptar el acuerdo antes de enviar la reserva.','en':'You must accept the agreement before submitting.','pt':'Você deve aceitar o acordo antes de enviar.'}[window.lang]);
+// Función para actualizar el precio estimado
+function actualizarPrecioEstimado() {
+  const tipo = document.getElementById("tipoAceiteRecomendado").value;
+  const marcaAceite = document.getElementById("selectMarcaAceite").value;
+  const marca = document.getElementById("marcaSelect").value;
+  const modelo = document.getElementById("modeloSelect").value;
+
+  if (!tipo || !marcaAceite || !marca || !modelo) {
+    precioEstimadoInput.value = "";
     return;
   }
-  const data = Object.fromEntries(new FormData(form).entries());
-  data.callback='handleResponse';
+
+  // Buscar datos del aceite
+  const aceite = aceitesData.find(a => a.Tipo === tipo && a.Marca === marcaAceite);
+  if (!aceite) {
+    precioEstimadoInput.value = "";
+    return;
+  }
+
+  // Buscar datos del vehículo (capacidad de litros)
+  const vehiculo = vehiculos.find(v => v[0] === marca && v[1] === modelo);
+  if (!vehiculo) {
+    precioEstimadoInput.value = "";
+    return;
+  }
+
+  const capacidadLitros = parseFloat(vehiculo[3]); // Columna de litros en Vehiculos2
+  const costoAceite = aceite.Precio * capacidadLitros;
+
+  // Valores fijos (puedes reemplazar con tu tabla de precios real)
+  const filtro = 10; 
+  const manoObra = 15;
+  const desecho = 5;
+
+  const total = costoAceite + filtro + manoObra + desecho;
+
+  // Mostrar en el formulario
+  precioEstimadoInput.value = "$" + total.toFixed(2);
+}
+
+// Escuchar cambios en los selects
+document.getElementById("marcaSelect").addEventListener("change", actualizarPrecioEstimado);
+document.getElementById("modeloSelect").addEventListener("change", actualizarPrecioEstimado);
+document.getElementById("selectMarcaAceite").addEventListener("change", actualizarPrecioEstimado);
+</script>
+
+<script>
+/* ************** ENVÍO GOOGLE SCRIPT UNIFICADO ************** */
+const form = document.getElementById('formCita');
+const mensaje = document.getElementById('mensaje');
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1tZz15xnN88Z7ip3eVf9WlOmIBfij22XzLVIL-VfUyhAKijHqYFf4lut42fKSVopvtw/exec';
+
+let precios = [];
+let vehiculos = [];
+
+// Cargar precios desde Apps Script
+google.script.run.withSuccessHandler(function(data) {
+  precios = data;
+}).getPrecios();
+
+// Cargar vehículos desde Apps Script
+google.script.run.withSuccessHandler(function(data) {
+  vehiculos = data;
+}).getVehiculos();
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+
+  if (firmaInput.disabled) {
+    alert({
+      'es': 'Debe aceptar el acuerdo antes de enviar la reserva.',
+      'en': 'You must accept the agreement before submitting.',
+      'pt': 'Você deve aceitar o acordo antes de enviar.'
+    }[window.lang]);
+    return;
+  }
+
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  // --- Cálculo de precios ---
+  const marca = data.Marca;
+  const modelo = data.Modelo;
+  const ano = data.Ano;
+  const marcaAceite = data.MarcaAceite;
+  const aceiteRecomendado = document.getElementById("tipoAceiteRecomendado").value;
+
+  // Buscar capacidad real en Vehiculos2
+  let capacidadLitros = 0;
+  vehiculos.forEach(v => {
+    if (String(v[0]).toUpperCase() === marca.toUpperCase() &&
+        String(v[1]).toUpperCase() === modelo.toUpperCase()) {
+      capacidadLitros = parseFloat(v[3]) || 0;
+    }
+  });
+  let litrosFacturados = Math.ceil(capacidadLitros);
+
+  // Buscar precios según marca seleccionada o "Sin preferencia"
+  let precioAceite5L = 0, precioAceite1L = 0, filtro = 0, manoObra = 0, desecho = 0, descripcionAceite = "", marcaFinal = marcaAceite;
+
+  if (marcaAceite.toUpperCase() === "SIN PREFERENCIA") {
+    let mejor = null;
+    precios.forEach(p => {
+      if (String(p[0]).toUpperCase() === aceiteRecomendado.toUpperCase()) {
+        const precio5L = parseFloat(p[3]) || 0;
+        if (!mejor || precio5L < mejor[3]) mejor = p;
+      }
+    });
+    if (mejor) {
+      descripcionAceite = mejor[2];
+      precioAceite5L = parseFloat(mejor[3]) || 0;
+      filtro = parseFloat(mejor[4]) || 0;
+      manoObra = parseFloat(mejor[5]) || 0;
+      desecho = parseFloat(mejor[6]) || 0;
+      precioAceite1L = parseFloat(mejor[8]) || 0;
+      marcaFinal = mejor[1];
+    }
+  } else {
+    precios.forEach(p => {
+      if (String(p[0]).toUpperCase() === aceiteRecomendado.toUpperCase() &&
+          String(p[1]).toUpperCase() === marcaAceite.toUpperCase()) {
+        descripcionAceite = p[2];
+        precioAceite5L = parseFloat(p[3]) || 0;
+        filtro = parseFloat(p[4]) || 0;
+        manoObra = parseFloat(p[5]) || 0;
+        desecho = parseFloat(p[6]) || 0;
+        precioAceite1L = parseFloat(p[8]) || 0;
+      }
+    });
+  }
+
+  // Calcular costo de aceite
+  let costoAceite = 0;
+  if (litrosFacturados >= 5) {
+    const bidones = Math.floor(litrosFacturados / 5);
+    const litrosSueltos = litrosFacturados % 5;
+    costoAceite = (bidones * precioAceite5L) + (litrosSueltos * precioAceite1L);
+  } else {
+    costoAceite = litrosFacturados * precioAceite1L;
+  }
+
+  const totalServicio = costoAceite + filtro + manoObra + desecho;
+
+  // Guardar en data para enviar y mostrar
+  data.tipoAceiteRecomendado = aceiteRecomendado;
+  data.DescripcionAceite = descripcionAceite;
+  data.MarcaAceite = marcaFinal;
+  data.CostoAceite = "$" + costoAceite.toFixed(2);
+  data.Filtro = "$" + filtro.toFixed(2);
+  data.ManoObra = "$" + manoObra.toFixed(2);
+  data.Desecho = "$" + desecho.toFixed(2);
+  data.TotalServicio = "$" + totalServicio.toFixed(2);
+
+  // --- Envío a Google Script ---
+  data.callback = 'handleResponse';
   const script = document.createElement('script');
   script.src = SCRIPT_URL + '?' + new URLSearchParams(data).toString();
   document.body.appendChild(script);
   window.ultimoEnvio = {...data};
 });
 
-function handleResponse(response){
-  if(response.success){
-    mensaje.textContent = {'es':'✅ Reserva enviada correctamente!','en':'✅ Booking submitted successfully!','pt':'✅ Reserva enviada com sucesso!'}[window.lang];
+function handleResponse(response) {
+  if (response.success) {
+    mensaje.textContent = {
+      'es': '✅ Reserva enviada correctamente!',
+      'en': '✅ Booking submitted successfully!',
+      'pt': '✅ Reserva enviada com sucesso!'
+    }[window.lang];
     mostrarRecibo(window.ultimoEnvio);
     form.reset();
-    if(firmaInput) firmaInput.disabled=true;
+    if (firmaInput) firmaInput.disabled = true;
     localStorage.removeItem('acuerdoFirmado');
-  }else{
-    mensaje.textContent = ( {'es':'Error: ','en':'Error: ','pt':'Erro: '}[window.lang] + (response.error|| {'es':'Problema al enviar la reserva.','en':'Problem submitting booking.','pt':'Problema ao enviar a reserva.'}[window.lang]) );
+  } else {
+    mensaje.textContent = (
+      {'es':'Error: ','en':'Error: ','pt':'Erro: '}[window.lang] +
+      (response.error || {
+        'es':'Problema al enviar la reserva.',
+        'en':'Problem submitting booking.',
+        'pt':'Problema ao enviar a reserva.'
+      }[window.lang])
+    );
   }
 }
 
-function mostrarRecibo(data){
+function mostrarRecibo(data) {
   document.getElementById('reciboNombre').innerText = data.Nombre || '';
   document.getElementById('reciboTelefono').innerText = data.Telefono || '';
   document.getElementById('reciboCorreo').innerText = data.Correo || '';
   document.getElementById('reciboMarca').innerText = data.Marca || '';
   document.getElementById('reciboModelo').innerText = data.Modelo || '';
   document.getElementById('reciboAno').innerText = data.Ano || '';
-  document.getElementById('reciboAceite').innerText = (data.TipoAceite || '') + ' - ' + (data.MarcaAceite || '');
+  document.getElementById('reciboAceite').innerText = (data.tipoAceiteRecomendado || '') + ' - ' + (data.MarcaAceite || '');
   document.getElementById('reciboDireccion').innerText = data.Direccion || '';
   document.getElementById('reciboFecha').innerText = data.Fecha || '';
   document.getElementById('reciboHora').innerText = data.Hora || '';
   document.getElementById('reciboComentarios').innerText = data.Comentarios || '';
   document.getElementById('reciboFirma').innerText = data.Firma || '';
-  document.getElementById('recibo').style.display='block';
+
+  // Desglose de precios
+  document.getElementById('reciboAceiteCosto').innerText = data.CostoAceite || '';
+  document.getElementById('reciboFiltro').innerText = data.Filtro || '';
+  document.getElementById('reciboManoObra').innerText = data.ManoObra || '';
+  document.getElementById('reciboDesecho').innerText = data.Desecho || '';
+  document.getElementById('reciboTotal').innerText = data.TotalServicio || '';
+
+  document.getElementById('recibo').style.display = 'block';
 }
+</script>
+
+ <script>
+let precios = [];
+let vehiculos = [];
+
+// Cargar precios desde Apps Script
+google.script.run.withSuccessHandler(function(data) {
+  precios = data;
+}).getPrecios();
+
+// Cargar vehículos desde Apps Script
+google.script.run.withSuccessHandler(function(data) {
+  vehiculos = data;
+}).getVehiculos();
+
+document.getElementById("formCita").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+  const nombre = formData.get("Nombre");
+  const telefono = formData.get("Telefono");
+  const correo = formData.get("Correo");
+  const marca = formData.get("Marca");
+  const modelo = formData.get("Modelo");
+  const ano = formData.get("Ano");
+  const marcaAceite = formData.get("MarcaAceite");
+  const aceiteRecomendado = document.querySelector("#aceiteRecomendado")?.value || "";
+  const direccion = formData.get("Direccion");
+  const fecha = formData.get("Fecha");
+  const hora = formData.get("Hora");
+  const comentarios = formData.get("Comentarios");
+  const firma = formData.get("Firma");
+
+  // Buscar capacidad real en Vehiculos2
+  let capacidadLitros = 0;
+  vehiculos.forEach(v => {
+    if (String(v[0]).toUpperCase() === marca.toUpperCase() &&
+        String(v[1]).toUpperCase() === modelo.toUpperCase()) {
+      capacidadLitros = parseFloat(v[3]) || 0;
+    }
+  });
+  let litrosFacturados = Math.ceil(capacidadLitros);
+
+  // Buscar precios según marca seleccionada o "Sin preferencia"
+  let precioAceite5L = 0, precioAceite1L = 0, filtro = 0, manoObra = 0, desecho = 0, descripcionAceite = "", marcaFinal = marcaAceite;
+
+  if (marcaAceite.toUpperCase() === "SIN PREFERENCIA") {
+    let mejor = null;
+    precios.forEach(p => {
+      if (String(p[0]).toUpperCase() === aceiteRecomendado.toUpperCase()) {
+        const precio5L = parseFloat(p[3]) || 0;
+        if (!mejor || precio5L < mejor[3]) mejor = p;
+      }
+    });
+    if (mejor) {
+      descripcionAceite = mejor[2];
+      precioAceite5L = parseFloat(mejor[3]) || 0;
+      filtro = parseFloat(mejor[4]) || 0;
+      manoObra = parseFloat(mejor[5]) || 0;
+      desecho = parseFloat(mejor[6]) || 0;
+      precioAceite1L = parseFloat(mejor[8]) || 0;
+      marcaFinal = mejor[1];
+    }
+  } else {
+    precios.forEach(p => {
+      if (String(p[0]).toUpperCase() === aceiteRecomendado.toUpperCase() &&
+          String(p[1]).toUpperCase() === marcaAceite.toUpperCase()) {
+        descripcionAceite = p[2];
+        precioAceite5L = parseFloat(p[3]) || 0;
+        filtro = parseFloat(p[4]) || 0;
+        manoObra = parseFloat(p[5]) || 0;
+        desecho = parseFloat(p[6]) || 0;
+        precioAceite1L = parseFloat(p[8]) || 0;
+      }
+    });
+  }
+
+  // Calcular costo de aceite
+  let costoAceite = 0;
+  if (litrosFacturados >= 5) {
+    const bidones = Math.floor(litrosFacturados / 5);
+    const litrosSueltos = litrosFacturados % 5;
+    costoAceite = (bidones * precioAceite5L) + (litrosSueltos * precioAceite1L);
+  } else {
+    costoAceite = litrosFacturados * precioAceite1L;
+  }
+
+  const totalServicio = costoAceite + filtro + manoObra + desecho;
+
+  // Mostrar recibo
+  document.getElementById("reciboNombre").textContent = nombre;
+  document.getElementById("reciboTelefono").textContent = telefono;
+  document.getElementById("reciboCorreo").textContent = correo;
+  document.getElementById("reciboMarca").textContent = marca;
+  document.getElementById("reciboModelo").textContent = modelo;
+  document.getElementById("reciboAno").textContent = ano;
+  document.getElementById("reciboMarcaAceite").textContent = marcaFinal;
+  document.getElementById("reciboAceite").textContent = aceiteRecomendado;
+  document.getElementById("reciboDireccion").textContent = direccion;
+  document.getElementById("reciboFecha").textContent = fecha;
+  document.getElementById("reciboHora").textContent = hora;
+  document.getElementById("reciboComentarios").textContent = comentarios;
+  document.getElementById("reciboFirma").textContent = firma;
+
+  // Desglose de precios
+  document.getElementById("reciboAceiteCosto").textContent = "$" + costoAceite.toFixed(2);
+  document.getElementById("reciboFiltro").textContent = "$" + filtro.toFixed(2);
+  document.getElementById("reciboManoObra").textContent = "$" + manoObra.toFixed(2);
+  document.getElementById("reciboDesecho").textContent = "$" + desecho.toFixed(2);
+  document.getElementById("reciboTotal").textContent = "$" + totalServicio.toFixed(2);
+
+  document.getElementById("recibo").style.display = "block";
+});
+</script>
+ <script>
+// Cargar vehículos desde Apps Script y llenar selects dinámicos
+google.script.run.withSuccessHandler(function(data) {
+  vehiculos = data;
+
+  // Obtener marcas únicas
+  const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
+  const marcaSelect = document.getElementById("marcaSelect");
+
+  marcas.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m;
+    marcaSelect.appendChild(opt);
+  });
+
+  // Cuando se seleccione una marca, llenar modelos
+  marcaSelect.addEventListener("change", function() {
+    const modeloSelect = document.getElementById("modeloSelect");
+    modeloSelect.innerHTML = '<option value="">Selecciona un modelo</option>';
+
+    vehiculos.forEach(v => {
+      if (v[0] === this.value) {
+        const opt = document.createElement("option");
+        opt.value = v[1];
+        opt.textContent = v[1];
+        modeloSelect.appendChild(opt);
+      }
+    });
+  });
+}).getVehiculos();
 </script>
 </body>
 </html>
