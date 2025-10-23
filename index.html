@@ -207,6 +207,7 @@
 <!-- === SCRIPT: DETECCIÓN Y APLICACIÓN DE IDIOMA AUTOMÁTICO === -->
 <script>
 /* Detectar idioma del navegador y elegir entre 'es','pt','en' */
+/* Detectar idioma del navegador y elegir entre 'es','pt','en' */
 window.lang = (function(){
   const nav = (navigator.languages && navigator.languages[0]) || navigator.language || 'es';
   if(!nav) return 'es';
@@ -214,6 +215,51 @@ window.lang = (function(){
   if(nav.toLowerCase().startsWith('es')) return 'es';
   return 'en';
 })();
+</script>
+
+<!-- === SCRIPT: CARGA DE VEHÍCULOS Y LLENADO DE SELECTS === -->
+<script>
+  let vehiculos = [];
+
+  google.script.run.withSuccessHandler(function(data) {
+    console.log("Vehículos recibidos:", data);
+    vehiculos = data;
+
+    // llenar marcas únicas
+    const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
+    const marcaSelect = document.getElementById("marcaSelect");
+    marcas.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      marcaSelect.appendChild(opt);
+    });
+
+    // cuando se seleccione una marca, llenar modelos
+    marcaSelect.addEventListener("change", function() {
+      const modeloSelect = document.getElementById("modeloSelect");
+      modeloSelect.innerHTML = '<option value="">Selecciona modelo</option>';
+
+      vehiculos.forEach(v => {
+        if (v[0] === this.value) {
+          const opt = document.createElement("option");
+          opt.value = v[1];
+          opt.textContent = v[1];
+          modeloSelect.appendChild(opt);
+        }
+      });
+    });
+
+    // cuando se seleccione un modelo, rellenar aceite recomendado
+    document.getElementById("modeloSelect").addEventListener("change", function() {
+      const marca = document.getElementById("marcaSelect").value;
+      const modelo = this.value;
+      const match = vehiculos.find(v => v[0] === marca && v[1] === modelo);
+      if (match) {
+        document.getElementById("tipoAceiteRecomendado").value = match[4]; // Columna E
+      }
+    });
+  }).getVehiculos();
 
 /* Diccionarios */
 const textosUI = {
@@ -535,7 +581,7 @@ document.getElementById("selectMarcaAceite").addEventListener("change", actualiz
 /* ************** ENVÍO GOOGLE SCRIPT UNIFICADO ************** */
 const form = document.getElementById('formCita');
 const mensaje = document.getElementById('mensaje');
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx1tZz15xnN88Z7ip3eVf9WlOmIBfij22XzLVIL-VfUyhAKijHqYFf4lut42fKSVopvtw/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZhA2j7vYxUrsWTltl3UUZA8RyCqP2PshKOCdSiuPtfj3F66pRAorLaYdkdshUUKsFpg/exec';
 
 let precios = [];
 let vehiculos = [];
