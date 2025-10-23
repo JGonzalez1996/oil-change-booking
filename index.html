@@ -321,48 +321,69 @@ window.lang = (function(){
   return 'en';
 })();
 
-/* Carga de vehículos desde Apps Script */
+/* Variables globales */
 let vehiculos = [];
+let precios = [];
 
-google.script.run.withSuccessHandler(function(data) {
-  console.log("Vehículos recibidos:", data);
-  vehiculos = data;
+/* Callback JSONP para vehículos */
+function handleVehiculos(response) {
+  if (response.success) {
+    vehiculos = response.data;
+    console.log("Vehículos recibidos:", vehiculos);
 
-  // llenar marcas únicas
-  const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
-  const marcaSelect = document.getElementById("marcaSelect");
-  marcas.forEach(m => {
-    const opt = document.createElement("option");
-    opt.value = m;
-    opt.textContent = m;
-    marcaSelect.appendChild(opt);
-  });
+    // llenar marcas únicas
+    const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
+    const marcaSelect = document.getElementById("marcaSelect");
+    marcas.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      marcaSelect.appendChild(opt);
+    });
 
-  // cuando se seleccione una marca, llenar modelos
-  marcaSelect.addEventListener("change", function() {
-    const modeloSelect = document.getElementById("modeloSelect");
-    modeloSelect.innerHTML = '<option value="">Selecciona modelo</option>';
+    // cuando se seleccione una marca, llenar modelos
+    marcaSelect.addEventListener("change", function() {
+      const modeloSelect = document.getElementById("modeloSelect");
+      modeloSelect.innerHTML = '<option value="">Selecciona modelo</option>';
 
-    vehiculos.forEach(v => {
-      if (v[0] === this.value) {
-        const opt = document.createElement("option");
-        opt.value = v[1];
-        opt.textContent = v[1];
-        modeloSelect.appendChild(opt);
+      vehiculos.forEach(v => {
+        if (v[0] === this.value) {
+          const opt = document.createElement("option");
+          opt.value = v[1];
+          opt.textContent = v[1];
+          modeloSelect.appendChild(opt);
+        }
+      });
+    });
+
+    // cuando se seleccione un modelo, rellenar aceite recomendado
+    document.getElementById("modeloSelect").addEventListener("change", function() {
+      const marca = document.getElementById("marcaSelect").value;
+      const modelo = this.value;
+      const match = vehiculos.find(v => v[0] === marca && v[1] === modelo);
+      if (match) {
+        document.getElementById("tipoAceiteRecomendado").value = match[4]; // Columna E
       }
     });
-  });
+  }
+}
 
-  // cuando se seleccione un modelo, rellenar aceite recomendado
-  document.getElementById("modeloSelect").addEventListener("change", function() {
-    const marca = document.getElementById("marcaSelect").value;
-    const modelo = this.value;
-    const match = vehiculos.find(v => v[0] === marca && v[1] === modelo);
-    if (match) {
-      document.getElementById("tipoAceiteRecomendado").value = match[4]; // Columna E
-    }
-  });
-}).getVehiculos();
+/* Callback JSONP para precios */
+function handlePrecios(response) {
+  if (response.success) {
+    precios = response.data;
+    console.log("Precios recibidos:", precios);
+  }
+}
+
+/* Lanzar llamadas JSONP */
+const scriptVehiculos = document.createElement('script');
+scriptVehiculos.src = SCRIPT_URL + '?action=getVehiculos&callback=handleVehiculos';
+document.body.appendChild(scriptVehiculos);
+
+const scriptPrecios = document.createElement('script');
+scriptPrecios.src = SCRIPT_URL + '?action=getPrecios&callback=handlePrecios';
+document.body.appendChild(scriptPrecios);
 </script>
 
 <script>
@@ -585,7 +606,7 @@ document.getElementById("selectMarcaAceite").addEventListener("change", actualiz
 /* ************** ENVÍO GOOGLE SCRIPT UNIFICADO ************** */
 const form = document.getElementById('formCita');
 const mensaje = document.getElementById('mensaje');
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxRntPTORAGIyquzTOShv_uan-8e2bDyJ4kRmH2Jh-sZCymrM0KnUsXXWFe9YfrbYaS4w/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvtYIXLJe_kcqiSeJ3CMWXHj_Dx2t26L7L0r5LOs8F75ti1wYZs8iZPiLRgMVXFxRsLQ/exec';
 
 // 👇 OJO: NO vuelvas a declarar precios ni vehiculos aquí
 // Usa las variables globales ya declaradas en otro bloque
@@ -664,46 +685,93 @@ function handleResponse(response) {
 let precios = [];
 let vehiculos = [];
 
-// Cargar precios desde Apps Script
-google.script.run.withSuccessHandler(function(data) {
-  precios = data;
-}).getPrecios();
+/* === Callbacks JSONP === */
+function handleVehiculos(response) {
+  if (response.success) {
+    vehiculos = response.data;
 
-// Cargar vehículos desde Apps Script y llenar selects dinámicos
-google.script.run.withSuccessHandler(function(data) {
-  vehiculos = data;
+    // Obtener marcas únicas
+    const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
+    const marcaSelect = document.getElementById("marcaSelect");
 
-  // Obtener marcas únicas
-  const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
-  const marcaSelect = document.getElementById("marcaSelect");
+    marcas.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      marcaSelect.appendChild(opt);
+    });
 
-  marcas.forEach(m => {
-    const opt = document.createElement("option");
-    opt.value = m;
-    opt.textContent = m;
-    marcaSelect.appendChild(opt);
-  });
+    // Cuando se seleccione una marca, llenar modelos
+    marcaSelect.addEventListener("change", function() {
+      const modeloSelect = document.getElementById("modeloSelect");
+      modeloSelect.innerHTML = '<option value="">Selecciona un modelo</option>';
 
-  // Cuando se seleccione una marca, llenar modelos
-  marcaSelect.addEventListener("change", function() {
-    const modeloSelect = document.getElementById("modeloSelect");
-    modeloSelect.innerHTML = '<option value="">Selecciona un modelo</option>';
+      vehiculos.forEach(v => {
+        if (v[0] === this.value) {
+          const opt = document.createElement("option");
+          opt.value = v[1];
+          opt.textContent = v[1];
+          modeloSelect.appendChild(opt);
+        }
+      });
+    });
 
-    vehiculos.forEach(v => {
-      if (v[0] === this.value) {
-        const opt = document.createElement("option");
-        opt.value = v[1];
-        opt.textContent = v[1];
-        modeloSelect.appendChild(opt);
+    // Cuando se seleccione un modelo, rellenar aceite recomendado
+    document.getElementById("modeloSelect").addEventListener("change", function() {
+      const marca = document.getElementById("marcaSelect").value;
+      const modelo = this.value;
+      const match = vehiculos.find(v => v[0] === marca && v[1] === modelo);
+      if (match) {
+        document.getElementById("tipoAceiteRecomendado").value = match[4]; // Columna E
       }
     });
-  });
-}).getVehiculos();
+  }
+}
 
+function handlePrecios(response) {
+  if (response.success) {
+    precios = response.data;
+  }
+}
+
+/* === Llamadas JSONP para cargar datos === */
+const scriptVehiculos = document.createElement('script');
+scriptVehiculos.src = SCRIPT_URL + '?action=getVehiculos&callback=handleVehiculos';
+document.body.appendChild(scriptVehiculos);
+
+const scriptPrecios = document.createElement('script');
+scriptPrecios.src = SCRIPT_URL + '?action=getPrecios&callback=handlePrecios';
+document.body.appendChild(scriptPrecios);
+
+/* === Envío del formulario === */
 document.getElementById("formCita").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const formData = new FormData(this);
+  const params = new URLSearchParams();
+
+  for (const [key, value] of formData.entries()) {
+    params.append(key, value);
+  }
+
+  // Agregar callback para JSONP
+  params.append("callback", "handleResponse");
+
+  // Crear script dinámico para enviar datos
+  const script = document.createElement("script");
+  script.src = SCRIPT_URL + "?" + params.toString();
+  document.body.appendChild(script);
+});
+
+/* === Manejo de respuesta del servidor === */
+function handleResponse(response) {
+  if (!response.success) {
+    alert("Problema al enviar la reserva: " + (response.error || ""));
+    return;
+  }
+
+  // Extraer datos del formulario para mostrar recibo
+  const formData = new FormData(document.getElementById("formCita"));
   const nombre = formData.get("Nombre");
   const telefono = formData.get("Telefono");
   const correo = formData.get("Correo");
@@ -729,7 +797,7 @@ document.getElementById("formCita").addEventListener("submit", function(e) {
   let litrosFacturados = Math.ceil(capacidadLitros);
 
   // Buscar precios según marca seleccionada o "Sin preferencia"
-  let precioAceite5L = 0, precioAceite1L = 0, filtro = 0, manoObra = 0, desecho = 0, descripcionAceite = "", marcaFinal = marcaAceite;
+  let precioAceite5L = 0, precioAceite1L = 0, filtro = 0, manoObra = 0, desecho = 0, marcaFinal = marcaAceite;
 
   if (marcaAceite.toUpperCase() === "SIN PREFERENCIA") {
     let mejor = null;
@@ -740,7 +808,6 @@ document.getElementById("formCita").addEventListener("submit", function(e) {
       }
     });
     if (mejor) {
-      descripcionAceite = mejor[2];
       precioAceite5L = parseFloat(mejor[3]) || 0;
       filtro = parseFloat(mejor[4]) || 0;
       manoObra = parseFloat(mejor[5]) || 0;
@@ -752,7 +819,6 @@ document.getElementById("formCita").addEventListener("submit", function(e) {
     precios.forEach(p => {
       if (String(p[0]).toUpperCase() === aceiteRecomendado.toUpperCase() &&
           String(p[1]).toUpperCase() === marcaAceite.toUpperCase()) {
-        descripcionAceite = p[2];
         precioAceite5L = parseFloat(p[3]) || 0;
         filtro = parseFloat(p[4]) || 0;
         manoObra = parseFloat(p[5]) || 0;
@@ -803,7 +869,7 @@ document.getElementById("formCita").addEventListener("submit", function(e) {
   document.getElementById("reciboTotal").textContent = "$" + totalServicio.toFixed(2);
 
   document.getElementById("recibo").style.display = "block";
-});
+}
 </script>
 </body>
 </html>
