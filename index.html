@@ -436,6 +436,7 @@ window.i18n = {
 </div>
 
 <script>
+<script>
 /* ************** MODAL Y FIRMA ************** */
 const modal = document.getElementById('modalAcuerdo');
 const link = document.getElementById('linkAcuerdo');
@@ -475,9 +476,6 @@ window.addEventListener('load', () => {
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', ()=>{
- 
-<script>
 /* ************** ACEITES ************** */
 const aceitesData = [
   {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
@@ -509,7 +507,7 @@ function actualizarTipoAceite() {
 
   const vehiculo = vehiculos.find(v => v[0] === marca && v[1] === modelo);
   if (vehiculo) {
-    tipoAceiteInput.value = vehiculo[2]; // Columna tipo de aceite en Vehiculos2
+    tipoAceiteInput.value = vehiculo[4]; // Columna E de Vehiculos2
   }
 }
 marcaSelect.addEventListener("change", actualizarTipoAceite);
@@ -523,6 +521,7 @@ marcaAceiteSelect.addEventListener("change", function() {
   descripcionAceite.value = aceite ? aceite.Descripcion : "";
 });
 </script>
+
  <script>
 // ************** CÁLCULO DE PRECIOS EN TIEMPO REAL **************
 
@@ -555,7 +554,7 @@ function actualizarPrecioEstimado() {
     return;
   }
 
-  const capacidadLitros = parseFloat(vehiculo[3]); // Columna de litros en Vehiculos2
+  const capacidadLitros = parseFloat(vehiculo[3]) || 0; // Columna D de Vehiculos2
   const costoAceite = aceite.Precio * capacidadLitros;
 
   // Valores fijos (puedes reemplazar con tu tabla de precios real)
@@ -567,6 +566,13 @@ function actualizarPrecioEstimado() {
 
   // Mostrar en el formulario
   precioEstimadoInput.value = "$" + total.toFixed(2);
+
+  // Mostrar también en el recibo (si está visible)
+  document.getElementById("reciboAceiteCosto").textContent = "$" + costoAceite.toFixed(2);
+  document.getElementById("reciboFiltro").textContent = "$" + filtro.toFixed(2);
+  document.getElementById("reciboManoObra").textContent = "$" + manoObra.toFixed(2);
+  document.getElementById("reciboDesecho").textContent = "$" + desecho.toFixed(2);
+  document.getElementById("reciboTotal").textContent = "$" + total.toFixed(2);
 }
 
 // Escuchar cambios en los selects
@@ -738,7 +744,7 @@ function mostrarRecibo(data) {
 }
 </script>
 
- <script>
+<script>
 let precios = [];
 let vehiculos = [];
 
@@ -747,9 +753,35 @@ google.script.run.withSuccessHandler(function(data) {
   precios = data;
 }).getPrecios();
 
-// Cargar vehículos desde Apps Script
+// Cargar vehículos desde Apps Script y llenar selects dinámicos
 google.script.run.withSuccessHandler(function(data) {
   vehiculos = data;
+
+  // Obtener marcas únicas
+  const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
+  const marcaSelect = document.getElementById("marcaSelect");
+
+  marcas.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m;
+    marcaSelect.appendChild(opt);
+  });
+
+  // Cuando se seleccione una marca, llenar modelos
+  marcaSelect.addEventListener("change", function() {
+    const modeloSelect = document.getElementById("modeloSelect");
+    modeloSelect.innerHTML = '<option value="">Selecciona un modelo</option>';
+
+    vehiculos.forEach(v => {
+      if (v[0] === this.value) {
+        const opt = document.createElement("option");
+        opt.value = v[1];
+        opt.textContent = v[1];
+        modeloSelect.appendChild(opt);
+      }
+    });
+  });
 }).getVehiculos();
 
 document.getElementById("formCita").addEventListener("submit", function(e) {
@@ -763,7 +795,7 @@ document.getElementById("formCita").addEventListener("submit", function(e) {
   const modelo = formData.get("Modelo");
   const ano = formData.get("Ano");
   const marcaAceite = formData.get("MarcaAceite");
-  const aceiteRecomendado = document.querySelector("#aceiteRecomendado")?.value || "";
+  const aceiteRecomendado = document.getElementById("tipoAceiteRecomendado").value || "";
   const direccion = formData.get("Direccion");
   const fecha = formData.get("Fecha");
   const hora = formData.get("Hora");
@@ -826,6 +858,12 @@ document.getElementById("formCita").addEventListener("submit", function(e) {
 
   const totalServicio = costoAceite + filtro + manoObra + desecho;
 
+  // Validación de precio
+  if (!totalServicio) {
+    alert("No se pudo calcular el precio. Verifique los datos.");
+    return;
+  }
+
   // Mostrar recibo
   document.getElementById("reciboNombre").textContent = nombre;
   document.getElementById("reciboTelefono").textContent = telefono;
@@ -850,38 +888,6 @@ document.getElementById("formCita").addEventListener("submit", function(e) {
 
   document.getElementById("recibo").style.display = "block";
 });
-</script>
- <script>
-// Cargar vehículos desde Apps Script y llenar selects dinámicos
-google.script.run.withSuccessHandler(function(data) {
-  vehiculos = data;
-
-  // Obtener marcas únicas
-  const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
-  const marcaSelect = document.getElementById("marcaSelect");
-
-  marcas.forEach(m => {
-    const opt = document.createElement("option");
-    opt.value = m;
-    opt.textContent = m;
-    marcaSelect.appendChild(opt);
-  });
-
-  // Cuando se seleccione una marca, llenar modelos
-  marcaSelect.addEventListener("change", function() {
-    const modeloSelect = document.getElementById("modeloSelect");
-    modeloSelect.innerHTML = '<option value="">Selecciona un modelo</option>';
-
-    vehiculos.forEach(v => {
-      if (v[0] === this.value) {
-        const opt = document.createElement("option");
-        opt.value = v[1];
-        opt.textContent = v[1];
-        modeloSelect.appendChild(opt);
-      }
-    });
-  });
-}).getVehiculos();
 </script>
 </body>
 </html>
