@@ -1,72 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reserva Cambio de Aceite</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-<style>
-  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-  body{background-color:#121212;color:#e0e0e0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 10px;}
-  .container{background:#1e1e1e;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.7);padding:40px 30px;max-width:600px;width:100%;}
-  h2{text-align:center;margin-bottom:30px;font-size:28px;color:#ffffff;}
-  .idiomas{text-align:right;margin-bottom:25px;}
-  .idiomas img{width:30px;height:20px;cursor:pointer;margin-left:8px;border-radius:3px;border:1px solid #333;transition:transform 0.2s;}
-  .idiomas img:hover{transform:scale(1.2);}
-  .form-group{position:relative;margin-bottom:25px;}
-  .form-group i{position:absolute;top:50%;left:12px;transform:translateY(-50%);color:#888;font-size:16px;}
-  .form-group input, .form-group select, .form-group textarea{
-    width:100%;padding:14px 12px 14px 38px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;transition:all 0.3s ease;
-  }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
-    outline:none;background-color:#333;box-shadow:0 0 8px #0b5ed7;
-  }
-  .form-group textarea{min-height:80px;resize:vertical;}
-  .form-group label{
-    position:absolute;top:50%;left:38px;transform:translateY(-50%);
-    pointer-events:none;color:#aaa;transition:0.3s;font-size:14px;background:#1e1e1e;padding:0 5px;
-  }
-  .form-group input:focus + label, .form-group input:not(:placeholder-shown) + label,
-  .form-group select:focus + label, .form-group select:not([value=""]) + label,
-  .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
-    top:-10px; left:10px; font-size:12px; color:#0b5ed7;
-  }
-  .agreement-container{margin-bottom:20px;text-align:left;}
-  .agreement-container a{color:#0b5ed7;text-decoration:underline;font-size:13px;display:inline-block;margin-top:5px;cursor:pointer;}
-  .firma-container{margin-bottom:20px;}
-  .firma-container input{width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;}
-  button[type="submit"]{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
-  button[type="submit"]:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
-  .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
-  #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:20px;border-radius:10px;color:#fff;}
-  #recibo h3{text-align:center;margin-bottom:20px;}
-  .modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,0.8);}
-  .modal-content{background:#1e1e1e;margin:50px auto;padding:20px;border-radius:12px;width:90%;max-width:700px;color:#e0e0e0;max-height:80vh;overflow-y:auto;}
-  .modal-close{float:right;font-size:24px;color:#888;cursor:pointer;transition:color 0.2s;}
-  .modal-close:hover{color:#fff;}
-  @media(max-width:600px){.container{padding:30px 20px;}h2{font-size:24px;}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserva Cambio de Aceite</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+    body{background-color:#121212;color:#e0e0e0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 10px;}
+    .container{background:#1e1e1e;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.7);padding:40px 30px;max-width:600px;width:100%;}
+    h2{text-align:center;margin-bottom:30px;font-size:28px;color:#ffffff;}
+    .idiomas{text-align:right;margin-bottom:25px;}
+    .idiomas img{width:30px;height:20px;cursor:pointer;margin-left:8px;border-radius:3px;border:1px solid #333;transition:transform 0.2s;}
+    .idiomas img:hover{transform:scale(1.2);}
+    .form-group{position:relative;margin-bottom:25px;}
+    .form-group i{position:absolute;top:50%;left:12px;transform:translateY(-50%);color:#888;font-size:16px;}
+    .form-group input, .form-group select, .form-group textarea{
+      width:100%;padding:14px 12px 14px 38px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;transition:all 0.3s ease;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus{
+      outline:none;background-color:#333;box-shadow:0 0 8px #0b5ed7;
+    }
+    .form-group textarea{min-height:80px;resize:vertical;}
+    .form-group label{
+      position:absolute;top:50%;left:38px;transform:translateY(-50%);
+      pointer-events:none;color:#aaa;transition:0.3s;font-size:14px;background:#1e1e1e;padding:0 5px;
+    }
+    .form-group input:focus + label, .form-group input:not(:placeholder-shown) + label,
+    .form-group select:focus + label, .form-group select:not([value=""]) + label,
+    .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
+      top:-10px; left:10px; font-size:12px; color:#0b5ed7;
+    }
+    .agreement-container{margin-bottom:20px;text-align:left;}
+    .agreement-container a{color:#0b5ed7;text-decoration:underline;font-size:13px;display:inline-block;margin-top:5px;cursor:pointer;}
+    .firma-container{margin-bottom:20px;}
+    .firma-container input{width:100%;padding:10px;border-radius:8px;border:none;background-color:#2a2a2a;color:#e0e0e0;font-size:15px;}
+    button[type="submit"]{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:white;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:all 0.3s ease;}
+    button[type="submit"]:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.6);}
+    .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
+    #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:20px;border-radius:10px;color:#fff;}
+    #recibo h3{text-align:center;margin-bottom:20px;}
+    .modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,0.8);}
+    .modal-content{background:#1e1e1e;margin:50px auto;padding:20px;border-radius:12px;width:90%;max-width:700px;color:#e0e0e0;max-height:80vh;overflow-y:auto;}
+    .modal-close{float:right;font-size:24px;color:#888;cursor:pointer;transition:color 0.2s;}
+    .modal-close:hover{color:#fff;}
+    @media(max-width:600px){.container{padding:30px 20px;}h2{font-size:24px;}}
+  </style>
 </head>
 <body>
-
 <div class="container">
   <div class="idiomas"></div>
-
   <h2 id="titulo">Reserva de Servicio a Domicilio</h2>
 
   <form id="formCita">
+    <!-- Nombre -->
     <div class="form-group">
       <i class="fas fa-user"></i>
       <input type="text" name="Nombre" placeholder=" " required>
       <label id="lblNombre">Nombre completo</label>
     </div>
 
+    <!-- Teléfono -->
     <div class="form-group">
       <i class="fas fa-phone"></i>
       <input type="tel" name="Telefono" placeholder=" " required>
       <label id="lblTelefono">Teléfono</label>
     </div>
 
+    <!-- Correo -->
     <div class="form-group">
       <i class="fas fa-envelope"></i>
       <input type="email" name="Correo" placeholder=" " required>
@@ -91,184 +92,148 @@
       <label id="lblModelo">Modelo del vehículo</label>
     </div>
 
-    <!-- Año (manual por el cliente) -->
+    <!-- Año -->
     <div class="form-group">
       <i class="fas fa-calendar-alt"></i>
       <input type="number" name="Ano" id="anoInput" placeholder=" " required>
       <label id="lblAno">Año del vehículo</label>
     </div>
 
-    <!-- Tipo de Aceite Recomendado (readonly, automático) -->
-    <div class="form-group">
-      <i class="fas fa-oil-can"></i>
-      <input type="text" id="tipoAceiteRecomendado" name="tipoAceiteRecomendado" readonly placeholder="Tipo de aceite recomendado">
-      <label id="lblAceite">Aceite recomendado</label>
-    </div>
-<script>
-/* Lista fija de marcas y modelos con aceite recomendado */
-const marcasModelos = [
-  {Marca:"Acura", Modelo:"ILX 2.4L", Aceite:"0W20"},
-  {Marca:"Acura", Modelo:"MDX 3.5L", Aceite:"5W30"},
-  {Marca:"Chevrolet", Modelo:"Aveo", Aceite:"10W30"},
-  {Marca:"Chevrolet", Modelo:"Cruze", Aceite:"5W30"},
-  {Marca:"Dodge", Modelo:"Dart", Aceite:"5W20"},
-  {Marca:"Dodge", Modelo:"Journey", Aceite:"5W30"}
-  // 🔁 Aquí pegas toda tu lista completa de Vehiculos2
-];
-
-/* Referencias a los selects y al input de aceite */
-const marcaSelect = document.getElementById("marcaSelect");
-const modeloSelect = document.getElementById("modeloSelect");
-const aceiteInput = document.getElementById("tipoAceiteRecomendado");
-
-/* Poblar marcas únicas */
-const marcasUnicas = [...new Set(marcasModelos.map(m => m.Marca))].sort();
-marcasUnicas.forEach(marca => {
-  const opt = document.createElement("option");
-  opt.value = marca;
-  opt.textContent = marca;
-  marcaSelect.appendChild(opt);
-});
-
-/* Cuando cambia la marca, poblar modelos */
-marcaSelect.addEventListener("change", () => {
-  const marca = marcaSelect.value;
-  modeloSelect.innerHTML = `<option value="">Selecciona modelo</option>`;
-  
-  marcasModelos
-    .filter(m => m.Marca === marca)
-    .forEach(m => {
-      const opt = document.createElement("option");
-      opt.value = m.Modelo;
-      opt.textContent = m.Modelo;
-      modeloSelect.appendChild(opt);
-    });
-
-  aceiteInput.value = ""; // limpiar aceite si cambia la marca
-});
-
-/* Cuando cambia el modelo, mostrar aceite recomendado */
-modeloSelect.addEventListener("change", () => {
-  const marca = marcaSelect.value;
-  const modelo = modeloSelect.value;
-  const match = marcasModelos.find(m => m.Marca === marca && m.Modelo === modelo);
-  if (match) {
-    aceiteInput.value = match.Aceite || "";
-  } else {
-    aceiteInput.value = "";
-  }
-});
-</script>
-
-    <!-- Marca de Aceite -->
-    <div class="form-group">
-      <i class="fas fa-industry"></i>
-      <select name="MarcaAceite" id="selectMarcaAceite" required>
-        <option value="">Selecciona marca de aceite</option>
-        <option value="Mobil 1">Mobil 1</option>
-        <option value="Pennzoil">Pennzoil</option>
-        <option value="Valvoline">Valvoline</option>
-        <option value="Castrol EDGE">Castrol EDGE</option>
-        <option value="Shell Helix">Shell Helix</option>
-      </select>
-      <label id="lblMarcaAceite">Marca de Aceite</label>
-    </div>
-
-    <!-- Descripción del aceite -->
-    <div class="form-group">
-      <i class="fas fa-info-circle"></i>
-      <textarea id="descripcionAceite" name="DescripcionAceite" readonly placeholder="Descripción del aceite seleccionado"></textarea>
-    </div>
-
-    <!-- Precio estimado -->
-    <div class="form-group">
-      <i class="fas fa-dollar-sign"></i>
-      <input type="text" id="precioEstimado" name="PrecioEstimado" readonly placeholder="Precio estimado del servicio">
-    </div>
-
+    <!-- Dirección -->
     <div class="form-group">
       <i class="fas fa-map-marker-alt"></i>
       <input type="text" name="Direccion" placeholder=" " required>
       <label id="lblDireccion">Dirección del servicio</label>
     </div>
 
+    <!-- Fecha -->
     <div class="form-group">
       <i class="fas fa-calendar-day"></i>
       <input type="date" name="Fecha" placeholder=" " required>
       <label id="lblFecha">Fecha</label>
     </div>
 
+    <!-- Hora -->
     <div class="form-group">
       <i class="fas fa-clock"></i>
       <input type="time" name="Hora" placeholder=" " required>
       <label id="lblHora">Hora</label>
     </div>
 
+    <!-- Comentarios -->
     <div class="form-group">
       <i class="fas fa-comment-dots"></i>
       <textarea name="Comentarios" placeholder=" "></textarea>
       <label id="lblComentarios">Comentarios adicionales</label>
     </div>
 
+    <!-- Acuerdo -->
     <div class="agreement-container">
       <a id="linkAcuerdo">Leer acuerdo completo</a>
     </div>
 
+    <!-- Firma -->
     <div class="firma-container">
       <input type="text" name="Firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" disabled required>
     </div>
 
+    <!-- Campos ocultos -->
     <input type="hidden" name="Estado" value="Pendiente">
     <input type="hidden" id="langField" name="Idioma">
+
+    <!-- Botón -->
     <button type="submit" id="btnEnviar">Enviar Reserva</button>
   </form>
 </div>
+
   <div class="mensaje" id="mensaje"></div>
 
- <div id="recibo">
-  <h3 id="reciboTitulo">✅ Recibo de Reserva</h3>
-  <p><b id="reciboLabelNombre">Nombre:</b> <span id="reciboNombre"></span></p>
-  <p><b id="reciboLabelTelefono">Teléfono:</b> <span id="reciboTelefono"></span></p>
-  <p><b id="reciboLabelCorreo">Correo:</b> <span id="reciboCorreo"></span></p>
-  <p><b id="reciboLabelMarca">Marca (vehículo):</b> <span id="reciboMarca"></span></p>
-  <p><b id="reciboLabelModelo">Modelo:</b> <span id="reciboModelo"></span></p>
-  <p><b id="reciboLabelAno">Año:</b> <span id="reciboAno"></span></p>
-  <p><b id="reciboLabelMarcaAceite">Marca de Aceite:</b> <span id="reciboMarcaAceite"></span></p>
-  <p><b id="reciboLabelAceite">Aceite recomendado:</b> <span id="reciboAceite"></span></p>
-  <p><b id="reciboLabelDireccion">Dirección:</b> <span id="reciboDireccion"></span></p>
-  <p><b id="reciboLabelFecha">Fecha del Servicio:</b> <span id="reciboFecha"></span></p>
-  <p><b id="reciboLabelHora">Hora del Servicio:</b> <span id="reciboHora"></span></p>
-  <p><b id="reciboLabelComentarios">Comentarios:</b> <span id="reciboComentarios"></span></p>
-  <p><b id="reciboLabelFirma">Firma:</b> <span id="reciboFirma"></span></p>
-
-  <!-- Nuevo: sección de precio estimado -->
-  <h4 id="reciboLabelPrecio">💲 Precio estimado:</h4>
-  <p><b>Aceite:</b> <span id="reciboAceiteCosto"></span></p>
-  <p><b>Filtro:</b> <span id="reciboFiltro"></span></p>
-  <p><b>Mano de Obra:</b> <span id="reciboManoObra"></span></p>
-  <p><b>Desecho:</b> <span id="reciboDesecho"></span></p>
-  <p><b>Total:</b> <span id="reciboTotal"></span></p>
-</div>
-
-<!-- Modal del acuerdo -->
-<div id="modalAcuerdo" class="modal">
-  <div class="modal-content">
-    <span class="modal-close">&times;</span>
-    <!-- Aquí cargamos el archivo externo -->
-    <iframe id="acuerdoFrame" src="" style="width:100%; height:400px; border:none;"></iframe>
+  <div id="recibo">
+    <h3 id="reciboTitulo">✅ Recibo de Reserva</h3>
+    <p><b id="reciboLabelNombre">Nombre:</b> <span id="reciboNombre"></span></p>
+    <p><b id="reciboLabelTelefono">Teléfono:</b> <span id="reciboTelefono"></span></p>
+    <p><b id="reciboLabelCorreo">Correo:</b> <span id="reciboCorreo"></span></p>
+    <p><b id="reciboLabelMarca">Marca (vehículo):</b> <span id="reciboMarca"></span></p>
+    <p><b id="reciboLabelModelo">Modelo:</b> <span id="reciboModelo"></span></p>
+    <p><b id="reciboLabelAno">Año:</b> <span id="reciboAno"></span></p>
+    <p><b id="reciboLabelDireccion">Dirección:</b> <span id="reciboDireccion"></span></p>
+    <p><b id="reciboLabelFecha">Fecha del Servicio:</b> <span id="reciboFecha"></span></p>
+    <p><b id="reciboLabelHora">Hora del Servicio:</b> <span id="reciboHora"></span></p>
+    <p><b id="reciboLabelComentarios">Comentarios:</b> <span id="reciboComentarios"></span></p>
+    <p><b id="reciboLabelFirma">Firma:</b> <span id="reciboFirma"></span></p>
   </div>
-</div>
 
-<!-- === SCRIPT: DICCIONARIOS, IDIOMA Y MARCAS/MODELOS === -->
+  <!-- Modal del acuerdo -->
+  <div id="modalAcuerdo" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <iframe id="acuerdoFrame" src="" style="width:100%; height:400px; border:none;"></iframe>
+    </div>
+  </div>
+
+<!-- === SCRIPT: DICCIONARIOS E IDIOMA === -->
 <script>
-/* Diccionarios */
 const textosUI = {
-  es: { /* ... español ... */ },
-  en: { /* ... inglés ... */ },
-  pt: { /* ... portugués ... */ }
+  es: {
+    titulo: "Reserva de Servicio a Domicilio",
+    lblNombre: "Nombre completo",
+    lblTelefono: "Teléfono",
+    lblCorreo: "Correo electrónico",
+    lblMarca: "Marca del vehículo",
+    lblModelo: "Modelo del vehículo",
+    lblAno: "Año del vehículo",
+    lblDireccion: "Dirección del servicio",
+    lblFecha: "Fecha",
+    lblHora: "Hora",
+    lblComentarios: "Comentarios adicionales",
+    linkAcuerdo: "Leer acuerdo completo",
+    btnEnviar: "Enviar Reserva",
+    reciboTitulo: "✅ Recibo de Reserva",
+    alertaAceptar: "Has aceptado el acuerdo",
+    enviarExito: "Reserva enviada con éxito",
+    enviarError: "Error al enviar la reserva"
+  },
+  en: {
+    titulo: "Home Service Booking",
+    lblNombre: "Full Name",
+    lblTelefono: "Phone",
+    lblCorreo: "Email",
+    lblMarca: "Car Brand",
+    lblModelo: "Car Model",
+    lblAno: "Year",
+    lblDireccion: "Service Address",
+    lblFecha: "Date",
+    lblHora: "Time",
+    lblComentarios: "Additional Comments",
+    linkAcuerdo: "Read full agreement",
+    btnEnviar: "Submit Booking",
+    reciboTitulo: "✅ Booking Receipt",
+    alertaAceptar: "You have accepted the agreement",
+    enviarExito: "Booking submitted successfully",
+    enviarError: "Error submitting booking"
+  },
+  pt: {
+    titulo: "Reserva de Serviço em Domicílio",
+    lblNombre: "Nome completo",
+    lblTelefono: "Telefone",
+    lblCorreo: "E-mail",
+    lblMarca: "Marca do veículo",
+    lblModelo: "Modelo do veículo",
+    lblAno: "Ano do veículo",
+    lblDireccion: "Endereço do serviço",
+    lblFecha: "Data",
+    lblHora: "Hora",
+    lblComentarios: "Comentários adicionais",
+    linkAcuerdo: "Ler acordo completo",
+    btnEnviar: "Enviar Reserva",
+    reciboTitulo: "✅ Recibo de Reserva",
+    alertaAceptar: "Você aceitou o acordo",
+    enviarExito: "Reserva enviada com sucesso",
+    enviarError: "Erro ao enviar a reserva"
+  }
 };
 
-/* Detectar idioma del navegador */
+// Detectar idioma del navegador
 window.lang = (function(){
   const nav = (navigator.languages && navigator.languages[0]) || navigator.language || 'es';
   if(!nav) return 'es';
@@ -278,8 +243,8 @@ window.lang = (function(){
 })();
 </script>
 
+<!-- === SCRIPT: LISTA DE MARCAS Y MODELOS === -->
 <script>
-/* Lista fija de marcas y modelos */
 const marcasModelos = [
   /* 👇 aquí empiezan todas tus marcas y modelos */
   {Marca:"Acura", Modelo:"ILX 2.4L"},
@@ -621,11 +586,12 @@ const marcasModelos = [
 {Marca:"BMW", Modelo:"Z4 2.0i"},
 {Marca:"BMW", Modelo:"Z4 3.0i"}
 ];
+</script>
 
-/* Poblar marcas únicas */
+<!-- === SCRIPT: LÓGICA DE SELECTS === -->
 <script>
-const selectMarcaVehiculo = document.getElementById('selectMarcaVehiculo');
-const selectModeloVehiculo = document.getElementById('selectModeloVehiculo');
+const marcaSelect = document.getElementById('marcaSelect');
+const modeloSelect = document.getElementById('modeloSelect');
 
 // Poblar marcas únicas
 const marcasUnicas = [...new Set(marcasModelos.map(m => m.Marca))].sort();
@@ -633,15 +599,14 @@ marcasUnicas.forEach(marca => {
   const opt = document.createElement('option');
   opt.value = marca;
   opt.textContent = marca;
-  selectMarcaVehiculo.appendChild(opt);
+  marcaSelect.appendChild(opt);
 });
 
 // Poblar modelos según la marca seleccionada
-selectMarcaVehiculo.addEventListener('change', () => {
-  const marca = selectMarcaVehiculo.value;
-  selectModeloVehiculo.innerHTML = `<option value="">Selecciona modelo</option>`;
+marcaSelect.addEventListener('change', () => {
+  const marca = marcaSelect.value;
+  modeloSelect.innerHTML = `<option value="">Selecciona modelo</option>`;
 
-  // Usamos Set para evitar duplicados
   const modelosUnicos = [...new Set(
     marcasModelos.filter(m => m.Marca === marca).map(m => m.Modelo)
   )];
@@ -650,514 +615,10 @@ selectMarcaVehiculo.addEventListener('change', () => {
     const opt = document.createElement('option');
     opt.value = modelo;
     opt.textContent = modelo;
-    selectModeloVehiculo.appendChild(opt);
+    modeloSelect.appendChild(opt);
   });
 });
 </script>
 
-
-<!-- === SCRIPT: CARGA DE PRECIOS DINÁMICOS === -->
-<script>
-let precios = [];
-
-/* Callback JSONP para precios */
-function handlePrecios(response) {
-  if (response.success) {
-    precios = response.data;
-    console.log("Precios recibidos:", precios);
-  }
-}
-
-/* Llamada JSONP para precios */
-const scriptPrecios = document.createElement('script');
-scriptPrecios.src = SCRIPT_URL + '?action=getPrecios&callback=handlePrecios';
-document.body.appendChild(scriptPrecios);
-</script>
-
-<script>
-/* función que aplica la traducción a los elementos por id */
-function applyTranslations(){
-  const t = textosUI[window.lang] || textosUI.es;
-
-  // textos simples (elementos con id)
-  const map = {
-    'titulo': 'titulo',
-    'lblNombre': 'lblNombre',
-    'lblTelefono': 'lblTelefono',
-    'lblCorreo': 'lblCorreo',
-    'lblMarca': 'lblMarca',
-    'lblModelo': 'lblModelo',
-    'lblAno': 'lblAno',
-    'lblAceite': 'lblAceite',
-    'lblMarcaAceite': 'lblMarcaAceite',
-    'lblDireccion': 'lblDireccion',
-    'lblFecha': 'lblFecha',
-    'lblHora': 'lblHora',
-    'lblComentarios': 'lblComentarios',
-    'linkAcuerdo': 'linkAcuerdo',
-    'btnEnviar': 'btnEnviar',
-    'reciboTitulo': 'reciboTitulo'
-    // 'modalTitulo': 'modalTitulo' // solo si decides mostrar un título en el modal
-  };
-
-  Object.keys(map).forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    const key = map[id];
-    el.textContent = t[key] || el.textContent;
-  });
-
-  // traducir las etiquetas dentro del recibo
-  const reciboMap = [
-    'reciboLabelNombre','reciboLabelTelefono','reciboLabelCorreo','reciboLabelMarca',
-    'reciboLabelModelo','reciboLabelAno','reciboLabelAceite','reciboLabelDireccion',
-    'reciboLabelFecha','reciboLabelHora','reciboLabelComentarios','reciboLabelFirma'
-  ];
-  reciboMap.forEach(id=>{
-    const el = document.getElementById(id);
-    if(el && t[id]) {
-      el.textContent = t[id];
-    }
-  });
-
-  // colocar el idioma detectado en el campo oculto del formulario
-  const langField = document.getElementById('langField');
-  if(langField) langField.value = window.lang;
-}
-
-/* Ejecutar la aplicación de traducciones ahora */
-applyTranslations();
-
-/* exportar texto de mensajes */
-window.i18n = {
-  aceptarAlerta: textosUI[window.lang].alertaAceptar || textosUI.es.alertaAceptar,
-  enviarExito: textosUI[window.lang].enviarExito || textosUI.es.enviarExito,
-  enviarError: textosUI[window.lang].enviarError || textosUI.es.enviarError
-};
-</script>
-
-<!-- Modal del acuerdo -->
-<div id="modalAcuerdo" class="modal">
-  <div class="modal-content">
-    <span class="modal-close">&times;</span>
-    <iframe id="acuerdoFrame" src="" style="width:100%; height:400px; border:none;"></iframe>
-  </div>
-</div>
-
-<script>
-<script>
-/* ************** MODAL Y FIRMA ************** */
-const modal = document.getElementById('modalAcuerdo');
-const link = document.getElementById('linkAcuerdo');
-const spanClose = document.querySelector('.modal-close');
-const firmaInput = document.getElementById('firmaInput');
-const acuerdoFrame = document.getElementById('acuerdoFrame');
-
-// Abrir modal y cargar acuerdo.html
-if (link) {
-  link.onclick = (e) => {
-    e.preventDefault();
-    acuerdoFrame.src = 'acuerdo.html';
-    modal.style.display = 'block';
-  };
-}
-
-// Cerrar modal
-if (spanClose) spanClose.onclick = () => { modal.style.display = 'none'; };
-window.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-
-// Escuchar mensaje desde acuerdo.html
-window.addEventListener('message', (event) => {
-  if (event.data === 'acuerdoAceptado') {
-    if (firmaInput) firmaInput.disabled = false;
-    localStorage.setItem('acuerdoFirmado', 'true');
-    modal.style.display = 'none';
-    alert(window.i18n.aceptarAlerta);
-  }
-});
-
-// Activar firma si ya aceptó antes
-window.addEventListener('load', () => {
-  if (localStorage.getItem('acuerdoFirmado') === 'true') {
-    if (firmaInput) firmaInput.disabled = false;
-  }
-});
-</script>
-
-<script>
-/* ************** ACEITES ************** */
-const aceitesData = [
-  {Tipo:"0W20", Marca:"Mobil 1", Descripcion:"Aceite sintético total, excelente protección y limpieza del motor.", Precio:25},
-  {Tipo:"0W20", Marca:"Pennzoil", Descripcion:"Aceite sintético con limpieza activa, ideal para motores modernos.", Precio:24},
-  {Tipo:"0W20", Marca:"Valvoline", Descripcion:"Protección avanzada contra el desgaste, buen rendimiento en frío.", Precio:27},
-  {Tipo:"0W30", Marca:"Mobil 1", Descripcion:"Totalmente sintético, excelente viscosidad en climas fríos.", Precio:25},
-  {Tipo:"0W30", Marca:"Pennzoil", Descripcion:"Reduce la fricción interna del motor y mejora la eficiencia.", Precio:25},
-  {Tipo:"0W30", Marca:"Valvoline", Descripcion:"Formulado para máxima protección en motores exigentes.", Precio:27},
-  {Tipo:"5W20", Marca:"Mobil 1", Descripcion:"Tecnología avanzada anti-desgaste, rendimiento óptimo.", Precio:25},
-  {Tipo:"5W20", Marca:"Pennzoil", Descripcion:"Mantiene el motor limpio y eficiente, buena resistencia térmica.", Precio:24},
-  {Tipo:"5W20", Marca:"Valvoline", Descripcion:"Buena durabilidad del motor, ideal para condiciones mixtas.", Precio:26},
-  {Tipo:"5W30", Marca:"Mobil 1", Descripcion:"Excelente control de oxidación y protección del motor.", Precio:26},
-  {Tipo:"5W30", Marca:"Pennzoil", Descripcion:"Alta limpieza y fluidez en todo tipo de temperatura.", Precio:25},
-  {Tipo:"5W30", Marca:"Valvoline", Descripcion:"Protección avanzada contra desgaste y depósitos.", Precio:27}
-];
-
-// Referencias a los elementos del formulario
-const marcaSelect = document.getElementById("marcaSelect");
-const modeloSelect = document.getElementById("modeloSelect");
-const tipoAceiteInput = document.getElementById("tipoAceiteRecomendado");
-const marcaAceiteSelect = document.getElementById("selectMarcaAceite");
-const descripcionAceite = document.getElementById("descripcionAceite");
-
-// Cuando el cliente elige Marca + Modelo, autocompletar tipo de aceite
-function actualizarTipoAceite() {
-  const marca = marcaSelect.value;
-  const modelo = modeloSelect.value;
-  if (!marca || !modelo) return;
-
-  const vehiculo = vehiculos.find(v => v[0] === marca && v[1] === modelo);
-  if (vehiculo) {
-    tipoAceiteInput.value = vehiculo[4]; // Columna E de Vehiculos2
-  }
-}
-marcaSelect.addEventListener("change", actualizarTipoAceite);
-modeloSelect.addEventListener("change", actualizarTipoAceite);
-
-// Cuando el cliente elige la marca de aceite, mostrar descripción
-marcaAceiteSelect.addEventListener("change", function() {
-  const tipo = tipoAceiteInput.value;
-  const marca = this.value;
-  const aceite = aceitesData.find(a => a.Tipo === tipo && a.Marca === marca);
-  descripcionAceite.value = aceite ? aceite.Descripcion : "";
-});
-</script>
-
- <script>
-// ************** CÁLCULO DE PRECIOS EN TIEMPO REAL **************
-
-// Referencias
-const precioEstimadoInput = document.getElementById("precioEstimado");
-
-// Función para actualizar el precio estimado
-function actualizarPrecioEstimado() {
-  const tipo = document.getElementById("tipoAceiteRecomendado").value;
-  const marcaAceite = document.getElementById("selectMarcaAceite").value;
-  const marca = document.getElementById("marcaSelect").value;
-  const modelo = document.getElementById("modeloSelect").value;
-
-  if (!tipo || !marcaAceite || !marca || !modelo) {
-    precioEstimadoInput.value = "";
-    return;
-  }
-
-  // Buscar datos del aceite
-  const aceite = aceitesData.find(a => a.Tipo === tipo && a.Marca === marcaAceite);
-  if (!aceite) {
-    precioEstimadoInput.value = "";
-    return;
-  }
-
-  // Buscar datos del vehículo (capacidad de litros)
-  const vehiculo = vehiculos.find(v => v[0] === marca && v[1] === modelo);
-  if (!vehiculo) {
-    precioEstimadoInput.value = "";
-    return;
-  }
-
-  const capacidadLitros = parseFloat(vehiculo[3]) || 0; // Columna D de Vehiculos2
-  const costoAceite = aceite.Precio * capacidadLitros;
-
-  // Valores fijos (puedes reemplazar con tu tabla de precios real)
-  const filtro = 10; 
-  const manoObra = 15;
-  const desecho = 5;
-
-  const total = costoAceite + filtro + manoObra + desecho;
-
-  // Mostrar en el formulario
-  precioEstimadoInput.value = "$" + total.toFixed(2);
-
-  // Mostrar también en el recibo (si está visible)
-  document.getElementById("reciboAceiteCosto").textContent = "$" + costoAceite.toFixed(2);
-  document.getElementById("reciboFiltro").textContent = "$" + filtro.toFixed(2);
-  document.getElementById("reciboManoObra").textContent = "$" + manoObra.toFixed(2);
-  document.getElementById("reciboDesecho").textContent = "$" + desecho.toFixed(2);
-  document.getElementById("reciboTotal").textContent = "$" + total.toFixed(2);
-}
-
-// Escuchar cambios en los selects
-document.getElementById("marcaSelect").addEventListener("change", actualizarPrecioEstimado);
-document.getElementById("modeloSelect").addEventListener("change", actualizarPrecioEstimado);
-document.getElementById("selectMarcaAceite").addEventListener("change", actualizarPrecioEstimado);
-</script>
-
-<script>
-/* ************** ENVÍO GOOGLE SCRIPT UNIFICADO ************** */
-const form = document.getElementById('formCita');
-const mensaje = document.getElementById('mensaje');
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvtYIXLJe_kcqiSeJ3CMWXHj_Dx2t26L7L0r5LOs8F75ti1wYZs8iZPiLRgMVXFxRsLQ/exec';
-
-// 👇 OJO: NO vuelvas a declarar precios ni vehiculos aquí
-// Usa las variables globales ya declaradas en otro bloque
-// let precios = [];
-// let vehiculos = [];
-
-const firmaInput = document.getElementById('firmaInput');
-
-form.addEventListener('submit', e => {
-  e.preventDefault();
-
-  if (firmaInput && firmaInput.disabled) {
-    alert({
-      'es': 'Debe aceptar el acuerdo antes de enviar la reserva.',
-      'en': 'You must accept the agreement before submitting.',
-      'pt': 'Você deve aceitar o acordo antes de enviar.'
-    }[window.lang]);
-    return;
-  }
-
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData.entries());
-
-  // --- Cálculo de precios ---
-  const marca = data.Marca;
-  const modelo = data.Modelo;
-  const ano = data.Ano;
-  const marcaAceite = data.MarcaAceite;
-  const aceiteRecomendado = document.getElementById("tipoAceiteRecomendado").value;
-
-  // Buscar capacidad real en Vehiculos2
-  let capacidadLitros = 0;
-  vehiculos.forEach(v => {
-    if (String(v[0]).toUpperCase() === marca.toUpperCase() &&
-        String(v[1]).toUpperCase() === modelo.toUpperCase()) {
-      capacidadLitros = parseFloat(v[3]) || 0;
-    }
-  });
-  let litrosFacturados = Math.ceil(capacidadLitros);
-
-  // ... resto de tu lógica de cálculo ...
-
-  // --- Envío a Google Script ---
-  data.callback = 'handleResponse';
-  const script = document.createElement('script');
-  script.src = SCRIPT_URL + '?' + new URLSearchParams(data).toString();
-  document.body.appendChild(script);
-  window.ultimoEnvio = {...data};
-});
-
-function handleResponse(response) {
-  if (response.success) {
-    mensaje.textContent = {
-      'es': '✅ Reserva enviada correctamente!',
-      'en': '✅ Booking submitted successfully!',
-      'pt': '✅ Reserva enviada com sucesso!'
-    }[window.lang];
-    mostrarRecibo(window.ultimoEnvio);
-    form.reset();
-    if (firmaInput) firmaInput.disabled = true;
-    localStorage.removeItem('acuerdoFirmado');
-  } else {
-    mensaje.textContent = (
-      {'es':'Error: ','en':'Error: ','pt':'Erro: '}[window.lang] +
-      (response.error || {
-        'es':'Problema al enviar la reserva.',
-        'en':'Problem submitting booking.',
-        'pt':'Problema ao enviar a reserva.'
-      }[window.lang])
-    );
-  }
-}
-</script>
-
-<script>
-let precios = [];
-let vehiculos = [];
-
-/* === Callbacks JSONP === */
-function handleVehiculos(response) {
-  if (response.success) {
-    vehiculos = response.data;
-
-    // Obtener marcas únicas
-    const marcas = [...new Set(vehiculos.map(v => v[0]))].sort();
-    const marcaSelect = document.getElementById("marcaSelect");
-
-    marcas.forEach(m => {
-      const opt = document.createElement("option");
-      opt.value = m;
-      opt.textContent = m;
-      marcaSelect.appendChild(opt);
-    });
-
-    // Cuando se seleccione una marca, llenar modelos
-    marcaSelect.addEventListener("change", function() {
-      const modeloSelect = document.getElementById("modeloSelect");
-      modeloSelect.innerHTML = '<option value="">Selecciona un modelo</option>';
-
-      vehiculos.forEach(v => {
-        if (v[0] === this.value) {
-          const opt = document.createElement("option");
-          opt.value = v[1];
-          opt.textContent = v[1];
-          modeloSelect.appendChild(opt);
-        }
-      });
-    });
-
-    // Cuando se seleccione un modelo, rellenar aceite recomendado
-    document.getElementById("modeloSelect").addEventListener("change", function() {
-      const marca = document.getElementById("marcaSelect").value;
-      const modelo = this.value;
-      const match = vehiculos.find(v => v[0] === marca && v[1] === modelo);
-      if (match) {
-        document.getElementById("tipoAceiteRecomendado").value = match[4]; // Columna E
-      }
-    });
-  }
-}
-
-function handlePrecios(response) {
-  if (response.success) {
-    precios = response.data;
-  }
-}
-
-/* === Llamadas JSONP para cargar datos === */
-const scriptVehiculos = document.createElement('script');
-scriptVehiculos.src = SCRIPT_URL + '?action=getVehiculos&callback=handleVehiculos';
-document.body.appendChild(scriptVehiculos);
-
-const scriptPrecios = document.createElement('script');
-scriptPrecios.src = SCRIPT_URL + '?action=getPrecios&callback=handlePrecios';
-document.body.appendChild(scriptPrecios);
-
-/* === Envío del formulario === */
-document.getElementById("formCita").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const formData = new FormData(this);
-  const params = new URLSearchParams();
-
-  for (const [key, value] of formData.entries()) {
-    params.append(key, value);
-  }
-
-  // Agregar callback para JSONP
-  params.append("callback", "handleResponse");
-
-  // Crear script dinámico para enviar datos
-  const script = document.createElement("script");
-  script.src = SCRIPT_URL + "?" + params.toString();
-  document.body.appendChild(script);
-});
-
-/* === Manejo de respuesta del servidor === */
-function handleResponse(response) {
-  if (!response.success) {
-    alert("Problema al enviar la reserva: " + (response.error || ""));
-    return;
-  }
-
-  // Extraer datos del formulario para mostrar recibo
-  const formData = new FormData(document.getElementById("formCita"));
-  const nombre = formData.get("Nombre");
-  const telefono = formData.get("Telefono");
-  const correo = formData.get("Correo");
-  const marca = formData.get("Marca");
-  const modelo = formData.get("Modelo");
-  const ano = formData.get("Ano");
-  const marcaAceite = formData.get("MarcaAceite");
-  const aceiteRecomendado = document.getElementById("tipoAceiteRecomendado").value || "";
-  const direccion = formData.get("Direccion");
-  const fecha = formData.get("Fecha");
-  const hora = formData.get("Hora");
-  const comentarios = formData.get("Comentarios");
-  const firma = formData.get("Firma");
-
-  // Buscar capacidad real en Vehiculos2
-  let capacidadLitros = 0;
-  vehiculos.forEach(v => {
-    if (String(v[0]).toUpperCase() === marca.toUpperCase() &&
-        String(v[1]).toUpperCase() === modelo.toUpperCase()) {
-      capacidadLitros = parseFloat(v[3]) || 0;
-    }
-  });
-  let litrosFacturados = Math.ceil(capacidadLitros);
-
-  // Buscar precios según marca seleccionada o "Sin preferencia"
-  let precioAceite5L = 0, precioAceite1L = 0, filtro = 0, manoObra = 0, desecho = 0, marcaFinal = marcaAceite;
-
-  if (marcaAceite.toUpperCase() === "SIN PREFERENCIA") {
-    let mejor = null;
-    precios.forEach(p => {
-      if (String(p[0]).toUpperCase() === aceiteRecomendado.toUpperCase()) {
-        const precio5L = parseFloat(p[3]) || 0;
-        if (!mejor || precio5L < mejor[3]) mejor = p;
-      }
-    });
-    if (mejor) {
-      precioAceite5L = parseFloat(mejor[3]) || 0;
-      filtro = parseFloat(mejor[4]) || 0;
-      manoObra = parseFloat(mejor[5]) || 0;
-      desecho = parseFloat(mejor[6]) || 0;
-      precioAceite1L = parseFloat(mejor[8]) || 0;
-      marcaFinal = mejor[1];
-    }
-  } else {
-    precios.forEach(p => {
-      if (String(p[0]).toUpperCase() === aceiteRecomendado.toUpperCase() &&
-          String(p[1]).toUpperCase() === marcaAceite.toUpperCase()) {
-        precioAceite5L = parseFloat(p[3]) || 0;
-        filtro = parseFloat(p[4]) || 0;
-        manoObra = parseFloat(p[5]) || 0;
-        desecho = parseFloat(p[6]) || 0;
-        precioAceite1L = parseFloat(p[8]) || 0;
-      }
-    });
-  }
-
-  // Calcular costo de aceite
-  let costoAceite = 0;
-  if (litrosFacturados >= 5) {
-    const bidones = Math.floor(litrosFacturados / 5);
-    const litrosSueltos = litrosFacturados % 5;
-    costoAceite = (bidones * precioAceite5L) + (litrosSueltos * precioAceite1L);
-  } else {
-    costoAceite = litrosFacturados * precioAceite1L;
-  }
-
-  const totalServicio = costoAceite + filtro + manoObra + desecho;
-
-  // Validación de precio
-  if (!totalServicio) {
-    alert("No se pudo calcular el precio. Verifique los datos.");
-    return;
-  }
-
-  // Mostrar recibo
-  document.getElementById("reciboNombre").textContent = nombre;
-  document.getElementById("reciboTelefono").textContent = telefono;
-  document.getElementById("reciboCorreo").textContent = correo;
-  document.getElementById("reciboMarca").textContent = marca;
-  document.getElementById("reciboModelo").textContent = modelo;
-  document.getElementById("reciboAno").textContent = ano;
-  document.getElementById("reciboMarcaAceite").textContent = marcaFinal;
-  document.getElementById("reciboAceite").textContent = aceiteRecomendado;
-  document.getElementById("reciboDireccion").textContent = direccion;
-  document.getElementById("reciboFecha").textContent = fecha;
-  document.getElementById("reciboHora").textContent = hora;
-  document.getElementById("reciboComentarios").textContent = comentarios;
-  document.getElementById("reciboFirma").textContent = firma;
-
-  // Desglose de precios
-  document.getElementById("reciboAceiteCosto").textContent = "$" + costoAceite.toFixed(2);
-  document.getElementById("reciboFiltro").textContent = "$" + filtro.toFixed(2);
-  document.getElementById("reciboManoObra").textContent = "$" + manoObra.toFixed(2);
-  document.getElementById("reciboDesecho").textContent = "$" + desecho.toFixed(2);
-  document.getElementById("reciboTotal").textContent = "$" + totalServicio.toFixed(2);
-
-  document.getElementById("recibo").style.display = "block";
-}
-</script>
 </body>
 </html>
