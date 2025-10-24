@@ -607,37 +607,39 @@ marcaSelect.addEventListener("change", () => {
 });
 
 /* URL Apps Script */
-const queryParams = new URLSearchParams(new FormData(formCita)).toString();
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwOEasLVXdF0thNVAdGj08Y_5m5Drk62tHx6qK1IomZOExgWtpIwrIShAfR2KGo0a1sg/exec";
+const formCita = document.getElementById("formCita");
 
-fetch(`https://script.google.com/macros/s/AKfycby146fWrtTLztCLKTmn33n3OgB0_KA3hDMOpY6aFbSmtIf4SZWMZACjKujrK9PDFf3-eA/exec?${queryParams}`)
-  .then(res => res.json())
-  .then(data => {
-    // Mostrar recibo como ya lo tienes
-  })
-  .catch(err => {
-    console.error("Error al enviar reserva:", err);
-    document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva. Intenta nuevamente.";
-  });
-/* Al cambiar modelo: pedir aceite recomendado y motores (si aplica) */
+/* ===========================
+   CAMBIO DE MODELO: obtener aceite y motores
+   =========================== */
 modeloSelect.addEventListener("change", async () => {
   const marca = marcaSelect.value;
   const modelo = modeloSelect.value;
-  if (!marca || !modelo) { aceiteInput.value = ""; return; }
+  if (!marca || !modelo) {
+    aceiteInput.value = "";
+    return;
+  }
 
   try {
-    const resp = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ action: "obtenerAceiteRecomendado", marca, modelo })
-    });
+    const queryParams = new URLSearchParams({
+      action: "obtenerAceiteRecomendado",
+      marca,
+      modelo
+    }).toString();
+
+    const resp = await fetch(`${SCRIPT_URL}?${queryParams}`);
     const data = await resp.json();
-    // data puede contener: {aceite: "...", motores: [...]}
+
     aceiteInput.value = data.aceite || "";
     motorSelect.innerHTML = "";
+
     if (data.motores && data.motores.length) {
       data.motores.forEach(m => {
         const o = document.createElement("option");
-        o.value = m; o.textContent = m;
+        o.value = m;
+        o.textContent = m;
         motorSelect.appendChild(o);
       });
       motorGroup.style.display = "block";
@@ -650,25 +652,33 @@ modeloSelect.addEventListener("change", async () => {
   }
 });
 
-/* Cuando cambia marca de aceite: calcular precio vía Apps Script */
+/* ===========================
+   CAMBIO DE MARCA DE ACEITE: calcular precio
+   =========================== */
 marcaAceiteSelect.addEventListener("change", async () => {
   const marcaAceite = marcaAceiteSelect.value;
   const modelo = modeloSelect.value;
   const motor = motorSelect.value || "";
   const aceiteRecomendado = aceiteInput.value || "";
+
   if (!marcaAceite || !modelo || !aceiteRecomendado) return;
 
   try {
-    const resp = await fetch(SCRIPT_URL, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({
-        action: "calcularPrecio",
-        marcaAceite, modelo, motor, aceiteRecomendado
-      })
-    });
+    const queryParams = new URLSearchParams({
+      action: "calcularPrecio",
+      marcaAceite,
+      modelo,
+      motor,
+      aceiteRecomendado
+    }).toString();
+
+    const resp = await fetch(`${SCRIPT_URL}?${queryParams}`);
     const data = await resp.json();
-    precioBox.textContent = data.total ? `💲 Precio estimado: ${data.total}` : "💲 Precio estimado: N/A";
+
+    precioBox.textContent = data.total
+      ? `💲 Precio estimado: ${data.total}`
+      : "💲 Precio estimado: N/A";
+
     document.getElementById("reciboAceiteCosto").textContent = data.aceite || "";
     document.getElementById("reciboFiltro").textContent = data.filtro || "";
     document.getElementById("reciboManoObra").textContent = data.manoObra || "";
@@ -678,8 +688,7 @@ marcaAceiteSelect.addEventListener("change", async () => {
     console.error("Error calcular precio:", err);
   }
 });
-</script>
-<script>
+
 /* ===========================
    CONTROL DEL MODAL Y FIRMA
    =========================== */
@@ -699,7 +708,6 @@ document.addEventListener("DOMContentLoaded", () => {
   spanClose.addEventListener("click", () => { modal.style.display = "none"; });
   window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
 
-  // Escuchar mensaje desde el iframe
   window.addEventListener("message", (event) => {
     if (event.data === "acuerdoAceptado") {
       firmaInput.disabled = false;
@@ -709,35 +717,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Habilitar firma si ya lo aceptó antes
   if (localStorage.getItem("acuerdoFirmado") === "true") {
     firmaInput.disabled = false;
   }
 
   /* ===========================
-     ENVIAR FORMULARIO (guardarReserva)
+     ENVÍO DE RESERVA
      =========================== */
-  document.getElementById("formCita").addEventListener("submit", async (e) => {
+  formCita.addEventListener("submit", async (e) => {
     e.preventDefault();
     const form = e.target;
     const data = Object.fromEntries(new FormData(form).entries());
 
-    // Validación básica: firma debe estar habilitada
     if (firmaInput.disabled) {
       alert("Debes aceptar el acuerdo antes de firmar y enviar la reserva.");
       return;
     }
 
     try {
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ action: "guardarReserva", ...data })
-      });
-      const result = await res.json();
+      const queryParams = new URLSearchParams({ action: "guardarReserva", ...data }).toString();
+      const res = await fetch(`${SCRIPT_URL}?${queryParams}`);
+      const resultText = await res.text();
+      let result;
+      try {
+        result = JSON.parse(resultText);
+      } catch {
+        result = { success: false, error: resultText };
+      }
+
       if (result.success) {
         document.getElementById("mensaje").textContent = "✅ Reserva enviada con éxito";
-        // Mostrar recibo con datos
         document.getElementById("recibo").style.display = "block";
         document.getElementById("rNombre").textContent = data.nombre || "";
         document.getElementById("rTelefono").textContent = data.telefono || "";
@@ -754,6 +763,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("rFirma").textContent = data.firma || "";
       } else {
         document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva";
+        console.error("Error del servidor:", result.error);
       }
     } catch (err) {
       console.error("Error al enviar reserva:", err);
@@ -762,7 +772,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-
   </div> <!-- .container -->
 </body>
 </html>
