@@ -607,8 +607,17 @@ marcaSelect.addEventListener("change", () => {
 });
 
 /* URL Apps Script */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8GhZ4OUEZnjfxQ6qv5Unp987lhAUhmy_B62fZl7oi3YPrzsp8iBMv4mCLRqZxeMPBTg/exec";
+const queryParams = new URLSearchParams(new FormData(formCita)).toString();
 
+fetch(`https://script.google.com/macros/s/AKfycbx8GhZ4OUEZnjfxQ6qv5Unp987lhAUhmy_B62fZl7oi3YPrzsp8iBMv4mCLRqZxeMPBTg/exec?${queryParams}`)
+  .then(res => res.json())
+  .then(data => {
+    // Mostrar recibo como ya lo tienes
+  })
+  .catch(err => {
+    console.error("Error al enviar reserva:", err);
+    document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva. Intenta nuevamente.";
+  });
 /* Al cambiar modelo: pedir aceite recomendado y motores (si aplica) */
 modeloSelect.addEventListener("change", async () => {
   const marca = marcaSelect.value;
