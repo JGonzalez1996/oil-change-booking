@@ -567,45 +567,109 @@ const marcasModelos = [
 ];
 
 /* ===========================
-   Variables y referencias DOM
+   Variables, poblar marcas/modelos y control modal/firma
+   Reemplaza el bloque antiguo por este.
+   Soporta:
+    - marcasModelos como array de objetos [{Marca, Modelo}, ...]
+    - marcasModelos como objeto { "Toyota": ["Corolla", ...], ... }
    =========================== */
-const marcaSelect = document.getElementById("marcaSelect");
-const modeloSelect = document.getElementById("modeloSelect");
-const motorGroup = document.getElementById("motorGroup");
-const motorSelect = document.getElementById("motorSelect");
-const aceiteInput = document.getElementById("aceiteRecomendado");
-const marcaAceiteSelect = document.getElementById("marcaAceite");
-const precioBox = document.createElement("div");
-precioBox.id = "precioBox";
-precioBox.style.marginTop = "12px";
-precioBox.style.fontWeight = "700";
-document.querySelector("form").appendChild(precioBox);
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    // Referencias DOM
+    const marcaSelect = document.getElementById("marcaSelect");
+    const modeloSelect = document.getElementById("modeloSelect");
+    const motorGroup = document.getElementById("motorGroup");
+    const motorSelect = document.getElementById("motorSelect");
+    const aceiteInput = document.getElementById("aceiteRecomendado");
+    const marcaAceiteSelect = document.getElementById("marcaAceite");
+    const form = document.querySelector("form");
+    const precioBox = document.createElement("div");
 
-/* Poblar marcas únicas */
-const marcasUnicas = Object.keys(marcasModelos).sort();
-marcasUnicas.forEach(m => {
-  const opt = document.createElement("option");
-  opt.value = m;
-  opt.textContent = m;
-  marcaSelect.appendChild(opt);
-});
+    if (!marcaSelect || !modeloSelect || !motorSelect || !aceiteInput || !form) {
+      console.error("ERROR: elementos principales faltantes. marcaSelect/modeloSelect/motorSelect/aceiteInput/form");
+      return;
+    }
 
-/* Cuando cambia la marca, poblar modelos */
-marcaSelect.addEventListener("change", () => {
-  const marca = marcaSelect.value;
-  modeloSelect.innerHTML = `<option value="">Selecciona modelo</option>`;
-  motorSelect.innerHTML = "";
-  motorGroup.style.display = "none";
-  aceiteInput.value = "";
+    // Precio box
+    precioBox.id = "precioBox";
+    precioBox.style.marginTop = "12px";
+    precioBox.style.fontWeight = "700";
+    // asegúrate no duplicarlo
+    if (!document.getElementById("precioBox")) form.appendChild(precioBox);
 
-  const modelos = marcasModelos[marca] || [];
-  modelos.forEach(modelo => {
-    const opt = document.createElement("option");
-    opt.value = modelo;
-    opt.textContent = modelo;
-    modeloSelect.appendChild(opt);
-  });
-})
+    // Detectar tipo de marcasModelos y normalizar a objeto {marca: [modelos]}
+    let marcasObj = {};
+    if (Array.isArray(window.marcasModelos)) {
+      // array de objetos [{Marca, Modelo}, ...]
+      window.marcasModelos.forEach(item => {
+        if (!item) return;
+        const marca = item.Marca || item.marca || null;
+        const modelo = item.Modelo || item.modelo || null;
+        if (!marca || !modelo) return;
+        marcasObj[marca] = marcasObj[marca] || [];
+        if (!marcasObj[marca].includes(modelo)) marcasObj[marca].push(modelo);
+      });
+    } else if (typeof window.marcasModelos === "object" && window.marcasModelos !== null) {
+      // ya es objeto {marca: [modelos]}
+      marcasObj = { ...window.marcasModelos };
+    } else {
+      console.warn("advertencia: marcasModelos no encontrado o en formato inesperado:", window.marcasModelos);
+    }
+
+    // Poblar marcas únicas
+    const marcasUnicas = Object.keys(marcasObj).sort();
+    marcaSelect.innerHTML = `<option value="">Selecciona marca</option>`;
+    marcasUnicas.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      marcaSelect.appendChild(opt);
+    });
+
+    // Manejar cambio de marca -> poblar modelos
+    marcaSelect.addEventListener("change", () => {
+      const marca = marcaSelect.value;
+      modeloSelect.innerHTML = `<option value="">Selecciona modelo</option>`;
+      motorSelect.innerHTML = "";
+      if (motorGroup) motorGroup.style.display = "none";
+      aceiteInput.value = "";
+
+      const modelos = marcasObj[marca] || [];
+      if (!modelos.length) {
+        // si marcasModelos venía como array de objetos y no hubo coincidencia,
+        // intentamos buscar filtrando (defensivo)
+        if (Array.isArray(window.marcasModelos)) {
+          window.marcasModelos.filter(x => (x.Marca === marca || x.marca === marca)).forEach(x => {
+            const model = x.Modelo || x.modelo;
+            if (model) {
+              const opt = document.createElement("option");
+              opt.value = model;
+              opt.textContent = model;
+              modeloSelect.appendChild(opt);
+            }
+          });
+        }
+      } else {
+        modelos.forEach(modelo => {
+          const opt = document.createElement("option");
+          opt.value = modelo;
+          opt.textContent = modelo;
+          modeloSelect.appendChild(opt);
+        });
+      }
+      console.log("Marca seleccionada:", marca, "Modelos cargados:", modeloSelect.options.length - 1);
+    });
+
+    // Manejar cambio de modelo -> trigger existente (si ya tienes listener para JSONP, lo mantienes)
+    // Aquí nos aseguramos solo de borrar el motor/aceite si se cambia el modelo manualmente.
+    modeloSelect.addEventListener("change", () => {
+      motorSelect.innerHTML = "";
+      if (motorGroup) motorGroup.style.display = "none";
+      aceiteInput.value = "";
+      // Si ya tienes lógica JSONP para cargar aceite/motores, esa lógica seguirá ejecutándose
+      // (porque el otro listener está presente). Dejamos que lo maneje el script JSONP.
+      console.log("Modelo cambiado:", modeloSelect.value);
+    })
 
 /* URL Apps Script */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyr-QmwMFvops845tuBKfFt8MXefx0RY0axTgDNZX69bkxyieaEmD_9SbYcqfW8CImhmQ/exec";
@@ -721,44 +785,109 @@ document.body.appendChild(script);
 });
 
 /* ===========================
-   CONTROL DEL MODAL Y FIRMA
+   Variables, poblar marcas/modelos y control modal/firma
+   Reemplaza el bloque antiguo por este.
+   Soporta:
+    - marcasModelos como array de objetos [{Marca, Modelo}, ...]
+    - marcasModelos como objeto { "Toyota": ["Corolla", ...], ... }
    =========================== */
 document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("modalAcuerdo");
-  const link = document.getElementById("linkAcuerdo");
-  const spanClose = document.querySelector(".modal-close");
-  const acuerdoFrame = document.getElementById("acuerdoFrame");
-  const firmaInput = document.getElementById("firmaInput");
+  try {
+    // Referencias DOM
+    const marcaSelect = document.getElementById("marcaSelect");
+    const modeloSelect = document.getElementById("modeloSelect");
+    const motorGroup = document.getElementById("motorGroup");
+    const motorSelect = document.getElementById("motorSelect");
+    const aceiteInput = document.getElementById("aceiteRecomendado");
+    const marcaAceiteSelect = document.getElementById("marcaAceite");
+    const form = document.querySelector("form");
+    const precioBox = document.createElement("div");
 
-  if (!modal || !link || !spanClose || !acuerdoFrame || !firmaInput) return;
-
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
-    acuerdoFrame.src = "acuerdo.html"; // debe estar en la misma carpeta
-    modal.style.display = "block";
-  });
-
-  spanClose.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) modal.style.display = "none";
-  });
-
-  window.addEventListener("message", (event) => {
-    if (event.data === "acuerdoAceptado") {
-      firmaInput.disabled = false;
-      localStorage.setItem("acuerdoFirmado", "true");
-      modal.style.display = "none";
-      alert("✅ Acuerdo aceptado. Ahora puedes firmar la reserva.");
+    if (!marcaSelect || !modeloSelect || !motorSelect || !aceiteInput || !form) {
+      console.error("ERROR: elementos principales faltantes. marcaSelect/modeloSelect/motorSelect/aceiteInput/form");
+      return;
     }
-  });
 
-  if (localStorage.getItem("acuerdoFirmado") === "true") {
-    firmaInput.disabled = false;
-  }
-});
+    // Precio box
+    precioBox.id = "precioBox";
+    precioBox.style.marginTop = "12px";
+    precioBox.style.fontWeight = "700";
+    // asegúrate no duplicarlo
+    if (!document.getElementById("precioBox")) form.appendChild(precioBox);
+
+    // Detectar tipo de marcasModelos y normalizar a objeto {marca: [modelos]}
+    let marcasObj = {};
+    if (Array.isArray(window.marcasModelos)) {
+      // array de objetos [{Marca, Modelo}, ...]
+      window.marcasModelos.forEach(item => {
+        if (!item) return;
+        const marca = item.Marca || item.marca || null;
+        const modelo = item.Modelo || item.modelo || null;
+        if (!marca || !modelo) return;
+        marcasObj[marca] = marcasObj[marca] || [];
+        if (!marcasObj[marca].includes(modelo)) marcasObj[marca].push(modelo);
+      });
+    } else if (typeof window.marcasModelos === "object" && window.marcasModelos !== null) {
+      // ya es objeto {marca: [modelos]}
+      marcasObj = { ...window.marcasModelos };
+    } else {
+      console.warn("advertencia: marcasModelos no encontrado o en formato inesperado:", window.marcasModelos);
+    }
+
+    // Poblar marcas únicas
+    const marcasUnicas = Object.keys(marcasObj).sort();
+    marcaSelect.innerHTML = `<option value="">Selecciona marca</option>`;
+    marcasUnicas.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      marcaSelect.appendChild(opt);
+    });
+
+    // Manejar cambio de marca -> poblar modelos
+    marcaSelect.addEventListener("change", () => {
+      const marca = marcaSelect.value;
+      modeloSelect.innerHTML = `<option value="">Selecciona modelo</option>`;
+      motorSelect.innerHTML = "";
+      if (motorGroup) motorGroup.style.display = "none";
+      aceiteInput.value = "";
+
+      const modelos = marcasObj[marca] || [];
+      if (!modelos.length) {
+        // si marcasModelos venía como array de objetos y no hubo coincidencia,
+        // intentamos buscar filtrando (defensivo)
+        if (Array.isArray(window.marcasModelos)) {
+          window.marcasModelos.filter(x => (x.Marca === marca || x.marca === marca)).forEach(x => {
+            const model = x.Modelo || x.modelo;
+            if (model) {
+              const opt = document.createElement("option");
+              opt.value = model;
+              opt.textContent = model;
+              modeloSelect.appendChild(opt);
+            }
+          });
+        }
+      } else {
+        modelos.forEach(modelo => {
+          const opt = document.createElement("option");
+          opt.value = modelo;
+          opt.textContent = modelo;
+          modeloSelect.appendChild(opt);
+        });
+      }
+      console.log("Marca seleccionada:", marca, "Modelos cargados:", modeloSelect.options.length - 1);
+    });
+
+    // Manejar cambio de modelo -> trigger existente (si ya tienes listener para JSONP, lo mantienes)
+    // Aquí nos aseguramos solo de borrar el motor/aceite si se cambia el modelo manualmente.
+    modeloSelect.addEventListener("change", () => {
+      motorSelect.innerHTML = "";
+      if (motorGroup) motorGroup.style.display = "none";
+      aceiteInput.value = "";
+      // Si ya tienes lógica JSONP para cargar aceite/motores, esa lógica seguirá ejecutándose
+      // (porque el otro listener está presente). Dejamos que lo maneje el script JSONP.
+      console.log("Modelo cambiado:", modeloSelect.value);
+    })
 
   /* ===========================
      ENVÍO DE RESERVA
