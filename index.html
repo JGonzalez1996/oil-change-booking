@@ -607,30 +607,27 @@ marcaSelect.addEventListener("change", () => {
 });
 
 /* URL Apps Script */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwOEasLVXdF0thNVAdGj08Y_5m5Drk62tHx6qK1IomZOExgWtpIwrIShAfR2KGo0a1sg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwpEidLL2LpG1_-D678DgbRi9hVAeX1G1NVtdPuSp7jyjQZcXaxt8kZXiohwfvqcs0Zaw/exec";
 const formCita = document.getElementById("formCita");
 
 /* ===========================
-   CAMBIO DE MODELO: obtener aceite y motores
+   CAMBIO DE MODELO: obtener aceite y motores (JSONP)
    =========================== */
-modeloSelect.addEventListener("change", async () => {
+modeloSelect.addEventListener("change", () => {
   const marca = marcaSelect.value;
   const modelo = modeloSelect.value;
   if (!marca || !modelo) {
     aceiteInput.value = "";
+    motorSelect.innerHTML = "";
+    motorGroup.style.display = "none";
     return;
   }
 
-  try {
-    const queryParams = new URLSearchParams({
-      action: "obtenerAceiteRecomendado",
-      marca,
-      modelo
-    }).toString();
+  // Creamos un callback único para esta petición
+  const callbackName = "procesarAceite_" + Date.now();
 
-    const resp = await fetch(`${SCRIPT_URL}?${queryParams}`);
-    const data = await resp.json();
-
+  // Definimos la función callback global
+  window[callbackName] = (data) => {
     aceiteInput.value = data.aceite || "";
     motorSelect.innerHTML = "";
 
@@ -645,12 +642,24 @@ modeloSelect.addEventListener("change", async () => {
     } else {
       motorGroup.style.display = "none";
     }
-  } catch (err) {
-    console.error("Error al obtener datos del script:", err);
-    aceiteInput.value = "Error conexión";
-  }
-});
 
+    // Limpiamos el script y el callback
+    script.remove();
+    delete window[callbackName];
+  };
+
+  // Creamos el script JSONP
+  const script = document.createElement("script");
+  const params = new URLSearchParams({
+    action: "obtenerAceiteRecomendado",
+    marca,
+    modelo,
+    callback: callbackName
+  }).toString();
+
+  script.src = `${SCRIPT_URL}?${params}`;
+  document.body.appendChild(script);
+});
 /* ===========================
    CAMBIO DE MARCA DE ACEITE: calcular precio
    =========================== */
