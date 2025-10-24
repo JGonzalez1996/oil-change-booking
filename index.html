@@ -918,13 +918,84 @@ function mostrarRecibo(data) {
 </style>
 </style>
 
-<!-- Modal del Acuerdo -->
+/* === Modal === */
+    .modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.8);}
+    .modal-content{background:#1e1e1e;margin:50px auto;padding:20px;border-radius:12px;width:90%;max-width:800px;color:#e0e0e0;position:relative;}
+    .modal-close{position:absolute;top:10px;right:20px;font-size:26px;color:#888;cursor:pointer;}
+    .modal-close:hover{color:#fff;}
+    iframe{width:100%;height:70vh;border:none;border-radius:10px;}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>Reserva de Servicio a Domicilio</h2>
+
+  <form id="formCita">
+    <div class="form-group">
+      <i class="fas fa-user"></i>
+      <input type="text" name="nombre" placeholder=" " required>
+      <label>Nombre completo</label>
+    </div>
+
+    <div class="form-group">
+      <i class="fas fa-phone"></i>
+      <input type="tel" name="telefono" placeholder=" " required>
+      <label>Teléfono</label>
+    </div>
+
+    <div class="form-group">
+      <i class="fas fa-envelope"></i>
+      <input type="email" name="correo" placeholder=" " required>
+      <label>Correo electrónico</label>
+    </div>
+
+    <!-- Acuerdo -->
+    <div class="form-group">
+      <a href="#" id="linkAcuerdo">📄 Leer acuerdo completo</a>
+    </div>
+
+    <div class="form-group">
+      <input type="text" name="firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" disabled required>
+    </div>
+
+    <button type="submit">Enviar Reserva</button>
+  </form>
+</div>
+
+<!-- === Modal con iframe === -->
 <div id="modalAcuerdo" class="modal">
   <div class="modal-content">
     <span class="modal-close">&times;</span>
-    <iframe id="acuerdoFrame" style="width:100%;height:400px;border:none;"></iframe>
+    <h3 style="text-align:center;margin-bottom:15px;">Términos y Condiciones del Servicio</h3>
+    <iframe src="acuerdo.html" title="Acuerdo de servicio"></iframe>
   </div>
 </div>
 
+<script>
+  // === CONTROL DEL MODAL ===
+  const linkAcuerdo = document.getElementById('linkAcuerdo');
+  const modal = document.getElementById('modalAcuerdo');
+  const closeBtn = document.querySelector('.modal-close');
+  const firmaInput = document.getElementById('firmaInput');
+
+  linkAcuerdo.addEventListener('click', e => {
+    e.preventDefault();
+    modal.style.display = 'block';
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    // ✅ Activar campo de firma solo después de leer el acuerdo
+    firmaInput.disabled = false;
+  });
+
+  // Cerrar modal al hacer clic fuera del contenido
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+      firmaInput.disabled = false;
+    }
+  });
+</script>
 </body>
 </html>
