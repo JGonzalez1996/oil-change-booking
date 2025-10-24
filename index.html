@@ -607,7 +607,7 @@ marcaSelect.addEventListener("change", () => {
 });
 
 /* URL Apps Script */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwpEidLL2LpG1_-D678DgbRi9hVAeX1G1NVtdPuSp7jyjQZcXaxt8kZXiohwfvqcs0Zaw/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyr-QmwMFvops845tuBKfFt8MXefx0RY0axTgDNZX69bkxyieaEmD_9SbYcqfW8CImhmQ/exec";
 const formCita = document.getElementById("formCita");
 
 /* ===========================
@@ -680,8 +680,30 @@ marcaAceiteSelect.addEventListener("change", async () => {
       aceiteRecomendado
     }).toString();
 
-    const resp = await fetch(`${SCRIPT_URL}?${queryParams}`);
-    const data = await resp.json();
+const callbackName = "procesarReserva_" + Date.now();
+window[callbackName] = (data) => {
+  if (data.success) {
+    document.getElementById("mensaje").textContent = "✅ Reserva enviada con éxito";
+    document.getElementById("recibo").style.display = "block";
+    // Aquí puedes mostrar los datos del recibo como ya lo haces
+  } else {
+    document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva";
+    console.error("Error del servidor:", data.error);
+  }
+  script.remove();
+  delete window[callbackName];
+};
+
+const queryParams = new URLSearchParams({
+  action: "guardarReserva",
+  ...Object.fromEntries(new FormData(formCita).entries()),
+  callback: callbackName
+}).toString();
+
+const script = document.createElement("script");
+script.src = `${SCRIPT_URL}?${queryParams}`;
+document.body.appendChild(script);
+
 
     precioBox.textContent = data.total
       ? `💲 Precio estimado: ${data.total}`
