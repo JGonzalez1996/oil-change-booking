@@ -567,64 +567,73 @@ const marcasModelos = [
 ];
 
 /* ===========================
-   Variables, poblar marcas/modelos y control modal/firma
-   Reemplaza el bloque antiguo por este.
-   Soporta:
-    - marcasModelos como array de objetos [{Marca, Modelo}, ...]
-    - marcasModelos como objeto { "Toyota": ["Corolla", ...], ... }
+   INICIALIZACIÓN TRAS JSONP
    =========================== */
-document.addEventListener("DOMContentLoaded", () => {
-  try {
-    // Referencias DOM
-    const marcaSelect = document.getElementById("marcaSelect");
-    const modeloSelect = document.getElementById("modeloSelect");
-    const motorGroup = document.getElementById("motorGroup");
-    const motorSelect = document.getElementById("motorSelect");
-    const aceiteInput = document.getElementById("aceiteRecomendado");
-    const marcaAceiteSelect = document.getElementById("marcaAceite");
-    const form = document.querySelector("form");
-    const precioBox = document.createElement("div");
+function initInterfaz() {
+  console.log("✅ Iniciando interfaz de marcas y modal...");
 
-    if (!marcaSelect || !modeloSelect || !motorSelect || !aceiteInput || !form) {
-      console.error("ERROR: elementos principales faltantes. marcaSelect/modeloSelect/motorSelect/aceiteInput/form");
-      return;
-    }
+  const marcaSelect = document.getElementById("marcaSelect");
+  const modeloSelect = document.getElementById("modeloSelect");
+  const motorGroup = document.getElementById("motorGroup");
+  const motorSelect = document.getElementById("motorSelect");
+  const aceiteInput = document.getElementById("aceiteRecomendado");
+  const form = document.querySelector("form");
 
-    // Precio box
+  if (!marcaSelect || !modeloSelect) {
+    console.error("❌ No se encontraron elementos select en el DOM");
+    return;
+  }
+
+  // Crear contenedor de precio si no existe
+  let precioBox = document.getElementById("precioBox");
+  if (!precioBox) {
+    precioBox = document.createElement("div");
     precioBox.id = "precioBox";
     precioBox.style.marginTop = "12px";
     precioBox.style.fontWeight = "700";
-    // asegúrate no duplicarlo
-    if (!document.getElementById("precioBox")) form.appendChild(precioBox);
+    form.appendChild(precioBox);
+  }
 
-    // Detectar tipo de marcasModelos y normalizar a objeto {marca: [modelos]}
-    let marcasObj = {};
-    if (Array.isArray(window.marcasModelos)) {
-      // array de objetos [{Marca, Modelo}, ...]
-      window.marcasModelos.forEach(item => {
-        if (!item) return;
-        const marca = item.Marca || item.marca || null;
-        const modelo = item.Modelo || item.modelo || null;
-        if (!marca || !modelo) return;
-        marcasObj[marca] = marcasObj[marca] || [];
-        if (!marcasObj[marca].includes(modelo)) marcasObj[marca].push(modelo);
-      });
-    } else if (typeof window.marcasModelos === "object" && window.marcasModelos !== null) {
-      // ya es objeto {marca: [modelos]}
-      marcasObj = { ...window.marcasModelos };
-    } else {
-      console.warn("advertencia: marcasModelos no encontrado o en formato inesperado:", window.marcasModelos);
-    }
-
-    // Poblar marcas únicas
-    const marcasUnicas = Object.keys(marcasObj).sort();
-    marcaSelect.innerHTML = `<option value="">Selecciona marca</option>`;
-    marcasUnicas.forEach(m => {
-      const opt = document.createElement("option");
-      opt.value = m;
-      opt.textContent = m;
-      marcaSelect.appendChild(opt);
+  // Normalizar estructura de marcasModelos (según lo que venga del JSONP)
+  let marcasObj = {};
+  if (Array.isArray(window.marcasModelos)) {
+    window.marcasModelos.forEach(m => {
+      const marca = m.Marca || m.marca;
+      const modelo = m.Modelo || m.modelo;
+      if (!marcasObj[marca]) marcasObj[marca] = [];
+      if (!marcasObj[marca].includes(modelo)) marcasObj[marca].push(modelo);
     });
+  } else {
+    marcasObj = { ...window.marcasModelos };
+  }
+
+  // Poblar marcas
+  const marcas = Object.keys(marcasObj).sort();
+  marcaSelect.innerHTML = `<option value="">Selecciona marca</option>`;
+  marcas.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = m;
+    marcaSelect.appendChild(opt);
+  });
+
+  // Cambiar marca → modelos
+  marcaSelect.addEventListener("change", () => {
+    const marca = marcaSelect.value;
+    modeloSelect.innerHTML = `<option value="">Selecciona modelo</option>`;
+    motorSelect.innerHTML = "";
+    motorGroup.style.display = "none";
+    aceiteInput.value = "";
+
+    (marcasObj[marca] || []).forEach(modelo => {
+      const opt = document.createElement("option");
+      opt.value = modelo;
+      opt.textContent = modelo;
+      modeloSelect.appendChild(opt);
+    });
+  });
+
+  console.log("✅ Marcas y modelos inicializados correctamente");
 
     // Manejar cambio de marca -> poblar modelos
     marcaSelect.addEventListener("change", () => {
@@ -785,68 +794,55 @@ document.body.appendChild(script);
 });
 
 /* ===========================
-       CONTROL DEL MODAL Y FIRMA (compatibilidad con tu HTML)
-       =========================== */
-    const modal = document.getElementById("modalAcuerdo");      // según tu HTML
-    const link = document.getElementById("linkAcuerdo");        // enlace que abre modal
-    const spanClose = document.querySelector(".modal-close");   // botón X
-    const acuerdoFrame = document.getElementById("acuerdoFrame");
-    const firmaInput = document.getElementById("firmaInput");
+     CONTROL DEL MODAL Y FIRMA
+     =========================== */
+  const modal = document.getElementById("modalAcuerdo");
+  const link = document.getElementById("linkAcuerdo");
+  const spanClose = document.querySelector(".modal-close");
+  const acuerdoFrame = document.getElementById("acuerdoFrame");
+  const firmaInput = document.getElementById("firmaInput");
 
-    if (!modal || !link || !spanClose || !acuerdoFrame || !firmaInput) {
-      console.warn("Aviso: algún elemento del modal/firma falta en el DOM. modal/link/spanClose/acuerdoFrame/firmaInput");
-      // No retornamos porque marcas/modelos ya pueden funcionar.
-    } else {
-      // Abrir modal
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        // carga desde GitHub Pages (mismo dominio), si está en otra ruta pon la URL absoluta
-        acuerdoFrame.src = "acuerdo.html";
-        modal.style.display = "block";
-        console.log("Modal abierto -> acuerdo.html cargado en iframe");
-      });
+  if (link && modal && acuerdoFrame) {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      acuerdoFrame.src = "acuerdo.html";
+      modal.style.display = "block";
+      console.log("📄 Modal abierto y acuerdo cargado.");
+    });
 
-      // Cerrar con X
-      spanClose.addEventListener("click", () => {
-        modal.style.display = "none";
-        console.log("Modal cerrado (X)");
-      });
+    spanClose.addEventListener("click", () => modal.style.display = "none");
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    });
 
-      // Cerrar al click fuera del contenido
-      window.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.style.display = "none";
-          console.log("Modal cerrado (click fuera)");
-        }
-      });
-
-      // Recibir mensaje del iframe (acuerdo aceptado)
-      window.addEventListener("message", (event) => {
-        try {
-          if (event.data === "acuerdoAceptado") {
-            firmaInput.disabled = false;
-            localStorage.setItem("acuerdoFirmado", "true");
-            modal.style.display = "none";
-            alert("✅ Acuerdo aceptado. Ahora puedes firmar la reserva.");
-            console.log("Evento recibido: acuerdoAceptado -> firma habilitada");
-          }
-        } catch (e) {
-          console.error("Error procesando message desde iframe:", e);
-        }
-      });
-
-      // Restaurar estado al cargar
-      if (localStorage.getItem("acuerdoFirmado") === "true") {
+    window.addEventListener("message", (event) => {
+      if (event.data === "acuerdoAceptado") {
         firmaInput.disabled = false;
-        console.log("Estado: acuerdoFirmado en localStorage -> firma habilitada");
+        localStorage.setItem("acuerdoFirmado", "true");
+        modal.style.display = "none";
+        alert("✅ Acuerdo aceptado. Ahora puedes firmar.");
       }
+    });
+
+    if (localStorage.getItem("acuerdoFirmado") === "true") {
+      firmaInput.disabled = false;
     }
 
-    console.log("Inicialización UI completada: marcas", marcasUnicas.length, "modal presente?", !!modal);
-  } catch (e) {
-    console.error("Error inicializando UI marcas/modal:", e);
+    console.log("✅ Modal y firma inicializados correctamente");
+  } else {
+    console.warn("⚠️ Elementos del modal/firma no encontrados en el DOM");
   }
-});
+}
+
+/* ===========================
+   ESPERAR A QUE JSONP TERMINE
+   =========================== */
+// Llama a initInterfaz() DESPUÉS de que el JSONP cargue los datos
+function onReservasDataLoaded(data) {
+  console.log("✅ Datos recibidos vía JSONP:", data);
+  window.marcasModelos = data.marcasModelos || [];
+  initInterfaz(); // <<--- aquí inicia todo el comportamiento
+}
 
   /* ===========================
      ENVÍO DE RESERVA
