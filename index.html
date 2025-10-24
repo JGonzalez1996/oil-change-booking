@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cambio de Aceite a Domicilio</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     body{background:#121212;color:#e0e0e0;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:40px 10px;}
-    .container{background:#1e1e1e;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.7);padding:40px 30px;max-width:600px;width:100%;}
+    .container{background:#1e1e1e;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.7);padding:40px 30px;max-width:900px;width:100%;}
     h2{text-align:center;margin-bottom:30px;font-size:26px;color:#fff;}
     .form-group{position:relative;margin-bottom:22px;}
     .form-group i{position:absolute;top:50%;left:12px;transform:translateY(-50%);color:#888;font-size:16px;}
@@ -27,138 +27,193 @@
     .form-group textarea:focus + label, .form-group textarea:not(:placeholder-shown) + label{
       top:-10px;left:10px;font-size:12px;color:#0b5ed7;
     }
-    button{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:#fff;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:.3s;}
-    button:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.6);}
+    button.primary{width:100%;padding:15px;background:linear-gradient(90deg,#0b5ed7,#084298);color:#fff;font-size:17px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;transition:.3s;}
+    button.primary:hover{background:linear-gradient(90deg,#084298,#0b5ed7);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.6);}
     .mensaje{text-align:center;margin-top:20px;font-weight:bold;font-size:16px;}
     #recibo{display:none;background:#2a2a2a;margin-top:30px;padding:20px;border-radius:10px;}
     #recibo h3{text-align:center;margin-bottom:20px;}
+    a#linkAcuerdo{color:#0b5ed7;text-decoration:none;font-weight:bold;cursor:pointer;}
+    a#linkAcuerdo:hover{text-decoration:underline;}
+
+    /* Modal */
     .modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.8);}
-    .modal-content{background:#1e1e1e;margin:50px auto;padding:20px;border-radius:12px;width:90%;max-width:700px;color:#e0e0e0;}
-    .modal-close{float:right;font-size:24px;color:#888;cursor:pointer;}
+    .modal-content{background:#1e1e1e;margin:50px auto;padding:20px;border-radius:12px;width:90%;max-width:900px;color:#e0e0e0;position:relative;}
+    .modal-close{position:absolute;top:10px;right:20px;font-size:26px;color:#888;cursor:pointer;}
     .modal-close:hover{color:#fff;}
+    iframe#acuerdoFrame{width:100%;height:70vh;border:none;border-radius:8px;}
+
+    /* Recibo table */
+    .tabla-recibo{width:100%;border-collapse:collapse;margin-top:10px;}
+    .tabla-recibo td{padding:8px;border-bottom:1px solid #444;}
+    .tabla-recibo .total td{font-weight:bold;color:#0b5ed7;}
+    @media(max-width:700px){ .modal-content{margin:20px;} iframe#acuerdoFrame{height:60vh;} }
   </style>
 </head>
 <body>
-<div class="container">
-  <h2>Reserva de Servicio a Domicilio</h2>
-  <form id="formCita">
-    <!-- Nombre -->
-    <div class="form-group">
-      <i class="fas fa-user"></i>
-      <input type="text" name="nombre" placeholder=" " required>
-      <label>Nombre completo</label>
-    </div>
-    <!-- Teléfono -->
-    <div class="form-group">
-      <i class="fas fa-phone"></i>
-      <input type="tel" name="telefono" placeholder=" " required>
-      <label>Teléfono</label>
-    </div>
-    <!-- Correo -->
-    <div class="form-group">
-      <i class="fas fa-envelope"></i>
-      <input type="email" name="correo" placeholder=" " required>
-      <label>Correo electrónico</label>
-    </div>
-    <!-- Marca -->
-    <div class="form-group">
-      <i class="fas fa-car"></i>
-      <select name="marca" id="marcaSelect" required>
-        <option value="">Selecciona marca</option>
-      </select>
-      <label>Marca del vehículo</label>
-    </div>
-    <!-- Modelo -->
-<div class="form-group">
-  <i class="fas fa-car-side"></i>
-  <select name="modelo" id="modeloSelect" required>
-    <option value="">Selecciona modelo</option>
-  </select>
-  <label>Modelo del vehículo</label>
-</div>
+  <div class="container">
+    <h2>Reserva de Servicio a Domicilio</h2>
+    <form id="formCita">
+      <!-- Nombre -->
+      <div class="form-group">
+        <i class="fas fa-user"></i>
+        <input type="text" name="nombre" id="nombre" placeholder=" " required>
+        <label>Nombre completo</label>
+      </div>
 
-<!-- Motor / Código -->
-<div class="form-group" id="motorGroup" style="display:none;">
-  <i class="fas fa-cogs"></i>
-  <select id="motorSelect" name="Motor"></select>
-  <label>Motor / Código</label>
-</div>
+      <!-- Teléfono -->
+      <div class="form-group">
+        <i class="fas fa-phone"></i>
+        <input type="tel" name="telefono" id="telefono" placeholder=" " required>
+        <label>Teléfono</label>
+      </div>
 
+      <!-- Correo -->
+      <div class="form-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" name="correo" id="correo" placeholder=" " required>
+        <label>Correo electrónico</label>
+      </div>
 
-    <!-- Año -->
-    <div class="form-group">
-      <i class="fas fa-calendar-alt"></i>
-      <input type="number" name="ano" placeholder=" " required>
-      <label>Año del vehículo</label>
+      <!-- Marca -->
+      <div class="form-group">
+        <i class="fas fa-car"></i>
+        <select name="marca" id="marcaSelect" required>
+          <option value="">Selecciona marca</option>
+        </select>
+        <label>Marca del vehículo</label>
+      </div>
+
+      <!-- Modelo -->
+      <div class="form-group">
+        <i class="fas fa-car-side"></i>
+        <select name="modelo" id="modeloSelect" required>
+          <option value="">Selecciona modelo</option>
+        </select>
+        <label>Modelo del vehículo</label>
+      </div>
+
+      <!-- Motor / Código -->
+      <div class="form-group" id="motorGroup" style="display:none;">
+        <i class="fas fa-cogs"></i>
+        <select id="motorSelect" name="motor"></select>
+        <label>Motor / Código</label>
+      </div>
+
+      <!-- Año -->
+      <div class="form-group">
+        <i class="fas fa-calendar-alt"></i>
+        <input type="number" name="ano" id="ano" placeholder=" " required>
+        <label>Año del vehículo</label>
+      </div>
+
+      <!-- Aceite recomendado -->
+      <div class="form-group">
+        <i class="fas fa-oil-can"></i>
+        <input type="text" name="aceiteRecomendado" id="aceiteRecomendado" readonly placeholder="Tipo de aceite recomendado">
+        <label>Aceite recomendado</label>
+      </div>
+
+      <!-- Marca de Aceite -->
+      <div class="form-group">
+        <i class="fas fa-industry"></i>
+        <select name="marcaAceite" id="marcaAceite" required>
+          <option value="">Selecciona marca de aceite</option>
+          <option value="Mobil 1">Mobil 1</option>
+          <option value="Pennzoil">Pennzoil</option>
+          <option value="Valvoline">Valvoline</option>
+          <option value="Castrol EDGE">Castrol EDGE</option>
+          <option value="Shell Helix">Shell Helix</option>
+        </select>
+        <label>Marca de Aceite</label>
+      </div>
+
+      <!-- Dirección -->
+      <div class="form-group">
+        <i class="fas fa-map-marker-alt"></i>
+        <input type="text" name="direccion" id="direccion" placeholder=" " required>
+        <label>Dirección del servicio</label>
+      </div>
+
+      <!-- Fecha -->
+      <div class="form-group">
+        <i class="fas fa-calendar-day"></i>
+        <input type="date" name="fecha" id="fecha" required>
+        <label>Fecha</label>
+      </div>
+
+      <!-- Hora -->
+      <div class="form-group">
+        <i class="fas fa-clock"></i>
+        <input type="time" name="hora" id="hora" required>
+        <label>Hora</label>
+      </div>
+
+      <!-- Comentarios -->
+      <div class="form-group">
+        <i class="fas fa-comment-dots"></i>
+        <textarea name="comentarios" id="comentarios" placeholder=" "></textarea>
+        <label>Comentarios adicionales</label>
+      </div>
+
+      <!-- Acuerdo -->
+      <div class="form-group">
+        <a id="linkAcuerdo">Leer acuerdo completo</a>
+      </div>
+
+      <!-- Firma -->
+      <div class="form-group">
+        <input type="text" name="firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" disabled required>
+      </div>
+
+      <!-- Ocultos -->
+      <input type="hidden" name="estado" value="Pendiente">
+      <input type="hidden" name="idioma" id="langField">
+
+      <button type="submit" class="primary">Enviar Reserva</button>
+    </form>
+
+    <div class="mensaje" id="mensaje"></div>
+
+    <!-- Recibo -->
+    <div id="recibo">
+      <h3>📋 Recibo de Reserva</h3>
+      <div class="recibo-datos">
+        <p><strong>Nombre:</strong> <span id="rNombre"></span></p>
+        <p><strong>Teléfono:</strong> <span id="rTelefono"></span></p>
+        <p><strong>Correo:</strong> <span id="rCorreo"></span></p>
+        <p><strong>Marca:</strong> <span id="rMarca"></span></p>
+        <p><strong>Modelo:</strong> <span id="rModelo"></span></p>
+        <p><strong>Año:</strong> <span id="rAno"></span></p>
+        <p><strong>Aceite recomendado:</strong> <span id="rAceite"></span></p>
+        <p><strong>Marca de aceite seleccionada:</strong> <span id="rMarcaAceite"></span></p>
+        <p><strong>Dirección:</strong> <span id="rDireccionRec"></span></p>
+        <p><strong>Fecha:</strong> <span id="rFecha"></span></p>
+        <p><strong>Hora:</strong> <span id="rHora"></span></p>
+        <p><strong>Comentarios:</strong> <span id="rComentarios"></span></p>
+        <p><strong>Firma:</strong> <span id="rFirma"></span></p>
+      </div>
+
+      <h4>💲 Desglose de Costos</h4>
+      <table class="tabla-recibo">
+        <tr><td>Aceite</td><td><span id="reciboAceiteCosto"></span></td></tr>
+        <tr><td>Filtro</td><td><span id="reciboFiltro"></span></td></tr>
+        <tr><td>Mano de obra</td><td><span id="reciboManoObra"></span></td></tr>
+        <tr><td>Desecho</td><td><span id="reciboDesecho"></span></td></tr>
+        <tr class="total"><td>Total</td><td><strong><span id="reciboTotal"></span></strong></td></tr>
+      </table>
     </div>
-    <!-- Aceite recomendado -->
-    <div class="form-group">
-      <i class="fas fa-oil-can"></i>
-      <input type="text" name="aceiteRecomendado" id="aceiteRecomendado" readonly placeholder="Tipo de aceite recomendado">
-      <label>Aceite recomendado</label>
+    <!-- Modal del Acuerdo -->
+    <div id="modalAcuerdo" class="modal">
+      <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <iframe id="acuerdoFrame" title="Acuerdo de servicio"></iframe>
+      </div>
     </div>
-    <!-- Marca de Aceite -->
-    <div class="form-group">
-      <i class="fas fa-industry"></i>
-      <select name="marcaAceite" id="marcaAceite" required>
-        <option value="">Selecciona marca de aceite</option>
-        <option value="Mobil 1">Mobil 1</option>
-        <option value="Pennzoil">Pennzoil</option>
-        <option value="Valvoline">Valvoline</option>
-        <option value="Castrol EDGE">Castrol EDGE</option>
-        <option value="Shell Helix">Shell Helix</option>
-      </select>
-      <label>Marca de Aceite</label>
-    </div>
-    <!-- Dirección -->
-    <div class="form-group">
-      <i class="fas fa-map-marker-alt"></i>
-      <input type="text" name="direccion" placeholder=" " required>
-      <label>Dirección del servicio</label>
-    </div>
-    <!-- Fecha -->
-    <div class="form-group">
-      <i class="fas fa-calendar-day"></i>
-      <input type="date" name="fecha" required>
-      <label>Fecha</label>
-    </div>
-    <!-- Hora -->
-    <div class="form-group">
-      <i class="fas fa-clock"></i>
-      <input type="time" name="hora" required>
-      <label>Hora</label>
-    </div>
-    <!-- Comentarios -->
-    <div class="form-group">
-      <i class="fas fa-comment-dots"></i>
-      <textarea name="comentarios" placeholder=" "></textarea>
-      <label>Comentarios adicionales</label>
-    </div>
-    <!-- Acuerdo -->
-    <div class="form-group">
-      <a href="#" id="linkAcuerdo">Leer acuerdo completo</a>
-    </div>
-    <!-- Firma -->
-    <div class="form-group">
-      <input type="text" name="firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" disabled required>
-    </div>
-    <!-- Ocultos -->
-    <input type="hidden" name="estado" value="Pendiente">
-    <input type="hidden" name="idioma" id="langField">
-    <button type="submit">Enviar Reserva</button>
-  </form>
-  <div class="mensaje" id="mensaje"></div>
-  <!-- Recibo -->
-  <div id="recibo">
-    <h3>✅ Recibo de Reserva</h3>
-    <p><b>Nombre:</b> <span id="rNombre"></span></p>
-    <p><b>Teléfono:</b> <span id="rTelefono"></span></p>
-    <p><b>Correo:</b> <span id="rCorreo"></span></p>
-    <p><b>Vehículo:</b> <span id="rMarca"></span> <span id="rModelo"></span> <span id="rAno"></span></
-        <script>
-// === Datos base ===
+
 <script>
-// === Datos base ===
+/* ===========================
+   DATOS: marcasModelos (completo)
+   =========================== */
 const marcasModelos = [
   {Marca:"Acura", Modelo:"ILX 2.4L"},
   {Marca:"Acura", Modelo:"MDX 3.5L"},
@@ -167,835 +222,358 @@ const marcasModelos = [
   {Marca:"Acura", Modelo:"NSX 3.5L Turbo"},
   {Marca:"Acura", Modelo:"RDX 2WD 2.0L Turbo"},
   {Marca:"Acura", Modelo:"RDX AWD 2.0L Turbo"},
-{Marca:"Acura", Modelo:"RLX 3.5L"},
-{Marca:"Acura", Modelo:"RLX Sport Hybrid 3.5L"},
-{Marca:"Acura", Modelo:"TLX 2.0L Turbo"},
-{Marca:"Acura", Modelo:"TLX SH-AWD 3.5L"},
-{Marca:"Chevrolet", Modelo:"Aveo"},
-{Marca:"Chevrolet", Modelo:"Cruze"},
-{Marca:"Chevrolet", Modelo:"Malibu"},
-{Marca:"Chevrolet", Modelo:"Impala"},
-{Marca:"Chevrolet", Modelo:"Camaro"},
-{Marca:"Chevrolet", Modelo:"Corvette"},
-{Marca:"Chevrolet", Modelo:"Corvette Z06"},
-{Marca:"Chevrolet", Modelo:"Trax"},
-{Marca:"Chevrolet", Modelo:"Equinox"},
-{Marca:"Chevrolet", Modelo:"Blazer"},
-{Marca:"Chevrolet", Modelo:"Traverse"},
-{Marca:"Chevrolet", Modelo:"Colorado"},
-{Marca:"Chevrolet", Modelo:"Silverado 1500"},
-{Marca:"Chevrolet", Modelo:"Silverado 2500HD"},
-{Marca:"Chevrolet", Modelo:"Tahoe"},
-{Marca:"Chevrolet", Modelo:"Suburban"},
-{Marca:"Chevrolet", Modelo:"Trailblazer"},
-{Marca:"Chevrolet", Modelo:"Spark"},
-{Marca:"Chevrolet", Modelo:"Sonic"},
-{Marca:"Dodge", Modelo:"Dart"},
-{Marca:"Dodge", Modelo:"Dart"},
-{Marca:"Dodge", Modelo:"Neon"},
-{Marca:"Dodge", Modelo:"Caliber"},
-{Marca:"Dodge", Modelo:"Caliber"},
-{Marca:"Dodge", Modelo:"Caliber"},
-{Marca:"Dodge", Modelo:"Journey"},
-{Marca:"Dodge", Modelo:"Journey"},
-{Marca:"Dodge", Modelo:"Avenger"},
-{Marca:"Dodge", Modelo:"Avenger"},
-{Marca:"Dodge", Modelo:"Charger"},
-{Marca:"Dodge", Modelo:"Charger"},
-{Marca:"Dodge", Modelo:"Charger"},
-{Marca:"Dodge", Modelo:"Charger"},
-{Marca:"Dodge", Modelo:"Challenger"},
-{Marca:"Dodge", Modelo:"Challenger"},
-{Marca:"Dodge", Modelo:"Challenger"},
-{Marca:"Dodge", Modelo:"Challenger"},
-{Marca:"Dodge", Modelo:"Durango"},
-{Marca:"Dodge", Modelo:"Durango"},
-{Marca:"Dodge", Modelo:"Durango"},
-{Marca:"Dodge", Modelo:"Grand Caravan"},
-{Marca:"Dodge", Modelo:"Grand Caravan"},
-{Marca:"Dodge", Modelo:"Nitro"},
-{Marca:"Dodge", Modelo:"Nitro"},
-{Marca:"Dodge", Modelo:"Dakota"},
-{Marca:"Dodge", Modelo:"Dakota"},
-{Marca:"Dodge", Modelo:"Dakota"},
-{Marca:"Dodge", Modelo:"Ram 1500"},
-{Marca:"Dodge", Modelo:"Ram 1500"},
-{Marca:"Dodge", Modelo:"Ram 2500/3500"},
-{Marca:"Dodge", Modelo:"Viper"},
-{Marca:"Honda", Modelo:"Civic"},
-{Marca:"Honda", Modelo:"Civic"},
-{Marca:"Honda", Modelo:"Civic"},
-{Marca:"Honda", Modelo:"Accord"},
-{Marca:"Honda", Modelo:"Accord"},
-{Marca:"Honda", Modelo:"Accord"},
-{Marca:"Honda", Modelo:"Accord Hybrid"},
-{Marca:"Honda", Modelo:"CR-V"},
-{Marca:"Honda", Modelo:"CR-V"},
-{Marca:"Honda", Modelo:"HR-V"},
-{Marca:"Honda", Modelo:"Fit"},
-{Marca:"Honda", Modelo:"Pilot"},
-{Marca:"Honda", Modelo:"Odyssey"},
-{Marca:"Honda", Modelo:"Ridgeline"},
-{Marca:"Honda", Modelo:"Insight"},
-{Marca:"Honda", Modelo:"Passport"},
-{Marca:"Honda", Modelo:"Pilot Hybrid"},
-{Marca:"Honda", Modelo:"CR-V Hybrid"},
-{Marca:"Toyota", Modelo:"Yaris"},
-{Marca:"Toyota", Modelo:"Corolla"},
-{Marca:"Toyota", Modelo:"Corolla"},
-{Marca:"Toyota", Modelo:"Camry"},
-{Marca:"Toyota", Modelo:"Camry"},
-{Marca:"Toyota", Modelo:"Avalon"},
-{Marca:"Toyota", Modelo:"Prius"},
-{Marca:"Toyota", Modelo:"RAV4"},
-{Marca:"Toyota", Modelo:"RAV4"},
-{Marca:"Toyota", Modelo:"Highlander"},
-{Marca:"Toyota", Modelo:"Sequoia"},
-{Marca:"Toyota", Modelo:"4Runner"},
-{Marca:"Toyota", Modelo:"Tacoma"},
-{Marca:"Toyota", Modelo:"Tacoma"},
-{Marca:"Toyota", Modelo:"Tundra"},
-{Marca:"Toyota", Modelo:"Tundra"},
-{Marca:"Toyota", Modelo:"Sienna"},
-{Marca:"Ford", Modelo:"Fiesta"},
-{Marca:"Ford", Modelo:"Focus"},
-{Marca:"Ford", Modelo:"Focus"},
-{Marca:"Ford", Modelo:"Fusion"},
-{Marca:"Ford", Modelo:"Fusion"},
-{Marca:"Ford", Modelo:"Mustang"},
-{Marca:"Ford", Modelo:"Mustang"},
-{Marca:"Ford", Modelo:"Explorer"},
-{Marca:"Ford", Modelo:"Explorer"},
-{Marca:"Ford", Modelo:"F-150"},
-{Marca:"Ford", Modelo:"F-150"},
-{Marca:"Ford", Modelo:"F-150"},
-{Marca:"Ford", Modelo:"F-150"},
-{Marca:"Ford", Modelo:"Edge"},
-{Marca:"Ford", Modelo:"Edge"},
-{Marca:"Ford", Modelo:"Expedition"},
-{Marca:"Ford", Modelo:"Escape"},
-{Marca:"Ford", Modelo:"Escape"},
-{Marca:"GMC", Modelo:"Sierra 1500"},
-{Marca:"GMC", Modelo:"Sierra 1500"},
-{Marca:"GMC", Modelo:"Sierra 1500"},
-{Marca:"GMC", Modelo:"Sierra 2500HD"},
-{Marca:"GMC", Modelo:"Canyon"},
-{Marca:"GMC", Modelo:"Canyon"},
-{Marca:"GMC", Modelo:"Yukon"},
-{Marca:"GMC", Modelo:"Yukon"},
-{Marca:"GMC", Modelo:"Acadia"},
-{Marca:"GMC", Modelo:"Acadia"},
-{Marca:"GMC", Modelo:"Terrain"},
-{Marca:"GMC", Modelo:"Terrain"},
-{Marca:"GMC", Modelo:"Terrain"},
-{Marca:"Hyundai", Modelo:"Sonata"},
-{Marca:"Hyundai", Modelo:"Sonata"},
-{Marca:"Hyundai", Modelo:"Sonata"},
-{Marca:"Hyundai", Modelo:"Tucson"},
-{Marca:"Hyundai", Modelo:"Palisade"},
-{Marca:"Hyundai", Modelo:"Venue"},
-{Marca:"Hyundai", Modelo:"Kona"},
-{Marca:"Hyundai", Modelo:"Santa Fe"},
-{Marca:"Hyundai", Modelo:"Creta"},
-{Marca:"Hyundai", Modelo:"Creta"},
-{Marca:"Jeep", Modelo:"Renegade"},
-{Marca:"Jeep", Modelo:"Renegade"},
-{Marca:"Jeep", Modelo:"Compass"},
-{Marca:"Jeep", Modelo:"Compass"},
-{Marca:"Jeep", Modelo:"Cherokee"},
-{Marca:"Jeep", Modelo:"Cherokee"},
-{Marca:"Jeep", Modelo:"Cherokee"},
-{Marca:"Jeep", Modelo:"Grand Cherokee"},
-{Marca:"Jeep", Modelo:"Grand Cherokee"},
-{Marca:"Jeep", Modelo:"Grand Cherokee"},
-{Marca:"Jeep", Modelo:"Wrangler"},
-{Marca:"Jeep", Modelo:"Wrangler"},
-{Marca:"Jeep", Modelo:"Wrangler"},
-{Marca:"Jeep", Modelo:"Gladiator"},
-{Marca:"Infiniti", Modelo:"Q50"},
-{Marca:"Infiniti", Modelo:"Q50"},
-{Marca:"Infiniti", Modelo:"Q60"},
-{Marca:"Infiniti", Modelo:"Q60"},
-{Marca:"Infiniti", Modelo:"QX50"},
-{Marca:"Infiniti", Modelo:"QX55"},
-{Marca:"Infiniti", Modelo:"QX60"},
-{Marca:"Infiniti", Modelo:"QX80"},
-{Marca:"Infiniti", Modelo:"QX70"},
-{Marca:"Infiniti", Modelo:"M35/M37"},
-{Marca:"Infiniti", Modelo:"M45"},
-{Marca:"Infiniti", Modelo:"FX35"},
-{Marca:"Infiniti", Modelo:"FX50"},
-{Marca:"Kia", Modelo:"Rio"},
-{Marca:"Kia", Modelo:"Forte"},
-{Marca:"Kia", Modelo:"Forte"},
-{Marca:"Kia", Modelo:"Optima/K5"},
-{Marca:"Kia", Modelo:"Optima/K5"},
-{Marca:"Kia", Modelo:"Stinger"},
-{Marca:"Kia", Modelo:"Stinger"},
-{Marca:"Kia", Modelo:"Soul"},
-{Marca:"Kia", Modelo:"Soul"},
-{Marca:"Kia", Modelo:"Sportage"},
-{Marca:"Kia", Modelo:"Sportage"},
-{Marca:"Kia", Modelo:"Sorento"},
-{Marca:"Kia", Modelo:"Sorento"},
-{Marca:"Kia", Modelo:"Telluride"},
-{Marca:"Lexus", Modelo:"IS 200t/300"},
-{Marca:"Lexus", Modelo:"ES 250/350"},
-{Marca:"Lexus", Modelo:"GS 350"},
-{Marca:"Lexus", Modelo:"GS 450h"},
-{Marca:"Lexus", Modelo:"RX 350"},
-{Marca:"Lexus", Modelo:"RX 450h"},
-{Marca:"Lexus", Modelo:"NX 300"},
-{Marca:"Lexus", Modelo:"NX 300h"},
-{Marca:"Lexus", Modelo:"LX 570"},
-{Marca:"Lexus", Modelo:"GX 460"},
-{Marca:"Lexus", Modelo:"LC 500"},
-{Marca:"Lexus", Modelo:"LS 500"},
-{Marca:"Lexus", Modelo:"LS 500h"},
-{Marca:"Mazda", Modelo:"Mazda2"},
-{Marca:"Mazda", Modelo:"Mazda3"},
-{Marca:"Mazda", Modelo:"Mazda3"},
-{Marca:"Mazda", Modelo:"Mazda6"},
-{Marca:"Mazda", Modelo:"CX-3"},
-{Marca:"Mazda", Modelo:"CX-30"},
-{Marca:"Mazda", Modelo:"CX-5"},
-{Marca:"Mazda", Modelo:"CX-9"},
-{Marca:"Mazda", Modelo:"MX-5 Miata"},
-{Marca:"Mazda", Modelo:"MX-5 Miata Turbo"},
-{Marca:"Nissan", Modelo:"Versa"},
-{Marca:"Nissan", Modelo:"Sentra"},
-{Marca:"Nissan", Modelo:"Sentra"},
-{Marca:"Nissan", Modelo:"Altima"},
-{Marca:"Nissan", Modelo:"Altima"},
-{Marca:"Nissan", Modelo:"Maxima"},
-{Marca:"Nissan", Modelo:"Kicks"},
-{Marca:"Nissan", Modelo:"Rogue"},
-{Marca:"Nissan", Modelo:"Rogue"},
-{Marca:"Nissan", Modelo:"Murano"},
-{Marca:"Nissan", Modelo:"Pathfinder"},
-{Marca:"Nissan", Modelo:"Armada"},
-{Marca:"Nissan", Modelo:"Frontier"},
-{Marca:"Nissan", Modelo:"Titan"},
-{Marca:"Volvo", Modelo:"S60 2.0L Turbo"},
-{Marca:"Volvo", Modelo:"S60 T5"},
-{Marca:"Volvo", Modelo:"S60 T6"},
-{Marca:"Volvo", Modelo:"S60 Recharge"},
-{Marca:"Volvo", Modelo:"S90 2.0L Turbo"},
-{Marca:"Volvo", Modelo:"S90 T6"},
-{Marca:"Volvo", Modelo:"S90 Recharge"},
-{Marca:"Volvo", Modelo:"V60 2.0L Turbo"},
-{Marca:"Volvo", Modelo:"V60 T6"},
-{Marca:"Volvo", Modelo:"V60 Recharge"},
-{Marca:"Volvo", Modelo:"XC40 2.0L Turbo"},
-{Marca:"Volvo", Modelo:"XC40 T5"},
-{Marca:"Volvo", Modelo:"XC60 2.0L Turbo"},
-{Marca:"Volvo", Modelo:"XC60 T6"},
-{Marca:"Volvo", Modelo:"XC60 Recharge"},
-{Marca:"Volvo", Modelo:"XC90 2.0L Turbo"},
-{Marca:"Volvo", Modelo:"XC90 T6"},
-{Marca:"Volvo", Modelo:"XC90 Recharge"},
-{Marca:"Mercedes-Benz", Modelo:"A220"},
-{Marca:"Mercedes-Benz", Modelo:"CLA250"},
-{Marca:"Mercedes-Benz", Modelo:"GLA250"},
-{Marca:"Mercedes-Benz", Modelo:"GLB250"},
-{Marca:"Mercedes-Benz", Modelo:"GLC300"},
-{Marca:"Mercedes-Benz", Modelo:"GLE350"},
-{Marca:"Mercedes-Benz", Modelo:"GLS450"},
-{Marca:"Mercedes-Benz", Modelo:"G550"},
-{Marca:"Mercedes-Benz", Modelo:"E350"},
-{Marca:"Mercedes-Benz", Modelo:"S450"},
-{Marca:"Mercedes-Benz", Modelo:"S560"},
-{Marca:"Mercedes-Benz", Modelo:"C300"},
-{Marca:"Mercedes-Benz", Modelo:"C43 AMG"},
-{Marca:"Mercedes-Benz", Modelo:"E450"},
-{Marca:"Mercedes-Benz", Modelo:"GLE450"},
-{Marca:"Mercedes-Benz", Modelo:"GLS580"},
-{Marca:"Mercedes-Benz", Modelo:"G-Class (G550)"},
-{Marca:"Mercedes-Benz", Modelo:"G-Class (G63 AMG)"},
-{Marca:"Mercedes-Benz", Modelo:"GLK350"},
-{Marca:"Mercedes-Benz", Modelo:"GL550"},
-{Marca:"Mercedes-Benz", Modelo:"SLC300"},
-{Marca:"Mercedes-Benz", Modelo:"SL450"},
-{Marca:"Mercedes-Benz", Modelo:"SL550"},
-{Marca:"Mercedes-Benz", Modelo:"GLA250 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLB250 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLC300 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLE350 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLS450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"G550 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"S450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"S560 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"C300 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"E350 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"SLC300 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"SL450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"SL550 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLA250 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLB250 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLC300 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLE350 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"GLS450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"G550 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"S450 4MATIC"},
-{Marca:"Mercedes-Benz", Modelo:"S560 4MATIC"},
-{Marca:"Audi", Modelo:"A1 1.0 TFSI"},
-{Marca:"Audi", Modelo:"A1 1.2 TFSI"},
-{Marca:"Audi", Modelo:"A1 1.4 TFSI"},
-{Marca:"Audi", Modelo:"A3 1.6"},
-{Marca:"Audi", Modelo:"A4 1.8 T"},
-{Marca:"Audi", Modelo:"A4 2.0 TFSI"},
-{Marca:"Audi", Modelo:"A5 2.0 TFSI"},
-{Marca:"Audi", Modelo:"A5 2.0 TSI"},
-{Marca:"Audi", Modelo:"A7 3.0 TFSI"},
-{Marca:"Audi", Modelo:"A8 3.0 TFSI"},
-{Marca:"Audi", Modelo:"A8 4.0 TFSI"},
-{Marca:"Audi", Modelo:"Q2 1.0 TFSI"},
-{Marca:"Audi", Modelo:"Q3 1.5 TFSI"},
-{Marca:"Audi", Modelo:"Q3 2.0 TFSI"},
-{Marca:"Audi", Modelo:"Q3 Sportback 1.5 TFSI"},
-{Marca:"Audi", Modelo:"Q3 Sportback 2.0 TFSI"},
-{Marca:"Audi", Modelo:"Q5 2.0 TFSI"},
-{Marca:"Audi", Modelo:"Q8 3.0 TFSI"},
-{Marca:"Audi", Modelo:"TT 1.8 T"},
-{Marca:"Audi", Modelo:"TT 2.0 TFSI"},
-{Marca:"Audi", Modelo:"R8 4.2 V8"},
-{Marca:"Audi", Modelo:"R8 5.2 V10"},
-{Marca:"Audi", Modelo:"RS3 2.5 TFSI"},
-{Marca:"Audi", Modelo:"RS4 4.2 V8"},
-{Marca:"Audi", Modelo:"RS5 2.9 TFSI"},
-{Marca:"Audi", Modelo:"RS6 4.0 TFSI"},
-{Marca:"Audi", Modelo:"RS7 4.0 TFSI"},
-{Marca:"Audi", Modelo:"S3 2.0 TFSI"},
-{Marca:"Audi", Modelo:"S4 3.0 TFSI"},
-{Marca:"Audi", Modelo:"S5 3.0 TFSI"},
-{Marca:"Audi", Modelo:"S6 4.0 TFSI"},
-{Marca:"Audi", Modelo:"S7 4.0 TFSI"},
-{Marca:"Audi", Modelo:"S8 4.0 TFSI"},
-{Marca:"Audi", Modelo:"SQ5 3.0 TFSI"},
-{Marca:"BMW", Modelo:"116i (E87)"},
-{Marca:"BMW", Modelo:"118i (F20)"},
-{Marca:"BMW", Modelo:"120i (E87/F20)"},
-{Marca:"BMW", Modelo:"125i (F20)"},
-{Marca:"BMW", Modelo:"316i (E90)"},
-{Marca:"BMW", Modelo:"318i (E90/F30)"},
-{Marca:"BMW", Modelo:"320i (E90/F30)"},
-{Marca:"BMW", Modelo:"325i (E90)"},
-{Marca:"BMW", Modelo:"328i (F30)"},
-{Marca:"BMW", Modelo:"330i (F30/G20)"},
-{Marca:"BMW", Modelo:"335i (E90/F30)"},
-{Marca:"BMW", Modelo:"340i (F30/G20)"},
-{Marca:"BMW", Modelo:"520i (F10)"},
-{Marca:"BMW", Modelo:"528i (F10)"},
-{Marca:"BMW", Modelo:"530i (G30)"},
-{Marca:"BMW", Modelo:"535i (F10)"},
-{Marca:"BMW", Modelo:"540i (G30)"},
-{Marca:"BMW", Modelo:"730i (G11)"},
-{Marca:"BMW", Modelo:"740i (G11)"},
-{Marca:"BMW", Modelo:"M2 (F87)"},
-{Marca:"BMW", Modelo:"M3 (E90/F80)"},
-{Marca:"BMW", Modelo:"M4 (F82/G82)"},
-{Marca:"BMW", Modelo:"M5 (E60/F90)"},
-{Marca:"BMW", Modelo:"M6 (E63/F13)"},
-{Marca:"BMW", Modelo:"Z4 2.0i"},
-{Marca:"BMW", Modelo:"Z4 3.0i"},
-  // 🔁 Agrega aquí todos tus modelos
+  {Marca:"Acura", Modelo:"RLX 3.5L"},
+  {Marca:"Acura", Modelo:"RLX Sport Hybrid 3.5L"},
+  {Marca:"Acura", Modelo:"TLX 2.0L Turbo"},
+  {Marca:"Acura", Modelo:"TLX SH-AWD 3.5L"},
+  {Marca:"Chevrolet", Modelo:"Aveo"},
+  {Marca:"Chevrolet", Modelo:"Cruze"},
+  {Marca:"Chevrolet", Modelo:"Malibu"},
+  {Marca:"Chevrolet", Modelo:"Impala"},
+  {Marca:"Chevrolet", Modelo:"Camaro"},
+  {Marca:"Chevrolet", Modelo:"Corvette"},
+  {Marca:"Chevrolet", Modelo:"Corvette Z06"},
+  {Marca:"Chevrolet", Modelo:"Trax"},
+  {Marca:"Chevrolet", Modelo:"Equinox"},
+  {Marca:"Chevrolet", Modelo:"Blazer"},
+  {Marca:"Chevrolet", Modelo:"Traverse"},
+  {Marca:"Chevrolet", Modelo:"Colorado"},
+  {Marca:"Chevrolet", Modelo:"Silverado 1500"},
+  {Marca:"Chevrolet", Modelo:"Silverado 2500HD"},
+  {Marca:"Chevrolet", Modelo:"Tahoe"},
+  {Marca:"Chevrolet", Modelo:"Suburban"},
+  {Marca:"Chevrolet", Modelo:"Trailblazer"},
+  {Marca:"Chevrolet", Modelo:"Spark"},
+  {Marca:"Chevrolet", Modelo:"Sonic"},
+  {Marca:"Dodge", Modelo:"Dart"},
+  {Marca:"Dodge", Modelo:"Neon"},
+  {Marca:"Dodge", Modelo:"Caliber"},
+  {Marca:"Dodge", Modelo:"Journey"},
+  {Marca:"Dodge", Modelo:"Avenger"},
+  {Marca:"Dodge", Modelo:"Charger"},
+  {Marca:"Dodge", Modelo:"Challenger"},
+  {Marca:"Dodge", Modelo:"Durango"},
+  {Marca:"Dodge", Modelo:"Grand Caravan"},
+  {Marca:"Dodge", Modelo:"Nitro"},
+  {Marca:"Dodge", Modelo:"Dakota"},
+  {Marca:"Dodge", Modelo:"Ram 1500"},
+  {Marca:"Dodge", Modelo:"Ram 2500/3500"},
+  {Marca:"Dodge", Modelo:"Viper"},
+  {Marca:"Honda", Modelo:"Civic"},
+  {Marca:"Honda", Modelo:"Accord"},
+  {Marca:"Honda", Modelo:"Accord Hybrid"},
+  {Marca:"Honda", Modelo:"CR-V"},
+  {Marca:"Honda", Modelo:"HR-V"},
+  {Marca:"Honda", Modelo:"Fit"},
+  {Marca:"Honda", Modelo:"Pilot"},
+  {Marca:"Honda", Modelo:"Odyssey"},
+  {Marca:"Honda", Modelo:"Ridgeline"},
+  {Marca:"Honda", Modelo:"Insight"},
+  {Marca:"Honda", Modelo:"Passport"},
+  {Marca:"Honda", Modelo:"Pilot Hybrid"},
+  {Marca:"Honda", Modelo:"CR-V Hybrid"},
+  {Marca:"Toyota", Modelo:"Yaris"},
+  {Marca:"Toyota", Modelo:"Corolla"},
+  {Marca:"Toyota", Modelo:"Camry"},
+  {Marca:"Toyota", Modelo:"Avalon"},
+  {Marca:"Toyota", Modelo:"Prius"},
+  {Marca:"Toyota", Modelo:"RAV4"},
+  {Marca:"Toyota", Modelo:"Highlander"},
+  {Marca:"Toyota", Modelo:"Sequoia"},
+  {Marca:"Toyota", Modelo:"4Runner"},
+  {Marca:"Toyota", Modelo:"Tacoma"},
+  {Marca:"Toyota", Modelo:"Tundra"},
+  {Marca:"Toyota", Modelo:"Sienna"},
+  {Marca:"Ford", Modelo:"Fiesta"},
+  {Marca:"Ford", Modelo:"Focus"},
+  {Marca:"Ford", Modelo:"Fusion"},
+  {Marca:"Ford", Modelo:"Mustang"},
+  {Marca:"Ford", Modelo:"Explorer"},
+  {Marca:"Ford", Modelo:"F-150"},
+  {Marca:"Ford", Modelo:"Edge"},
+  {Marca:"Ford", Modelo:"Expedition"},
+  {Marca:"Ford", Modelo:"Escape"},
+  {Marca:"GMC", Modelo:"Sierra 1500"},
+  {Marca:"GMC", Modelo:"Sierra 2500HD"},
+  {Marca:"GMC", Modelo:"Canyon"},
+  {Marca:"GMC", Modelo:"Yukon"},
+  {Marca:"GMC", Modelo:"Acadia"},
+  {Marca:"GMC", Modelo:"Terrain"},
+  {Marca:"Hyundai", Modelo:"Sonata"},
+  {Marca:"Hyundai", Modelo:"Tucson"},
+  {Marca:"Hyundai", Modelo:"Palisade"},
+  {Marca:"Hyundai", Modelo:"Venue"},
+  {Marca:"Hyundai", Modelo:"Kona"},
+  {Marca:"Hyundai", Modelo:"Santa Fe"},
+  {Marca:"Jeep", Modelo:"Renegade"},
+  {Marca:"Jeep", Modelo:"Compass"},
+  {Marca:"Jeep", Modelo:"Cherokee"},
+  {Marca:"Jeep", Modelo:"Grand Cherokee"},
+  {Marca:"Jeep", Modelo:"Wrangler"},
+  {Marca:"Jeep", Modelo:"Gladiator"},
+  {Marca:"Infiniti", Modelo:"Q50"},
+  {Marca:"Infiniti", Modelo:"Q60"},
+  {Marca:"Infiniti", Modelo:"QX50"},
+  {Marca:"Infiniti", Modelo:"QX55"},
+  {Marca:"Infiniti", Modelo:"QX60"},
+  {Marca:"Infiniti", Modelo:"QX80"},
+  {Marca:"Kia", Modelo:"Rio"},
+  {Marca:"Kia", Modelo:"Forte"},
+  {Marca:"Kia", Modelo:"Optima/K5"},
+  {Marca:"Kia", Modelo:"Stinger"},
+  {Marca:"Kia", Modelo:"Soul"},
+  {Marca:"Kia", Modelo:"Sportage"},
+  {Marca:"Kia", Modelo:"Sorento"},
+  {Marca:"Kia", Modelo:"Telluride"},
+  {Marca:"Lexus", Modelo:"IS 200t/300"},
+  {Marca:"Lexus", Modelo:"ES 250/350"},
+  {Marca:"Lexus", Modelo:"GS 350"},
+  {Marca:"Lexus", Modelo:"RX 350"},
+  {Marca:"Lexus", Modelo:"RX 450h"},
+  {Marca:"Lexus", Modelo:"NX 300"},
+  {Marca:"Lexus", Modelo:"LX 570"},
+  {Marca:"Lexus", Modelo:"GX 460"},
+  {Marca:"Lexus", Modelo:"LC 500"},
+  {Marca:"Lexus", Modelo:"LS 500"},
+  {Marca:"Mazda", Modelo:"Mazda2"},
+  {Marca:"Mazda", Modelo:"Mazda3"},
+  {Marca:"Mazda", Modelo:"Mazda6"},
+  {Marca:"Mazda", Modelo:"CX-3"},
+  {Marca:"Mazda", Modelo:"CX-30"},
+  {Marca:"Mazda", Modelo:"CX-5"},
+  {Marca:"Mazda", Modelo:"CX-9"},
+  {Marca:"Mazda", Modelo:"MX-5 Miata"},
+  {Marca:"Nissan", Modelo:"Versa"},
+  {Marca:"Nissan", Modelo:"Sentra"},
+  {Marca:"Nissan", Modelo:"Altima"},
+  {Marca:"Nissan", Modelo:"Maxima"},
+  {Marca:"Nissan", Modelo:"Kicks"},
+  {Marca:"Nissan", Modelo:"Rogue"},
+  {Marca:"Nissan", Modelo:"Murano"},
+  {Marca:"Nissan", Modelo:"Pathfinder"},
+  {Marca:"Nissan", Modelo:"Armada"},
+  {Marca:"Nissan", Modelo:"Frontier"},
+  {Marca:"Nissan", Modelo:"Titan"},
+  {Marca:"Volvo", Modelo:"S60 2.0L Turbo"},
+  {Marca:"Volvo", Modelo:"S60 T5"},
+  {Marca:"Volvo", Modelo:"S60 T6"},
+  {Marca:"Volvo", Modelo:"XC90 2.0L Turbo"},
+  {Marca:"Volvo", Modelo:"XC60 2.0L Turbo"},
+  {Marca:"Mercedes-Benz", Modelo:"A220"},
+  {Marca:"Mercedes-Benz", Modelo:"CLA250"},
+  {Marca:"Mercedes-Benz", Modelo:"GLA250"},
+  {Marca:"Mercedes-Benz", Modelo:"GLB250"},
+  {Marca:"Mercedes-Benz", Modelo:"GLC300"},
+  {Marca:"Mercedes-Benz", Modelo:"GLE350"},
+  {Marca:"Mercedes-Benz", Modelo:"GLS450"},
+  {Marca:"Mercedes-Benz", Modelo:"G550"},
+  {Marca:"Mercedes-Benz", Modelo:"E350"},
+  {Marca:"Mercedes-Benz", Modelo:"S450"},
+  {Marca:"Audi", Modelo:"A1 1.0 TFSI"},
+  {Marca:"Audi", Modelo:"A3 1.6"},
+  {Marca:"Audi", Modelo:"A4 1.8 T"},
+  {Marca:"Audi", Modelo:"A4 2.0 TFSI"},
+  {Marca:"Audi", Modelo:"A5 2.0 TFSI"},
+  {Marca:"Audi", Modelo:"A7 3.0 TFSI"},
+  {Marca:"BMW", Modelo:"116i (E87)"},
+  {Marca:"BMW", Modelo:"118i (F20)"},
+  {Marca:"BMW", Modelo:"120i (E87/F20)"},
+  {Marca:"BMW", Modelo:"125i (F20)"},
+  {Marca:"BMW", Modelo:"316i (E90)"},
+  {Marca:"BMW", Modelo:"318i (E90/F30)"},
+  {Marca:"BMW", Modelo:"320i (E90/F30)"},
+  {Marca:"BMW", Modelo:"330i (F30/G20)"},
+  /* agrega más si hace falta */
 ];
 
-// URL de tu Apps Script publicado como Web App
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_UZqn6_CAe3HC-LP8gTZp551mmwbKRoHv7Uv8KAYM5jGDQaQMmv4GT-S5ZeO6b-_pRg/exec";
-
-const aceiteDescripciones = {
-  "Mobil 1": "Aceite sintético premium con excelente protección.",
-  "Pennzoil": "Aceite limpio con tecnología PurePlus.",
-  "Valvoline": "Protección avanzada para motores modernos.",
-  "Castrol EDGE": "Aceite con tecnología Fluid Titanium.",
-  "Shell Helix": "Limpieza activa y rendimiento confiable."
-};
-
-// === Poblar marcas únicas ===
+/* ===========================
+   Variables y referencias DOM
+   =========================== */
 const marcaSelect = document.getElementById("marcaSelect");
 const modeloSelect = document.getElementById("modeloSelect");
+const motorGroup = document.getElementById("motorGroup");
+const motorSelect = document.getElementById("motorSelect");
 const aceiteInput = document.getElementById("aceiteRecomendado");
 const marcaAceiteSelect = document.getElementById("marcaAceite");
-const motorSelect = document.getElementById("motorSelect");
-const motorGroup = document.getElementById("motorGroup");
-const precioEstimado = document.createElement("div");
-precioEstimado.id = "precioBox";
-precioEstimado.style.marginTop = "20px";
-precioEstimado.style.fontWeight = "bold";
-document.querySelector("form").appendChild(precioEstimado);
+const precioBox = document.createElement("div");
+precioBox.id = "precioBox";
+precioBox.style.marginTop = "12px";
+precioBox.style.fontWeight = "700";
+document.querySelector("form").appendChild(precioBox);
 
-// Poblar marcas únicas
+/* Poblar marcas únicas */
 const marcasUnicas = [...new Set(marcasModelos.map(m => m.Marca))].sort();
-marcasUnicas.forEach(marca => {
+marcasUnicas.forEach(m => {
   const opt = document.createElement("option");
-  opt.value = marca;
-  opt.textContent = marca;
+  opt.value = m;
+  opt.textContent = m;
   marcaSelect.appendChild(opt);
 });
 
-// === Poblar modelos según marca ===
+/* Cuando cambia la marca, poblar modelos */
 marcaSelect.addEventListener("change", () => {
   const marca = marcaSelect.value;
   modeloSelect.innerHTML = `<option value="">Selecciona modelo</option>`;
-
-  marcasModelos
-    .filter(m => m.Marca === marca)
-    .forEach(m => {
-      const opt = document.createElement("option");
-      opt.value = m.Modelo;
-      opt.textContent = m.Modelo; // 👈 solo mostramos el modelo
-      modeloSelect.appendChild(opt);
-    });
-
+  motorSelect.innerHTML = "";
+  motorGroup.style.display = "none";
   aceiteInput.value = "";
-  motorInput.value = ""; // limpiar motor al cambiar marca
+
+  marcasModelos.filter(x => x.Marca === marca).forEach(x => {
+    const opt = document.createElement("option");
+    opt.value = x.Modelo;
+    opt.textContent = x.Modelo;
+    modeloSelect.appendChild(opt);
+  });
 });
 
+/* URL Apps Script */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbm8ay_6FhvuSjTEl6_04JA30C6AXPPgkLm5qecqTLtdYFDpm8q0HMiaFmQCRPilxamQ/exec";
+
+/* Al cambiar modelo: pedir aceite recomendado y motores (si aplica) */
 modeloSelect.addEventListener("change", async () => {
   const marca = marcaSelect.value;
   const modelo = modeloSelect.value;
-  if (!marca || !modelo) return;
+  if (!marca || !modelo) { aceiteInput.value = ""; return; }
 
   try {
-    const response = await fetch(SCRIPT_URL, {
+    const resp = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: JSON.stringify({ action: "obtenerAceiteRecomendado", marca, modelo }),
-      headers: { "Content-Type": "application/json" }
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ action: "obtenerAceiteRecomendado", marca, modelo })
     });
-    const data = await response.json();
-
-    // Aceite recomendado
+    const data = await resp.json();
+    // data puede contener: {aceite: "...", motores: [...]}
     aceiteInput.value = data.aceite || "";
-
-    // Motores
     motorSelect.innerHTML = "";
-    if (data.motores && data.motores.length > 0) {
-      motorGroup.style.display = "block";
+    if (data.motores && data.motores.length) {
       data.motores.forEach(m => {
-        const opt = document.createElement("option");
-        opt.value = m;
-        opt.textContent = m;
-        motorSelect.appendChild(opt);
+        const o = document.createElement("option");
+        o.value = m; o.textContent = m;
+        motorSelect.appendChild(o);
       });
+      motorGroup.style.display = "block";
     } else {
       motorGroup.style.display = "none";
     }
   } catch (err) {
-    console.error("Error al obtener datos:", err);
-    aceiteInput.value = "Error de conexión";
+    console.error("Error al obtener datos del script:", err);
+    aceiteInput.value = "Error conexión";
   }
 });
 
-
-// === Obtener aceite recomendado desde App Script ===
-modeloSelect.addEventListener("change", async () => {
-  const marca = marcaSelect.value;
-  const modelo = modeloSelect.value;
-  const motor = modeloSelect.options[modeloSelect.selectedIndex]?.dataset.motor || "";
-
-  // 👇 mostrar motor automáticamente
-  motorInput.value = motor;
-
-  if (!marca || !modelo) {
-    aceiteInput.value = "";
-    return;
-  }
-
-  try {
-  const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "obtenerAceiteRecomendado",
-        marca,
-        modelo,
-        motor // 👈 también enviamos motor al backend
-      }),
-      headers: { "Content-Type": "application/json" }
-    });
-
-    const result = await response.json();
-
-    if (result.success && result.aceite) {
-      aceiteInput.value = result.aceite;
-    } else {
-      aceiteInput.value = "No disponible";
-    }
-
-  } catch (err) {
-    console.error("Error al consultar aceite recomendado:", err);
-    aceiteInput.value = "Error de conexión";
-  }
-});
-
-// === Mostrar descripción y calcular precio ===
+/* Cuando cambia marca de aceite: calcular precio vía Apps Script */
 marcaAceiteSelect.addEventListener("change", async () => {
   const marcaAceite = marcaAceiteSelect.value;
   const modelo = modeloSelect.value;
-  const motor = motorInput.value;
-  const aceiteRecomendado = aceiteInput.value;
-
-  // Mostrar descripción
-  const descripcion = aceiteDescripciones[marcaAceite] || "";
-  const descripcionInput = document.querySelector('textarea[name="descripcionAceite"]');
-  if (descripcionInput) descripcionInput.value = descripcion;
-
-  // Calcular precio
+  const motor = motorSelect.value || "";
+  const aceiteRecomendado = aceiteInput.value || "";
   if (!marcaAceite || !modelo || !aceiteRecomendado) return;
+
   try {
-    const response = await fetch(SCRIPT_URL, {
+    const resp = await fetch(SCRIPT_URL, {
       method: "POST",
+      headers: {"Content-Type":"application/json"},
       body: JSON.stringify({
         action: "calcularPrecio",
-        marcaAceite,
-        modelo,
-        motor, // 👈 incluimos motor en la petición
-        aceiteRecomendado
-      }),
-      headers: { "Content-Type": "application/json" }
+        marcaAceite, modelo, motor, aceiteRecomendado
+      })
     });
-    const data = await response.json();
-    precioEstimado.textContent = `💲 Precio estimado: ${data.total || "N/A"}`;
-
-    // Actualizar desglose en recibo
+    const data = await resp.json();
+    precioBox.textContent = data.total ? `💲 Precio estimado: ${data.total}` : "💲 Precio estimado: N/A";
     document.getElementById("reciboAceiteCosto").textContent = data.aceite || "";
     document.getElementById("reciboFiltro").textContent = data.filtro || "";
     document.getElementById("reciboManoObra").textContent = data.manoObra || "";
     document.getElementById("reciboDesecho").textContent = data.desecho || "";
     document.getElementById("reciboTotal").textContent = data.total || "";
-
   } catch (err) {
-    console.error("Error al calcular precio:", err);
+    console.error("Error calcular precio:", err);
   }
 });
-
-
-// === Mostrar recibo ===
-function mostrarRecibo(data) {
-  document.getElementById("recibo").style.display = "block";
-  document.getElementById("rNombre").textContent = data.nombre;
-  document.getElementById("rTelefono").textContent = data.telefono;
-  document.getElementById("rCorreo").textContent = data.correo;
-  document.getElementById("rMarca").textContent = data.marca;
-  document.getElementById("rModelo").textContent = data.modelo;
-  document.getElementById("rAno").textContent = data.ano;
-  document.getElementById("rAceite").textContent = data.aceiteRecomendado;
-  document.getElementById("rMarcaAceite").textContent = data.marcaAceite;
-  document.getElementById("rDireccion").textContent = data.direccion;
-  document.getElementById("rFecha").textContent = data.fecha;
-  document.getElementById("rHora").textContent = data.hora;
-  document.getElementById("rComentarios").textContent = data.comentarios;
-  document.getElementById("rFirma").textContent = data.firma;
-}
 </script>
+<script>
+/* ===========================
+   CONTROL DEL MODAL Y FIRMA
+   =========================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("modalAcuerdo");
+  const link = document.getElementById("linkAcuerdo");
+  const spanClose = document.querySelector(".modal-close");
+  const acuerdoFrame = document.getElementById("acuerdoFrame");
+  const firmaInput = document.getElementById("firmaInput");
 
-// === Obtener aceite recomendado desde App Script ===
-modeloSelect.addEventListener("change", async () => {
-  const marca = marcaSelect.value;
-  const modelo = modeloSelect.value;
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    acuerdoFrame.src = "acuerdo.html";
+    modal.style.display = "block";
+  });
 
-  if (!marca || !modelo) {
-    aceiteInput.value = "";
-    return;
-  }
+  spanClose.addEventListener("click", () => { modal.style.display = "none"; });
+  window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
 
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "obtenerAceiteRecomendado",
-        marca,
-        modelo
-      }),
-      headers: { "Content-Type": "application/json" }
-    });
-
-    const result = await response.json();
-
-    if (result.success && result.aceite) {
-      aceiteInput.value = result.aceite;
-    } else {
-      aceiteInput.value = "No disponible";
+  // Escuchar mensaje desde el iframe
+  window.addEventListener("message", (event) => {
+    if (event.data === "acuerdoAceptado") {
+      firmaInput.disabled = false;
+      localStorage.setItem("acuerdoFirmado", "true");
+      modal.style.display = "none";
+      alert("✅ Acuerdo aceptado. Ahora puedes firmar la reserva.");
     }
+  });
 
-  } catch (err) {
-    console.error("Error al consultar aceite recomendado:", err);
-    aceiteInput.value = "Error de conexión";
-  }
-});
-
-// === Mostrar descripción y calcular precio ===
-marcaAceiteSelect.addEventListener("change", async () => {
-  const marcaAceite = marcaAceiteSelect.value;
-  const modelo = modeloSelect.value;
-  const aceiteRecomendado = aceiteInput.value;
-
-  // Mostrar descripción
-  const descripcion = aceiteDescripciones[marcaAceite] || "";
-  const descripcionInput = document.querySelector('textarea[name="descripcionAceite"]');
-  if (descripcionInput) descripcionInput.value = descripcion;
-
-  // Calcular precio
-  if (!marcaAceite || !modelo || !aceiteRecomendado) return;
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "calcularPrecio",
-        marcaAceite,
-        modelo,
-        aceiteRecomendado
-      }),
-      headers: { "Content-Type": "application/json" }
-    });
-    const data = await response.json();
-    precioEstimado.textContent = `💲 Precio estimado: ${data.total || "N/A"}`;
-
-    // Actualizar desglose en recibo
-    document.getElementById("reciboAceiteCosto").textContent = data.aceite || "";
-    document.getElementById("reciboFiltro").textContent = data.filtro || "";
-    document.getElementById("reciboManoObra").textContent = data.manoObra || "";
-    document.getElementById("reciboDesecho").textContent = data.desecho || "";
-    document.getElementById("reciboTotal").textContent = data.total || "";
-
-  } catch (err) {
-    console.error("Error al calcular precio:", err);
-  }
-});
-
-
-const modal = document.getElementById("modalAcuerdo");
-const link = document.getElementById("linkAcuerdo");
-const spanClose = document.querySelector(".modal-close");
-const firmaInput = document.getElementById("firmaInput");
-const acuerdoFrame = document.getElementById("acuerdoFrame");
-
-link.onclick = (e) => {
-  e.preventDefault();
-  acuerdoFrame.src = "acuerdo.html";
-  modal.style.display = "block";
-};
-
-spanClose.onclick = () => { modal.style.display = "none"; };
-window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
-
-window.addEventListener("message", (event) => {
-  if (event.data === "acuerdoAceptado") {
-    firmaInput.disabled = false;
-    localStorage.setItem("acuerdoFirmado", "true");
-    modal.style.display = "none";
-    alert("Has aceptado el acuerdo");
-  }
-});
-
-window.addEventListener("load", () => {
+  // Habilitar firma si ya lo aceptó antes
   if (localStorage.getItem("acuerdoFirmado") === "true") {
     firmaInput.disabled = false;
   }
-});
 
-
-// === Enviar formulario ===
-document.getElementById("formCita").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  const form = e.target;
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData.entries());
-
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({ action: "guardarReserva", ...data }),
-      headers: { "Content-Type": "application/json" }
-    });
-    const result = await response.json();
-    if (result.success) {
-      document.getElementById("mensaje").textContent = "✅ Reserva enviada con éxito";
-      mostrarRecibo(data);
-    } else {
-      document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva";
-    }
-  } catch (err) {
-    console.error("Error al enviar:", err);
-    document.getElementById("mensaje").textContent = "❌ Error de conexión";
-  }
-});
-
-// === Mostrar recibo ===
-function mostrarRecibo(data) {
-  document.getElementById("recibo").style.display = "block";
-  document.getElementById("rNombre").textContent = data.nombre;
-  document.getElementById("rTelefono").textContent = data.telefono;
-  document.getElementById("rCorreo").textContent = data.correo;
-  document.getElementById("rMarca").textContent = data.marca;
-  document.getElementById("rModelo").textContent = data.modelo;
-  document.getElementById("rAno").textContent = data.ano;
-  document.getElementById("rAceite").textContent = data.aceiteRecomendado;
-  document.getElementById("rMarcaAceite").textContent = data.marcaAceite;
-  document.getElementById("rDireccion").textContent = data.direccion;
-  document.getElementById("rFecha").textContent = data.fecha;
-  document.getElementById("rHora").textContent = data.hora;
-  document.getElementById("rComentarios").textContent = data.comentarios;
-  document.getElementById("rFirma").textContent = data.firma;
-}
-</script>
-<!-- Recibo -->
-<div id="recibo">
-  <h3>📋 Recibo de Reserva</h3>
-
-  <div class="recibo-datos">
-    <p><strong>Nombre:</strong> <span id="rNombre"></span></p>
-    <p><strong>Teléfono:</strong> <span id="rTelefono"></span></p>
-    <p><strong>Correo:</strong> <span id="rCorreo"></span></p>
-    <p><strong>Marca:</strong> <span id="rMarca"></span></p>
-    <p><strong>Modelo:</strong> <span id="rModelo"></span></p>
-    <p><strong>Año:</strong> <span id="rAno"></span></p>
-    <p><strong>Aceite recomendado:</strong> <span id="rAceite"></span></p>
-    <p><strong>Marca de aceite seleccionada:</strong> <span id="rMarcaAceite"></span></p>
-    <p><strong>Dirección:</strong> <span id="rDireccion"></span></p>
-    <p><strong>Fecha:</strong> <span id="rFecha"></span></p>
-    <p><strong>Hora:</strong> <span id="rHora"></span></p>
-    <p><strong>Comentarios:</strong> <span id="rComentarios"></span></p>
-    <p><strong>Firma:</strong> <span id="rFirma"></span></p>
-  </div>
-
-  <h4>💲 Desglose de Costos</h4>
-  <table class="tabla-recibo">
-    <tr>
-      <td>Aceite</td>
-      <td><span id="reciboAceiteCosto"></span></td>
-    </tr>
-    <tr>
-      <td>Filtro</td>
-      <td><span id="reciboFiltro"></span></td>
-    </tr>
-    <tr>
-      <td>Mano de obra</td>
-      <td><span id="reciboManoObra"></span></td>
-    </tr>
-    <tr>
-      <td>Desecho</td>
-      <td><span id="reciboDesecho"></span></td>
-    </tr>
-    <tr class="total">
-      <td><strong>Total</strong></td>
-      <td><strong><span id="reciboTotal"></span></strong></td>
-    </tr>
-  </table>
-</div>
-
-<style>
-#recibo {
-  display: none;
-  background: #2a2a2a;
-  margin-top: 30px;
-  padding: 20px;
-  border-radius: 10px;
-  color: #e0e0e0;
-}
-#recibo h3, #recibo h4 {
-  text-align: center;
-  margin-bottom: 15px;
-  color: #fff;
-}
-.recibo-datos p {
-  margin: 5px 0;
-  font-size: 14px;
-}
-.tabla-recibo {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-.tabla-recibo td {
-  padding: 8px;
-  border-bottom: 1px solid #444;
-}
-.tabla-recibo .total td {
-  font-size: 16px;
-  color: #0b5ed7;
-}
-</style>
-</style>
-
-/* === Modal === */
-    .modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,.8);}
-    .modal-content{background:#1e1e1e;margin:50px auto;padding:20px;border-radius:12px;width:90%;max-width:800px;color:#e0e0e0;position:relative;}
-    .modal-close{position:absolute;top:10px;right:20px;font-size:26px;color:#888;cursor:pointer;}
-    .modal-close:hover{color:#fff;}
-    iframe{width:100%;height:70vh;border:none;border-radius:10px;}
-  </style>
-</head>
-<body>
-<div class="container">
-  <h2>Reserva de Servicio a Domicilio</h2>
-
-  <form id="formCita">
-    <div class="form-group">
-      <i class="fas fa-user"></i>
-      <input type="text" name="nombre" placeholder=" " required>
-      <label>Nombre completo</label>
-    </div>
-
-    <div class="form-group">
-      <i class="fas fa-phone"></i>
-      <input type="tel" name="telefono" placeholder=" " required>
-      <label>Teléfono</label>
-    </div>
-
-    <div class="form-group">
-      <i class="fas fa-envelope"></i>
-      <input type="email" name="correo" placeholder=" " required>
-      <label>Correo electrónico</label>
-    </div>
-
-    <!-- Acuerdo -->
-    <div class="form-group">
-      <a href="#" id="linkAcuerdo">📄 Leer acuerdo completo</a>
-    </div>
-
-    <div class="form-group">
-      <input type="text" name="firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" disabled required>
-    </div>
-
-    <button type="submit">Enviar Reserva</button>
-  </form>
-</div>
-
-<!-- === Modal con iframe === -->
-<div id="modalAcuerdo" class="modal">
-  <div class="modal-content">
-    <span class="modal-close">&times;</span>
-    <h3 style="text-align:center;margin-bottom:15px;">Términos y Condiciones del Servicio</h3>
-    <iframe src="acuerdo.html" title="Acuerdo de servicio"></iframe>
-  </div>
-</div>
-
-<script>
-  // === CONTROL DEL MODAL ===
-  const linkAcuerdo = document.getElementById('linkAcuerdo');
-  const modal = document.getElementById('modalAcuerdo');
-  const closeBtn = document.querySelector('.modal-close');
-  const firmaInput = document.getElementById('firmaInput');
-
-  linkAcuerdo.addEventListener('click', e => {
+  /* ===========================
+     ENVIAR FORMULARIO (guardarReserva)
+     =========================== */
+  document.getElementById("formCita").addEventListener("submit", async (e) => {
     e.preventDefault();
-    modal.style.display = 'block';
-  });
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form).entries());
 
-  closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-    // ✅ Activar campo de firma solo después de leer el acuerdo
-    firmaInput.disabled = false;
-  });
+    // Validación básica: firma debe estar habilitada
+    if (firmaInput.disabled) {
+      alert("Debes aceptar el acuerdo antes de firmar y enviar la reserva.");
+      return;
+    }
 
-  // Cerrar modal al hacer clic fuera del contenido
-  window.addEventListener('click', e => {
-    if (e.target === modal) {
-      modal.style.display = 'none';
-      firmaInput.disabled = false;
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ action: "guardarReserva", ...data })
+      });
+      const result = await res.json();
+      if (result.success) {
+        document.getElementById("mensaje").textContent = "✅ Reserva enviada con éxito";
+        // Mostrar recibo con datos
+        document.getElementById("recibo").style.display = "block";
+        document.getElementById("rNombre").textContent = data.nombre || "";
+        document.getElementById("rTelefono").textContent = data.telefono || "";
+        document.getElementById("rCorreo").textContent = data.correo || "";
+        document.getElementById("rMarca").textContent = data.marca || "";
+        document.getElementById("rModelo").textContent = data.modelo || "";
+        document.getElementById("rAno").textContent = data.ano || "";
+        document.getElementById("rAceite").textContent = data.aceiteRecomendado || "";
+        document.getElementById("rMarcaAceite").textContent = data.marcaAceite || "";
+        document.getElementById("rDireccionRec").textContent = data.direccion || "";
+        document.getElementById("rFecha").textContent = data.fecha || "";
+        document.getElementById("rHora").textContent = data.hora || "";
+        document.getElementById("rComentarios").textContent = data.comentarios || "";
+        document.getElementById("rFirma").textContent = data.firma || "";
+      } else {
+        document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva";
+      }
+    } catch (err) {
+      console.error("Error al enviar reserva:", err);
+      document.getElementById("mensaje").textContent = "❌ Error de conexión";
     }
   });
+});
 </script>
+
+  </div> <!-- .container -->
 </body>
 </html>
