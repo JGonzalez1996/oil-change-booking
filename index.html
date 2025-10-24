@@ -582,7 +582,7 @@ precioBox.style.fontWeight = "700";
 document.querySelector("form").appendChild(precioBox);
 
 /* Poblar marcas únicas */
-const marcasUnicas = [...new Set(marcasModelos.map(m => m.Marca))].sort();
+const marcasUnicas = Object.keys(marcasModelos).sort();
 marcasUnicas.forEach(m => {
   const opt = document.createElement("option");
   opt.value = m;
@@ -598,13 +598,14 @@ marcaSelect.addEventListener("change", () => {
   motorGroup.style.display = "none";
   aceiteInput.value = "";
 
-  marcasModelos.filter(x => x.Marca === marca).forEach(x => {
+  const modelos = marcasModelos[marca] || [];
+  modelos.forEach(modelo => {
     const opt = document.createElement("option");
-    opt.value = x.Modelo;
-    opt.textContent = x.Modelo;
+    opt.value = modelo;
+    opt.textContent = modelo;
     modeloSelect.appendChild(opt);
   });
-});
+})
 
 /* URL Apps Script */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyr-QmwMFvops845tuBKfFt8MXefx0RY0axTgDNZX69bkxyieaEmD_9SbYcqfW8CImhmQ/exec";
@@ -729,14 +730,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const acuerdoFrame = document.getElementById("acuerdoFrame");
   const firmaInput = document.getElementById("firmaInput");
 
+  if (!modal || !link || !spanClose || !acuerdoFrame || !firmaInput) return;
+
   link.addEventListener("click", (e) => {
     e.preventDefault();
-    acuerdoFrame.src = "acuerdo.html";
+    acuerdoFrame.src = "acuerdo.html"; // debe estar en la misma carpeta
     modal.style.display = "block";
   });
 
-  spanClose.addEventListener("click", () => { modal.style.display = "none"; });
-  window.addEventListener("click", (e) => { if (e.target === modal) modal.style.display = "none"; });
+  spanClose.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) modal.style.display = "none";
+  });
 
   window.addEventListener("message", (event) => {
     if (event.data === "acuerdoAceptado") {
@@ -750,6 +758,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (localStorage.getItem("acuerdoFirmado") === "true") {
     firmaInput.disabled = false;
   }
+});
 
   /* ===========================
      ENVÍO DE RESERVA
