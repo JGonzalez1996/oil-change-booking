@@ -38,50 +38,30 @@
     <!-- Nombre -->
     <div class="form-group">
       <i class="fas fa-user"></i>
-      <input type="text" name="Nombre" placeholder=" " required>
-      <label id="lblNombre">Nombre completo</label>
+      <input type="text" name="nombre" placeholder=" " required>
+      <label>Nombre completo</label>
     </div>
 
     <!-- Teléfono -->
     <div class="form-group">
       <i class="fas fa-phone"></i>
-      <input type="tel" name="Telefono" placeholder=" " required>
-      <label id="lblTelefono">Teléfono</label>
+      <input type="tel" name="telefono" placeholder=" " required>
+      <label>Teléfono</label>
     </div>
 
     <!-- Correo -->
     <div class="form-group">
       <i class="fas fa-envelope"></i>
-      <input type="email" name="Correo" placeholder=" " required>
-      <label id="lblCorreo">Correo electrónico</label>
+      <input type="email" name="email" placeholder=" " required>
+      <label>Correo electrónico</label>
     </div>
-
-
-      <!-- Marca -->
-      <div class="form-group">
-        <i class="fas fa-car"></i>
-        <select name="marca" id="marcaSelect" required>
-          <option value="">Selecciona marca</option>
-        </select>
-        <label>Marca del vehículo</label>
-      </div>
-
-      <!-- Modelo -->
-      <div class="form-group">
-        <i class="fas fa-car-side"></i>
-        <select name="modelo" id="modeloSelect" required>
-          <option value="">Selecciona modelo</option>
-        </select>
-        <label>Modelo del vehículo</label>
-      </div>
-
-          <!-- Marca y Modelo dinámicos -->
+    <!-- Marca y Modelo dinámicos -->
     <div class="form-group">
       <i class="fas fa-car"></i>
       <select name="marca" id="marcaSelect" required>
         <option value="">Selecciona marca</option>
       </select>
-      <label id="lblMarca">Marca del vehículo</label>
+      <label>Marca del vehículo</label>
     </div>
 
     <div class="form-group">
@@ -89,21 +69,21 @@
       <select name="modelo" id="modeloSelect" required>
         <option value="">Selecciona modelo</option>
       </select>
-      <label id="lblModelo">Modelo del vehículo</label>
+      <label>Modelo del vehículo</label>
     </div>
 
     <!-- Año -->
     <div class="form-group">
       <i class="fas fa-calendar-alt"></i>
       <input type="number" name="ano" id="anoInput" placeholder=" " required>
-      <label id="lblAno">Año del vehículo</label>
+      <label>Año del vehículo</label>
     </div>
 
     <!-- Aceite recomendado -->
     <div class="form-group">
       <i class="fas fa-oil-can"></i>
       <input type="text" id="tipoAceiteRecomendado" name="aceiteRecomendado" readonly placeholder="Tipo de aceite recomendado">
-      <label id="lblAceite">Aceite recomendado</label>
+      <label>Aceite recomendado</label>
     </div>
 
     <!-- Marca de Aceite -->
@@ -117,47 +97,47 @@
         <option value="Castrol EDGE">Castrol EDGE</option>
         <option value="Shell Helix">Shell Helix</option>
       </select>
-      <label id="lblMarcaAceite">Marca de Aceite</label>
+      <label>Marca de Aceite</label>
     </div>
 
     <!-- Descripción del aceite -->
     <div class="form-group">
       <i class="fas fa-info-circle"></i>
-      <textarea id="descripcionAceite" name="DescripcionAceite" readonly placeholder="Descripción del aceite seleccionado"></textarea>
+      <textarea id="descripcionAceite" name="descripcionAceite" readonly placeholder="Descripción del aceite seleccionado"></textarea>
     </div>
 
     <!-- Precio estimado -->
     <div class="form-group">
       <i class="fas fa-dollar-sign"></i>
-      <input type="text" id="precioEstimado" name="PrecioEstimado" readonly placeholder="Precio estimado del servicio">
+      <input type="text" id="precioEstimado" name="precioEstimado" readonly placeholder="Precio estimado del servicio">
     </div>
 
     <!-- Dirección -->
     <div class="form-group">
       <i class="fas fa-map-marker-alt"></i>
-      <input type="text" name="Direccion" placeholder=" " required>
-      <label id="lblDireccion">Dirección del servicio</label>
+      <input type="text" name="direccion" placeholder=" " required>
+      <label>Dirección del servicio</label>
     </div>
 
     <!-- Fecha -->
     <div class="form-group">
       <i class="fas fa-calendar-day"></i>
-      <input type="date" name="Fecha" placeholder=" " required>
-      <label id="lblFecha">Fecha</label>
+      <input type="date" name="fecha" placeholder=" " required>
+      <label>Fecha</label>
     </div>
 
     <!-- Hora -->
     <div class="form-group">
       <i class="fas fa-clock"></i>
-      <input type="time" name="Hora" placeholder=" " required>
-      <label id="lblHora">Hora</label>
+      <input type="time" name="hora" placeholder=" " required>
+      <label>Hora</label>
     </div>
 
     <!-- Comentarios -->
     <div class="form-group">
       <i class="fas fa-comment-dots"></i>
-      <textarea name="Comentarios" placeholder=" "></textarea>
-      <label id="lblComentarios">Comentarios adicionales</label>
+      <textarea name="comentarios" placeholder=" "></textarea>
+      <label>Comentarios adicionales</label>
     </div>
 
     <!-- Acuerdo -->
@@ -167,26 +147,17 @@
 
     <!-- Firma -->
     <div class="firma-container">
-      <input type="text" name="Firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" required>
+      <input type="text" name="firma" id="firmaInput" placeholder="Escribe tu nombre como firma digital" required>
     </div>
 
     <button type="submit" id="btnEnviar">Enviar Reserva</button>
   </form>
 </div>
-
-
-      <!-- Ocultos -->
-      <input type="hidden" name="estado" value="Pendiente">
-      <input type="hidden" name="idioma" id="langField">
-
-      <button type="submit" class="primary">Enviar Reserva</button>
-    </form>
-
 <div class="mensaje" id="mensaje"></div>
 
 <!-- Recibo -->
 <div id="recibo">
-  <h3 id="reciboTitulo">✅ Recibo de Reserva</h3>
+  <h3>✅ Recibo de Reserva</h3>
   <p><b>Nombre:</b> <span id="reciboNombre"></span></p>
   <p><b>Teléfono:</b> <span id="reciboTelefono"></span></p>
   <p><b>Correo:</b> <span id="reciboCorreo"></span></p>
@@ -209,335 +180,335 @@
 <!-- === Script de Marcas y Modelos (tú agregas los objetos) === -->
 <script>
 const marcasModelos = [
-{Marca:"Acura", Modelo:"ILX 2.4L – 2.4L I4 DOHC i-VTEC"},
-{Marca:"Acura", Modelo:"MDX 3.5L – 3.5L V6 SOHC"},
-{Marca:"Acura", Modelo:"MDX SH-AWD 3.5L – 3.5L V6 SOHC"},
-{Marca:"Acura", Modelo:"MDX Sport Hybrid 3.0L – 3.0L V6 + Híbrido"},
-{Marca:"Acura", Modelo:"NSX 3.5L Turbo – 3.5L V6 Twin Turbo + HEV"},
-{Marca:"Acura", Modelo:"RDX 2WD 2.0L Turbo – 2.0L I4 Turbo DOHC"},
-{Marca:"Acura", Modelo:"RDX AWD 2.0L Turbo – 2.0L I4 Turbo DOHC"},
-{Marca:"Acura", Modelo:"RLX 3.5L – 3.5L V6 SOHC"},
-{Marca:"Acura", Modelo:"RLX Sport Hybrid 3.5L – 3.5L V6 + Híbrido"},
-{Marca:"Acura", Modelo:"TLX 2.0L Turbo – 2.0L I4 Turbo DOHC"},
-{Marca:"Acura", Modelo:"TLX SH-AWD 3.5L – 3.5L V6 SOHC"},
-{Marca:"Chevrolet", Modelo:"Aveo – 1.6L DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Cruze – 1.4L Turbo DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Cruze – 1.8L DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Malibu – 1.5L Turbo DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Malibu – 2.0L Turbo DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Impala – 3.6L V6 DOHC"},
-{Marca:"Chevrolet", Modelo:"Camaro – 2.0L Turbo DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Camaro – 3.6L V6 DOHC"},
-{Marca:"Chevrolet", Modelo:"Camaro – 6.2L V8 OHV"},
-{Marca:"Chevrolet", Modelo:"Corvette – 6.2L V8 (LT1/LT2)"},
-{Marca:"Chevrolet", Modelo:"Corvette Z06 – 6.2L Supercharged V8 (LT4)"},
-{Marca:"Chevrolet", Modelo:"Trax – 1.4L Turbo DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Equinox – 1.5L Turbo DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Equinox – 2.0L Turbo DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Blazer – 2.0L Turbo DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Blazer – 3.6L V6 DOHC"},
-{Marca:"Chevrolet", Modelo:"Traverse – 3.6L V6 DOHC"},
-{Marca:"Chevrolet", Modelo:"Colorado – 2.5L DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Colorado – 3.6L V6 DOHC"},
-{Marca:"Chevrolet", Modelo:"Silverado 1500 – 2.7L Turbo I4 (L3B)"},
-{Marca:"Chevrolet", Modelo:"Silverado 1500 – 5.3L V8 (L84, L83)"},
-{Marca:"Chevrolet", Modelo:"Silverado 1500 – 6.2L V8 (L87)"},
-{Marca:"Chevrolet", Modelo:"Silverado 2500HD – 6.6L V8 Gasolina (L8T)"},
-{Marca:"Chevrolet", Modelo:"Tahoe – 5.3L V8"},
-{Marca:"Chevrolet", Modelo:"Suburban – 6.2L V8"},
-{Marca:"Chevrolet", Modelo:"Trailblazer – 1.2L Turbo DOHC 3cyl"},
-{Marca:"Chevrolet", Modelo:"Trailblazer – 1.3L Turbo DOHC 3cyl"},
-{Marca:"Chevrolet", Modelo:"Spark – 1.4L DOHC 4cyl"},
-{Marca:"Chevrolet", Modelo:"Sonic – 1.4L Turbo DOHC 4cyl"},
-{Marca:"Dodge", Modelo:"Dart – 2.0L DOHC 4cyl"},
-{Marca:"Dodge", Modelo:"Dart – 1.4L Turbo MultiAir 4cyl"},
-{Marca:"Dodge", Modelo:"Neon – 2.0L SOHC 4cyl"},
-{Marca:"Dodge", Modelo:"Caliber – 1.8L DOHC 4cyl"},
-{Marca:"Dodge", Modelo:"Caliber – 2.0L DOHC 4cyl"},
-{Marca:"Dodge", Modelo:"Caliber – 2.4L DOHC 4cyl"},
-{Marca:"Dodge", Modelo:"Journey – 2.4L DOHC 4cyl"},
-{Marca:"Dodge", Modelo:"Journey – 3.6L V6 DOHC (Pentastar)"},
-{Marca:"Dodge", Modelo:"Avenger – 2.4L DOHC 4cyl"},
-{Marca:"Dodge", Modelo:"Avenger – 3.6L V6 DOHC (Pentastar)"},
-{Marca:"Dodge", Modelo:"Charger – 3.6L V6 Pentastar"},
-{Marca:"Dodge", Modelo:"Charger – 5.7L V8 HEMI"},
-{Marca:"Dodge", Modelo:"Charger – 6.4L V8 HEMI (Scat Pack)"},
-{Marca:"Dodge", Modelo:"Charger – 6.2L Supercharged V8 HEMI (Hellcat)"},
-{Marca:"Dodge", Modelo:"Challenger – 3.6L V6 Pentastar"},
-{Marca:"Dodge", Modelo:"Challenger – 5.7L V8 HEMI"},
-{Marca:"Dodge", Modelo:"Challenger – 6.4L V8 HEMI"},
-{Marca:"Dodge", Modelo:"Challenger – 6.2L Supercharged V8 HEMI (Hellcat/Demon)"},
-{Marca:"Dodge", Modelo:"Durango – 3.6L V6 Pentastar"},
-{Marca:"Dodge", Modelo:"Durango – 5.7L V8 HEMI"},
-{Marca:"Dodge", Modelo:"Durango – 6.4L V8 HEMI"},
-{Marca:"Dodge", Modelo:"Grand Caravan – 3.3L V6 OHV"},
-{Marca:"Dodge", Modelo:"Grand Caravan – 3.6L V6 Pentastar"},
-{Marca:"Dodge", Modelo:"Nitro – 3.7L V6 SOHC"},
-{Marca:"Dodge", Modelo:"Nitro – 4.0L V6 SOHC"},
-{Marca:"Dodge", Modelo:"Dakota – 3.7L V6 SOHC"},
-{Marca:"Dodge", Modelo:"Dakota – 4.7L V8 SOHC"},
-{Marca:"Dodge", Modelo:"Dakota – 5.7L V8 HEMI"},
-{Marca:"Dodge", Modelo:"Ram 1500 – 3.6L V6 Pentastar"},
-{Marca:"Dodge", Modelo:"Ram 1500 – 5.7L V8 HEMI"},
-{Marca:"Dodge", Modelo:"Ram 2500/3500 – 6.4L V8 HEMI"},
-{Marca:"Dodge", Modelo:"Viper – 8.4L V10"},
-{Marca:"Honda", Modelo:"Civic – 1.5L Turbo I4"},
-{Marca:"Honda", Modelo:"Civic – 2.0L I4"},
-{Marca:"Honda", Modelo:"Civic – 1.8L I4"},
-{Marca:"Honda", Modelo:"Accord – 1.5L Turbo I4"},
-{Marca:"Honda", Modelo:"Accord – 2.0L Turbo I4"},
-{Marca:"Honda", Modelo:"Accord – 2.4L I4"},
-{Marca:"Honda", Modelo:"Accord Hybrid – 2.0L I4 + Hybrid"},
-{Marca:"Honda", Modelo:"CR-V – 1.5L Turbo I4"},
-{Marca:"Honda", Modelo:"CR-V – 2.4L I4"},
-{Marca:"Honda", Modelo:"HR-V – 1.8L I4"},
-{Marca:"Honda", Modelo:"Fit – 1.5L I4"},
-{Marca:"Honda", Modelo:"Pilot – 3.5L V6"},
-{Marca:"Honda", Modelo:"Odyssey – 3.5L V6"},
-{Marca:"Honda", Modelo:"Ridgeline – 3.5L V6"},
-{Marca:"Honda", Modelo:"Insight – 1.5L I4 + Hybrid"},
-{Marca:"Honda", Modelo:"Passport – 3.5L V6"},
-{Marca:"Honda", Modelo:"Pilot Hybrid – 3.5L V6 + Hybrid"},
-{Marca:"Honda", Modelo:"CR-V Hybrid – 2.0L I4 + Hybrid"},
-{Marca:"Toyota", Modelo:"Yaris – 1.5L I4 DOHC"},
-{Marca:"Toyota", Modelo:"Corolla – 1.8L I4 DOHC"},
-{Marca:"Toyota", Modelo:"Corolla – 2.0L I4 DOHC"},
-{Marca:"Toyota", Modelo:"Camry – 2.5L I4 DOHC"},
-{Marca:"Toyota", Modelo:"Camry – 3.5L V6 DOHC"},
-{Marca:"Toyota", Modelo:"Avalon – 3.5L V6 DOHC"},
-{Marca:"Toyota", Modelo:"Prius – 1.8L I4 Híbrido"},
-{Marca:"Toyota", Modelo:"RAV4 – 2.5L I4 DOHC"},
-{Marca:"Toyota", Modelo:"RAV4 – 2.5L I4 Turbo"},
-{Marca:"Toyota", Modelo:"Highlander – 3.5L V6 DOHC"},
-{Marca:"Toyota", Modelo:"Sequoia – 5.7L V8 OHV"},
-{Marca:"Toyota", Modelo:"4Runner – 4.0L V6 DOHC"},
-{Marca:"Toyota", Modelo:"Tacoma – 2.7L I4 DOHC"},
-{Marca:"Toyota", Modelo:"Tacoma – 3.5L V6 DOHC"},
-{Marca:"Toyota", Modelo:"Tundra – 4.6L V8 OHV"},
-{Marca:"Toyota", Modelo:"Tundra – 5.7L V8 OHV"},
-{Marca:"Toyota", Modelo:"Sienna – 3.5L V6 DOHC"},
-{Marca:"Ford", Modelo:"Fiesta – 1.0L I3 Turbo"},
-{Marca:"Ford", Modelo:"Focus – 2.0L I4 DOHC"},
-{Marca:"Ford", Modelo:"Focus – 1.0L EcoBoost I3"},
-{Marca:"Ford", Modelo:"Fusion – 2.5L I4 DOHC"},
-{Marca:"Ford", Modelo:"Fusion – 1.5L EcoBoost I4"},
-{Marca:"Ford", Modelo:"Mustang – 2.3L I4 Turbo"},
-{Marca:"Ford", Modelo:"Mustang – 5.0L V8"},
-{Marca:"Ford", Modelo:"Explorer – 3.5L V6 DOHC"},
-{Marca:"Ford", Modelo:"Explorer – 2.3L EcoBoost I4"},
-{Marca:"Ford", Modelo:"F-150 – 3.3L V6"},
-{Marca:"Ford", Modelo:"F-150 – 2.7L Turbo V6"},
-{Marca:"Ford", Modelo:"F-150 – 3.5L V6"},
-{Marca:"Ford", Modelo:"F-150 – 5.0L V8"},
-{Marca:"Ford", Modelo:"Edge – 2.0L Turbo I4"},
-{Marca:"Ford", Modelo:"Edge – 3.5L V6"},
-{Marca:"Ford", Modelo:"Expedition – 3.5L V6 EcoBoost"},
-{Marca:"Ford", Modelo:"Escape – 1.5L EcoBoost I3"},
-{Marca:"Ford", Modelo:"Escape – 2.0L EcoBoost I4"},
-{Marca:"GMC", Modelo:"Sierra 1500 – 4.3L V6"},
-{Marca:"GMC", Modelo:"Sierra 1500 – 5.3L V8"},
-{Marca:"GMC", Modelo:"Sierra 1500 – 6.2L V8"},
-{Marca:"GMC", Modelo:"Sierra 2500HD – 6.6L V8 Gasolina"},
-{Marca:"GMC", Modelo:"Canyon – 2.5L I4 DOHC"},
-{Marca:"GMC", Modelo:"Canyon – 3.6L V6 DOHC"},
-{Marca:"GMC", Modelo:"Yukon – 5.3L V8"},
-{Marca:"GMC", Modelo:"Yukon – 6.2L V8"},
-{Marca:"GMC", Modelo:"Acadia – 2.5L I4 DOHC"},
-{Marca:"GMC", Modelo:"Acadia – 3.6L V6 DOHC"},
-{Marca:"GMC", Modelo:"Terrain – 1.5L Turbo I4"},
-{Marca:"GMC", Modelo:"Terrain – 2.0L Turbo I4"},
-{Marca:"GMC", Modelo:"Terrain – 2.5L I4 DOHC"},
-{Marca:"Hyundai", Modelo:"Sonata – 2.5L I4"},
-{Marca:"Hyundai", Modelo:"Sonata – 1.6L Turbo I4"},
-{Marca:"Hyundai", Modelo:"Sonata – 2.5L Turbo I4"},
-{Marca:"Hyundai", Modelo:"Tucson – 2.0L I4"},
-{Marca:"Hyundai", Modelo:"Palisade – 3.8L V6"},
-{Marca:"Hyundai", Modelo:"Venue – 1.6L I4"},
-{Marca:"Hyundai", Modelo:"Kona – 2.0L I4"},
-{Marca:"Hyundai", Modelo:"Santa Fe – 2.5L Turbo I4"},
-{Marca:"Hyundai", Modelo:"Creta – 1.5L I4"},
-{Marca:"Hyundai", Modelo:"Creta – 1.5L Turbo I4"},
-{Marca:"Jeep", Modelo:"Renegade – 1.3L Turbo I4"},
-{Marca:"Jeep", Modelo:"Renegade – 2.4L I4 DOHC"},
-{Marca:"Jeep", Modelo:"Compass – 1.3L Turbo I4"},
-{Marca:"Jeep", Modelo:"Compass – 2.4L I4 DOHC"},
-{Marca:"Jeep", Modelo:"Cherokee – 2.0L Turbo I4"},
-{Marca:"Jeep", Modelo:"Cherokee – 2.4L I4 DOHC"},
-{Marca:"Jeep", Modelo:"Cherokee – 3.2L V6 DOHC"},
-{Marca:"Jeep", Modelo:"Grand Cherokee – 3.6L V6 Pentastar"},
-{Marca:"Jeep", Modelo:"Grand Cherokee – 5.7L V8 HEMI OHV"},
-{Marca:"Jeep", Modelo:"Grand Cherokee – 6.4L V8 HEMI OHV"},
-{Marca:"Jeep", Modelo:"Wrangler – 2.0L Turbo I4"},
-{Marca:"Jeep", Modelo:"Wrangler – 3.6L V6 Pentastar"},
-{Marca:"Jeep", Modelo:"Wrangler – 3.8L V6"},
-{Marca:"Jeep", Modelo:"Gladiator – 3.6L V6 Pentastar"},
-{Marca:"Infiniti", Modelo:"Q50 – 2.0L Turbo I4"},
-{Marca:"Infiniti", Modelo:"Q50 – 3.0L Twin Turbo V6"},
-{Marca:"Infiniti", Modelo:"Q60 – 2.0L Turbo I4"},
-{Marca:"Infiniti", Modelo:"Q60 – 3.0L Twin Turbo V6"},
-{Marca:"Infiniti", Modelo:"QX50 – 2.0L Turbo I4"},
-{Marca:"Infiniti", Modelo:"QX55 – 2.0L Turbo I4"},
-{Marca:"Infiniti", Modelo:"QX60 – 3.5L V6 DOHC"},
-{Marca:"Infiniti", Modelo:"QX80 – 5.6L V8 DOHC"},
-{Marca:"Infiniti", Modelo:"QX70 – 3.7L V6 DOHC"},
-{Marca:"Infiniti", Modelo:"M35/M37 – 3.5L V6 DOHC"},
-{Marca:"Infiniti", Modelo:"M45 – 4.5L V8 DOHC"},
-{Marca:"Infiniti", Modelo:"FX35 – 3.5L V6 DOHC"},
-{Marca:"Infiniti", Modelo:"FX50 – 5.0L V8 DOHC"},
-{Marca:"Kia", Modelo:"Rio – 1.6L I4 DOHC"},
-{Marca:"Kia", Modelo:"Forte – 2.0L I4 DOHC"},
-{Marca:"Kia", Modelo:"Forte – 1.6L Turbo I4"},
-{Marca:"Kia", Modelo:"Optima/K5 – 2.4L I4 DOHC"},
-{Marca:"Kia", Modelo:"Optima/K5 – 1.6L Turbo I4"},
-{Marca:"Kia", Modelo:"Stinger – 2.0L Turbo I4"},
-{Marca:"Kia", Modelo:"Stinger – 3.3L Twin Turbo V6"},
-{Marca:"Kia", Modelo:"Soul – 2.0L I4 DOHC"},
-{Marca:"Kia", Modelo:"Soul – 1.6L Turbo I4"},
-{Marca:"Kia", Modelo:"Sportage – 2.4L I4 DOHC"},
-{Marca:"Kia", Modelo:"Sportage – 2.0L Turbo I4"},
-{Marca:"Kia", Modelo:"Sorento – 2.4L I4 DOHC"},
-{Marca:"Kia", Modelo:"Sorento – 3.3L V6 DOHC"},
-{Marca:"Kia", Modelo:"Telluride – 3.8L V6 DOHC"},
-{Marca:"Lexus", Modelo:"IS 200t/300 – 2.0L Turbo I4 / 3.5L V6"},
-{Marca:"Lexus", Modelo:"ES 250/350 – 2.5L I4 / 3.5L V6"},
-{Marca:"Lexus", Modelo:"GS 350 – 3.5L V6 DOHC"},
-{Marca:"Lexus", Modelo:"GS 450h – 3.5L V6 Híbrido"},
-{Marca:"Lexus", Modelo:"RX 350 – 3.5L V6 DOHC"},
-{Marca:"Lexus", Modelo:"RX 450h – 3.5L V6 Híbrido"},
-{Marca:"Lexus", Modelo:"NX 300 – 2.0L Turbo I4"},
-{Marca:"Lexus", Modelo:"NX 300h – 2.5L I4 Híbrido"},
-{Marca:"Lexus", Modelo:"LX 570 – 5.7L V8"},
-{Marca:"Lexus", Modelo:"GX 460 – 4.6L V8"},
-{Marca:"Lexus", Modelo:"LC 500 – 5.0L V8"},
-{Marca:"Lexus", Modelo:"LS 500 – 3.5L V6 Twin Turbo"},
-{Marca:"Lexus", Modelo:"LS 500h – 3.5L V6 Híbrido"},
-{Marca:"Mazda", Modelo:"Mazda2 – 1.5L I4 DOHC"},
-{Marca:"Mazda", Modelo:"Mazda3 – 2.0L I4 DOHC"},
-{Marca:"Mazda", Modelo:"Mazda3 – 2.5L I4 DOHC"},
-{Marca:"Mazda", Modelo:"Mazda6 – 2.5L I4 DOHC"},
-{Marca:"Mazda", Modelo:"CX-3 – 2.0L I4 DOHC"},
-{Marca:"Mazda", Modelo:"CX-30 – 2.5L I4 DOHC"},
-{Marca:"Mazda", Modelo:"CX-5 – 2.5L I4 DOHC"},
-{Marca:"Mazda", Modelo:"CX-9 – 2.5L Turbo I4"},
-{Marca:"Mazda", Modelo:"MX-5 Miata – 2.0L I4 DOHC"},
-{Marca:"Mazda", Modelo:"MX-5 Miata Turbo – 2.0L Turbo I4"},
-{Marca:"Nissan", Modelo:"Versa – 1.6L I4 DOHC"},
-{Marca:"Nissan", Modelo:"Sentra – 2.0L I4 DOHC"},
-{Marca:"Nissan", Modelo:"Sentra – 1.6L Turbo I4"},
-{Marca:"Nissan", Modelo:"Altima – 2.5L I4 DOHC"},
-{Marca:"Nissan", Modelo:"Altima – 2.0L Turbo I4"},
-{Marca:"Nissan", Modelo:"Maxima – 3.5L V6 DOHC"},
-{Marca:"Nissan", Modelo:"Kicks – 1.6L I4 DOHC"},
-{Marca:"Nissan", Modelo:"Rogue – 2.5L I4 DOHC"},
-{Marca:"Nissan", Modelo:"Rogue – 1.5L Turbo I4"},
-{Marca:"Nissan", Modelo:"Murano – 3.5L V6 DOHC"},
-{Marca:"Nissan", Modelo:"Pathfinder – 3.5L V6 DOHC"},
-{Marca:"Nissan", Modelo:"Armada – 5.6L V8 DOHC"},
-{Marca:"Nissan", Modelo:"Frontier – 3.8L V6 DOHC"},
-{Marca:"Nissan", Modelo:"Titan – 5.6L V8 DOHC"},
-{Marca:"Volvo", Modelo:"S60 2.0L Turbo – 2.0L I4 Turbo"},
-{Marca:"Volvo", Modelo:"S60 T5 – 2.0L I4 Turbo"},
-{Marca:"Volvo", Modelo:"S60 T6 – 2.0L I4 Turbo / Supercharged"},
-{Marca:"Volvo", Modelo:"S60 Recharge – 2.0L I4 Turbo Híbrido"},
-{Marca:"Volvo", Modelo:"S90 2.0L Turbo – 2.0L I4 Turbo"},
-{Marca:"Volvo", Modelo:"S90 T6 – 2.0L I4 Turbo / Supercharged"},
-{Marca:"Volvo", Modelo:"S90 Recharge – 2.0L I4 Turbo Híbrido"},
-{Marca:"Volvo", Modelo:"V60 2.0L Turbo – 2.0L I4 Turbo"},
-{Marca:"Volvo", Modelo:"V60 T6 – 2.0L I4 Turbo / Supercharged"},
-{Marca:"Volvo", Modelo:"V60 Recharge – 2.0L I4 Turbo Híbrido"},
-{Marca:"Volvo", Modelo:"XC40 2.0L Turbo – 2.0L I4 Turbo"},
-{Marca:"Volvo", Modelo:"XC40 T5 – 2.0L I4 Turbo"},
-{Marca:"Volvo", Modelo:"XC60 2.0L Turbo – 2.0L I4 Turbo"},
-{Marca:"Volvo", Modelo:"XC60 T6 – 2.0L I4 Turbo / Supercharged"},
-{Marca:"Volvo", Modelo:"XC60 Recharge – 2.0L I4 Turbo Híbrido"},
-{Marca:"Volvo", Modelo:"XC90 2.0L Turbo – 2.0L I4 Turbo"},
-{Marca:"Volvo", Modelo:"XC90 T6 – 2.0L I4 Turbo / Supercharged"},
-{Marca:"Volvo", Modelo:"XC90 Recharge – 2.0L I4 Turbo Híbrido"},
-{Marca:"Mercedes-Benz", Modelo:"A220 – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"CLA250 – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"GLA250 – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"GLB250 – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"GLC300 – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"GLE350 – 3.5L V6 (Engine Code 276.952)"},
-{Marca:"Mercedes-Benz", Modelo:"GLS450 – 3.0L I6 Turbo (Engine Code M256)"},
-{Marca:"Mercedes-Benz", Modelo:"G550 – 4.0L V8 (Engine Code M176)"},
-{Marca:"Mercedes-Benz", Modelo:"E350 – 3.5L V6 (Engine Code 276.952)"},
-{Marca:"Mercedes-Benz", Modelo:"S450 – 3.0L I6 Turbo (Engine Code M256)"},
-{Marca:"Mercedes-Benz", Modelo:"S560 – 4.0L V8 (Engine Code M176)"},
-{Marca:"Mercedes-Benz", Modelo:"C300 – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"C43 AMG – 3.0L V6 Biturbo (Engine Code M276)"},
-{Marca:"Mercedes-Benz", Modelo:"E450 – 3.0L V6 Turbo (Engine Code M256)"},
-{Marca:"Mercedes-Benz", Modelo:"GLE450 – 3.0L V6 Turbo (Engine Code M256)"},
-{Marca:"Mercedes-Benz", Modelo:"GLS580 – 4.0L V8 Turbo (Engine Code M176)"},
-{Marca:"Mercedes-Benz", Modelo:"G-Class (G550) – 4.0L V8 (Engine Code M176)"},
-{Marca:"Mercedes-Benz", Modelo:"G-Class (G63 AMG) – 4.0L V8 Biturbo (Engine Code M177)"},
-{Marca:"Mercedes-Benz", Modelo:"GLK350 – 3.5L V6 (Engine Code 276.952)"},
-{Marca:"Mercedes-Benz", Modelo:"GL550 – 4.7L V8 (Engine Code M157)"},
-{Marca:"Mercedes-Benz", Modelo:"SLC300 – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"SL450 – 3.0L V6 Turbo (Engine Code M276)"},
-{Marca:"Mercedes-Benz", Modelo:"SL550 – 4.7L V8 (Engine Code M157)"},
-{Marca:"Mercedes-Benz", Modelo:"GLA250 4MATIC – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"GLB250 4MATIC – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"GLC300 4MATIC – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"GLE350 4MATIC – 3.5L V6 (Engine Code 276.952)"},
-{Marca:"Mercedes-Benz", Modelo:"GLS450 4MATIC – 3.0L I6 Turbo (Engine Code M256)"},
-{Marca:"Mercedes-Benz", Modelo:"G550 4MATIC – 4.0L V8 (Engine Code M176)"},
-{Marca:"Mercedes-Benz", Modelo:"S450 4MATIC – 3.0L I6 Turbo (Engine Code M256)"},
-{Marca:"Mercedes-Benz", Modelo:"S560 4MATIC – 4.0L V8 (Engine Code M176)"},
-{Marca:"Mercedes-Benz", Modelo:"C300 4MATIC – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"E350 4MATIC – 3.5L V6 (Engine Code 276.952)"},
-{Marca:"Mercedes-Benz", Modelo:"SLC300 4MATIC – 2.0L I4 Turbo (Engine Code 274.920)"},
-{Marca:"Mercedes-Benz", Modelo:"SL450 4MATIC – 3.0L V6 Turbo (Engine Code M276)"},
-{Marca:"Mercedes-Benz", Modelo:"SL550 4MATIC – 4.7L V8 (Engine Code M157)"},
-{Marca:"Audi", Modelo:"A1 1.0 TFSI – CHZE / CHZB"},
-{Marca:"Audi", Modelo:"A1 1.2 TFSI – CBZA"},
-{Marca:"Audi", Modelo:"A1 1.4 TFSI – CAXA / CNVA"},
-{Marca:"Audi", Modelo:"A3 1.6 – BGU / BSE"},
-{Marca:"Audi", Modelo:"A4 1.8 T – BFB / BEX"},
-{Marca:"Audi", Modelo:"A4 2.0 TFSI – CAEB / CPMA"},
-{Marca:"Audi", Modelo:"A5 2.0 TFSI – CAEB / CPMA"},
-{Marca:"Audi", Modelo:"A5 2.0 TSI – EA888 / DCGA"},
-{Marca:"Audi", Modelo:"A7 3.0 TFSI – CREC / CGWB"},
-{Marca:"Audi", Modelo:"A8 3.0 TFSI – CGWA / CREC"},
-{Marca:"Audi", Modelo:"A8 4.0 TFSI – CEUA / CTFA"},
-{Marca:"Audi", Modelo:"Q2 1.0 TFSI – CHZB"},
-{Marca:"Audi", Modelo:"Q3 1.5 TFSI – DADA / DACA"},
-{Marca:"Audi", Modelo:"Q3 2.0 TFSI – CZPA / DNVB"},
-{Marca:"Audi", Modelo:"Q3 Sportback 1.5 TFSI – DADA / DACA"},
-{Marca:"Audi", Modelo:"Q3 Sportback 2.0 TFSI – CZPA / DNVB"},
-{Marca:"Audi", Modelo:"Q5 2.0 TFSI – CAEB / CPMA"},
-{Marca:"Audi", Modelo:"Q8 3.0 TFSI – CREC / DLZA"},
-{Marca:"Audi", Modelo:"TT 1.8 T – AJQ / APP"},
-{Marca:"Audi", Modelo:"TT 2.0 TFSI – BWA / CESA"},
-{Marca:"Audi", Modelo:"R8 4.2 V8 – BYH / CFSA"},
-{Marca:"Audi", Modelo:"R8 5.2 V10 – CEUA / CNDA"},
-{Marca:"Audi", Modelo:"RS3 2.5 TFSI – DAZA / CZGB"},
-{Marca:"Audi", Modelo:"RS4 4.2 V8 – BNS / CFSA"},
-{Marca:"Audi", Modelo:"RS5 2.9 TFSI – DECA / DECD"},
-{Marca:"Audi", Modelo:"RS6 4.0 TFSI – CEUA / CRDB"},
-{Marca:"Audi", Modelo:"RS7 4.0 TFSI – CRDB / CTFA"},
-{Marca:"Audi", Modelo:"S3 2.0 TFSI – CJXA / DNUE"},
-{Marca:"Audi", Modelo:"S4 3.0 TFSI – CREC / CGWC"},
-{Marca:"Audi", Modelo:"S5 3.0 TFSI – CREC / CGWC"},
-{Marca:"Audi", Modelo:"S6 4.0 TFSI – CTFA / CRDB"},
-{Marca:"Audi", Modelo:"S7 4.0 TFSI – CTFA / CRDB"},
-{Marca:"Audi", Modelo:"S8 4.0 TFSI – CTFA / CRDB"},
-{Marca:"Audi", Modelo:"SQ5 3.0 TFSI – CREC / CGWB"},
-{Marca:"BMW", Modelo:"116i (E87) – N45 / N43"},
-{Marca:"BMW", Modelo:"118i (F20) – N13 / B38"},
-{Marca:"BMW", Modelo:"120i (E87/F20) – N46 / N20"},
-{Marca:"BMW", Modelo:"125i (F20) – N52 / B48"},
-{Marca:"BMW", Modelo:"316i (E90) – N43 / N45"},
-{Marca:"BMW", Modelo:"318i (E90/F30) – N46 / N20 / B38"},
-{Marca:"BMW", Modelo:"320i (E90/F30) – N46 / N20 / B48"},
-{Marca:"BMW", Modelo:"325i (E90) – N52 / M54"},
-{Marca:"BMW", Modelo:"328i (F30) – N20 / B48"},
-{Marca:"BMW", Modelo:"330i (F30/G20) – B48"},
-{Marca:"BMW", Modelo:"335i (E90/F30) – N54 / N55"},
-{Marca:"BMW", Modelo:"340i (F30/G20) – B58"},
-{Marca:"BMW", Modelo:"520i (F10) – N20 / B48"},
-{Marca:"BMW", Modelo:"528i (F10) – N52 / N20"},
-{Marca:"BMW", Modelo:"530i (G30) – B48"},
+  {Marca:"Acura", Modelo:"ILX 2.4L â 2.4L I4 DOHC i-VTEC"},
+{Marca:"Acura", Modelo:"MDX 3.5L â 3.5L V6 SOHC"},
+{Marca:"Acura", Modelo:"MDX SH-AWD 3.5L â 3.5L V6 SOHC"},
+{Marca:"Acura", Modelo:"MDX Sport Hybrid 3.0L â 3.0L V6 + HÃ­brido"},
+{Marca:"Acura", Modelo:"NSX 3.5L Turbo â 3.5L V6 Twin Turbo + HEV"},
+{Marca:"Acura", Modelo:"RDX 2WD 2.0L Turbo â 2.0L I4 Turbo DOHC"},
+{Marca:"Acura", Modelo:"RDX AWD 2.0L Turbo â 2.0L I4 Turbo DOHC"},
+{Marca:"Acura", Modelo:"RLX 3.5L â 3.5L V6 SOHC"},
+{Marca:"Acura", Modelo:"RLX Sport Hybrid 3.5L â 3.5L V6 + HÃ­brido"},
+{Marca:"Acura", Modelo:"TLX 2.0L Turbo â 2.0L I4 Turbo DOHC"},
+{Marca:"Acura", Modelo:"TLX SH-AWD 3.5L â 3.5L V6 SOHC"},
+{Marca:"Chevrolet", Modelo:"Aveo â 1.6L DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Cruze â 1.4L Turbo DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Cruze â 1.8L DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Malibu â 1.5L Turbo DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Malibu â 2.0L Turbo DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Impala â 3.6L V6 DOHC"},
+{Marca:"Chevrolet", Modelo:"Camaro â 2.0L Turbo DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Camaro â 3.6L V6 DOHC"},
+{Marca:"Chevrolet", Modelo:"Camaro â 6.2L V8 OHV"},
+{Marca:"Chevrolet", Modelo:"Corvette â 6.2L V8 (LT1/LT2)"},
+{Marca:"Chevrolet", Modelo:"Corvette Z06 â 6.2L Supercharged V8 (LT4)"},
+{Marca:"Chevrolet", Modelo:"Trax â 1.4L Turbo DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Equinox â 1.5L Turbo DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Equinox â 2.0L Turbo DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Blazer â 2.0L Turbo DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Blazer â 3.6L V6 DOHC"},
+{Marca:"Chevrolet", Modelo:"Traverse â 3.6L V6 DOHC"},
+{Marca:"Chevrolet", Modelo:"Colorado â 2.5L DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Colorado â 3.6L V6 DOHC"},
+{Marca:"Chevrolet", Modelo:"Silverado 1500 â 2.7L Turbo I4 (L3B)"},
+{Marca:"Chevrolet", Modelo:"Silverado 1500 â 5.3L V8 (L84, L83)"},
+{Marca:"Chevrolet", Modelo:"Silverado 1500 â 6.2L V8 (L87)"},
+{Marca:"Chevrolet", Modelo:"Silverado 2500HD â 6.6L V8 Gasolina (L8T)"},
+{Marca:"Chevrolet", Modelo:"Tahoe â 5.3L V8"},
+{Marca:"Chevrolet", Modelo:"Suburban â 6.2L V8"},
+{Marca:"Chevrolet", Modelo:"Trailblazer â 1.2L Turbo DOHC 3cyl"},
+{Marca:"Chevrolet", Modelo:"Trailblazer â 1.3L Turbo DOHC 3cyl"},
+{Marca:"Chevrolet", Modelo:"Spark â 1.4L DOHC 4cyl"},
+{Marca:"Chevrolet", Modelo:"Sonic â 1.4L Turbo DOHC 4cyl"},
+{Marca:"Dodge", Modelo:"Dart â 2.0L DOHC 4cyl"},
+{Marca:"Dodge", Modelo:"Dart â 1.4L Turbo MultiAir 4cyl"},
+{Marca:"Dodge", Modelo:"Neon â 2.0L SOHC 4cyl"},
+{Marca:"Dodge", Modelo:"Caliber â 1.8L DOHC 4cyl"},
+{Marca:"Dodge", Modelo:"Caliber â 2.0L DOHC 4cyl"},
+{Marca:"Dodge", Modelo:"Caliber â 2.4L DOHC 4cyl"},
+{Marca:"Dodge", Modelo:"Journey â 2.4L DOHC 4cyl"},
+{Marca:"Dodge", Modelo:"Journey â 3.6L V6 DOHC (Pentastar)"},
+{Marca:"Dodge", Modelo:"Avenger â 2.4L DOHC 4cyl"},
+{Marca:"Dodge", Modelo:"Avenger â 3.6L V6 DOHC (Pentastar)"},
+{Marca:"Dodge", Modelo:"Charger â 3.6L V6 Pentastar"},
+{Marca:"Dodge", Modelo:"Charger â 5.7L V8 HEMI"},
+{Marca:"Dodge", Modelo:"Charger â 6.4L V8 HEMI (Scat Pack)"},
+{Marca:"Dodge", Modelo:"Charger â 6.2L Supercharged V8 HEMI (Hellcat)"},
+{Marca:"Dodge", Modelo:"Challenger â 3.6L V6 Pentastar"},
+{Marca:"Dodge", Modelo:"Challenger â 5.7L V8 HEMI"},
+{Marca:"Dodge", Modelo:"Challenger â 6.4L V8 HEMI"},
+{Marca:"Dodge", Modelo:"Challenger â 6.2L Supercharged V8 HEMI (Hellcat/Demon)"},
+{Marca:"Dodge", Modelo:"Durango â 3.6L V6 Pentastar"},
+{Marca:"Dodge", Modelo:"Durango â 5.7L V8 HEMI"},
+{Marca:"Dodge", Modelo:"Durango â 6.4L V8 HEMI"},
+{Marca:"Dodge", Modelo:"Grand Caravan â 3.3L V6 OHV"},
+{Marca:"Dodge", Modelo:"Grand Caravan â 3.6L V6 Pentastar"},
+{Marca:"Dodge", Modelo:"Nitro â 3.7L V6 SOHC"},
+{Marca:"Dodge", Modelo:"Nitro â 4.0L V6 SOHC"},
+{Marca:"Dodge", Modelo:"Dakota â 3.7L V6 SOHC"},
+{Marca:"Dodge", Modelo:"Dakota â 4.7L V8 SOHC"},
+{Marca:"Dodge", Modelo:"Dakota â 5.7L V8 HEMI"},
+{Marca:"Dodge", Modelo:"Ram 1500 â 3.6L V6 Pentastar"},
+{Marca:"Dodge", Modelo:"Ram 1500 â 5.7L V8 HEMI"},
+{Marca:"Dodge", Modelo:"Ram 2500/3500 â 6.4L V8 HEMI"},
+{Marca:"Dodge", Modelo:"Viper â 8.4L V10"},
+{Marca:"Honda", Modelo:"Civic â 1.5L Turbo I4"},
+{Marca:"Honda", Modelo:"Civic â 2.0L I4"},
+{Marca:"Honda", Modelo:"Civic â 1.8L I4"},
+{Marca:"Honda", Modelo:"Accord â 1.5L Turbo I4"},
+{Marca:"Honda", Modelo:"Accord â 2.0L Turbo I4"},
+{Marca:"Honda", Modelo:"Accord â 2.4L I4"},
+{Marca:"Honda", Modelo:"Accord Hybrid â 2.0L I4 + Hybrid"},
+{Marca:"Honda", Modelo:"CR-V â 1.5L Turbo I4"},
+{Marca:"Honda", Modelo:"CR-V â 2.4L I4"},
+{Marca:"Honda", Modelo:"HR-V â 1.8L I4"},
+{Marca:"Honda", Modelo:"Fit â 1.5L I4"},
+{Marca:"Honda", Modelo:"Pilot â 3.5L V6"},
+{Marca:"Honda", Modelo:"Odyssey â 3.5L V6"},
+{Marca:"Honda", Modelo:"Ridgeline â 3.5L V6"},
+{Marca:"Honda", Modelo:"Insight â 1.5L I4 + Hybrid"},
+{Marca:"Honda", Modelo:"Passport â 3.5L V6"},
+{Marca:"Honda", Modelo:"Pilot Hybrid â 3.5L V6 + Hybrid"},
+{Marca:"Honda", Modelo:"CR-V Hybrid â 2.0L I4 + Hybrid"},
+{Marca:"Toyota", Modelo:"Yaris â 1.5L I4 DOHC"},
+{Marca:"Toyota", Modelo:"Corolla â 1.8L I4 DOHC"},
+{Marca:"Toyota", Modelo:"Corolla â 2.0L I4 DOHC"},
+{Marca:"Toyota", Modelo:"Camry â 2.5L I4 DOHC"},
+{Marca:"Toyota", Modelo:"Camry â 3.5L V6 DOHC"},
+{Marca:"Toyota", Modelo:"Avalon â 3.5L V6 DOHC"},
+{Marca:"Toyota", Modelo:"Prius â 1.8L I4 HÃ­brido"},
+{Marca:"Toyota", Modelo:"RAV4 â 2.5L I4 DOHC"},
+{Marca:"Toyota", Modelo:"RAV4 â 2.5L I4 Turbo"},
+{Marca:"Toyota", Modelo:"Highlander â 3.5L V6 DOHC"},
+{Marca:"Toyota", Modelo:"Sequoia â 5.7L V8 OHV"},
+{Marca:"Toyota", Modelo:"4Runner â 4.0L V6 DOHC"},
+{Marca:"Toyota", Modelo:"Tacoma â 2.7L I4 DOHC"},
+{Marca:"Toyota", Modelo:"Tacoma â 3.5L V6 DOHC"},
+{Marca:"Toyota", Modelo:"Tundra â 4.6L V8 OHV"},
+{Marca:"Toyota", Modelo:"Tundra â 5.7L V8 OHV"},
+{Marca:"Toyota", Modelo:"Sienna â 3.5L V6 DOHC"},
+{Marca:"Ford", Modelo:"Fiesta â 1.0L I3 Turbo"},
+{Marca:"Ford", Modelo:"Focus â 2.0L I4 DOHC"},
+{Marca:"Ford", Modelo:"Focus â 1.0L EcoBoost I3"},
+{Marca:"Ford", Modelo:"Fusion â 2.5L I4 DOHC"},
+{Marca:"Ford", Modelo:"Fusion â 1.5L EcoBoost I4"},
+{Marca:"Ford", Modelo:"Mustang â 2.3L I4 Turbo"},
+{Marca:"Ford", Modelo:"Mustang â 5.0L V8"},
+{Marca:"Ford", Modelo:"Explorer â 3.5L V6 DOHC"},
+{Marca:"Ford", Modelo:"Explorer â 2.3L EcoBoost I4"},
+{Marca:"Ford", Modelo:"F-150 â 3.3L V6"},
+{Marca:"Ford", Modelo:"F-150 â 2.7L Turbo V6"},
+{Marca:"Ford", Modelo:"F-150 â 3.5L V6"},
+{Marca:"Ford", Modelo:"F-150 â 5.0L V8"},
+{Marca:"Ford", Modelo:"Edge â 2.0L Turbo I4"},
+{Marca:"Ford", Modelo:"Edge â 3.5L V6"},
+{Marca:"Ford", Modelo:"Expedition â 3.5L V6 EcoBoost"},
+{Marca:"Ford", Modelo:"Escape â 1.5L EcoBoost I3"},
+{Marca:"Ford", Modelo:"Escape â 2.0L EcoBoost I4"},
+{Marca:"GMC", Modelo:"Sierra 1500 â 4.3L V6"},
+{Marca:"GMC", Modelo:"Sierra 1500 â 5.3L V8"},
+{Marca:"GMC", Modelo:"Sierra 1500 â 6.2L V8"},
+{Marca:"GMC", Modelo:"Sierra 2500HD â 6.6L V8 Gasolina"},
+{Marca:"GMC", Modelo:"Canyon â 2.5L I4 DOHC"},
+{Marca:"GMC", Modelo:"Canyon â 3.6L V6 DOHC"},
+{Marca:"GMC", Modelo:"Yukon â 5.3L V8"},
+{Marca:"GMC", Modelo:"Yukon â 6.2L V8"},
+{Marca:"GMC", Modelo:"Acadia â 2.5L I4 DOHC"},
+{Marca:"GMC", Modelo:"Acadia â 3.6L V6 DOHC"},
+{Marca:"GMC", Modelo:"Terrain â 1.5L Turbo I4"},
+{Marca:"GMC", Modelo:"Terrain â 2.0L Turbo I4"},
+{Marca:"GMC", Modelo:"Terrain â 2.5L I4 DOHC"},
+{Marca:"Hyundai", Modelo:"Sonata â 2.5L I4"},
+{Marca:"Hyundai", Modelo:"Sonata â 1.6L Turbo I4"},
+{Marca:"Hyundai", Modelo:"Sonata â 2.5L Turbo I4"},
+{Marca:"Hyundai", Modelo:"Tucson â 2.0L I4"},
+{Marca:"Hyundai", Modelo:"Palisade â 3.8L V6"},
+{Marca:"Hyundai", Modelo:"Venue â 1.6L I4"},
+{Marca:"Hyundai", Modelo:"Kona â 2.0L I4"},
+{Marca:"Hyundai", Modelo:"Santa Fe â 2.5L Turbo I4"},
+{Marca:"Hyundai", Modelo:"Creta â 1.5L I4"},
+{Marca:"Hyundai", Modelo:"Creta â 1.5L Turbo I4"},
+{Marca:"Jeep", Modelo:"Renegade â 1.3L Turbo I4"},
+{Marca:"Jeep", Modelo:"Renegade â 2.4L I4 DOHC"},
+{Marca:"Jeep", Modelo:"Compass â 1.3L Turbo I4"},
+{Marca:"Jeep", Modelo:"Compass â 2.4L I4 DOHC"},
+{Marca:"Jeep", Modelo:"Cherokee â 2.0L Turbo I4"},
+{Marca:"Jeep", Modelo:"Cherokee â 2.4L I4 DOHC"},
+{Marca:"Jeep", Modelo:"Cherokee â 3.2L V6 DOHC"},
+{Marca:"Jeep", Modelo:"Grand Cherokee â 3.6L V6 Pentastar"},
+{Marca:"Jeep", Modelo:"Grand Cherokee â 5.7L V8 HEMI OHV"},
+{Marca:"Jeep", Modelo:"Grand Cherokee â 6.4L V8 HEMI OHV"},
+{Marca:"Jeep", Modelo:"Wrangler â 2.0L Turbo I4"},
+{Marca:"Jeep", Modelo:"Wrangler â 3.6L V6 Pentastar"},
+{Marca:"Jeep", Modelo:"Wrangler â 3.8L V6"},
+{Marca:"Jeep", Modelo:"Gladiator â 3.6L V6 Pentastar"},
+{Marca:"Infiniti", Modelo:"Q50 â 2.0L Turbo I4"},
+{Marca:"Infiniti", Modelo:"Q50 â 3.0L Twin Turbo V6"},
+{Marca:"Infiniti", Modelo:"Q60 â 2.0L Turbo I4"},
+{Marca:"Infiniti", Modelo:"Q60 â 3.0L Twin Turbo V6"},
+{Marca:"Infiniti", Modelo:"QX50 â 2.0L Turbo I4"},
+{Marca:"Infiniti", Modelo:"QX55 â 2.0L Turbo I4"},
+{Marca:"Infiniti", Modelo:"QX60 â 3.5L V6 DOHC"},
+{Marca:"Infiniti", Modelo:"QX80 â 5.6L V8 DOHC"},
+{Marca:"Infiniti", Modelo:"QX70 â 3.7L V6 DOHC"},
+{Marca:"Infiniti", Modelo:"M35/M37 â 3.5L V6 DOHC"},
+{Marca:"Infiniti", Modelo:"M45 â 4.5L V8 DOHC"},
+{Marca:"Infiniti", Modelo:"FX35 â 3.5L V6 DOHC"},
+{Marca:"Infiniti", Modelo:"FX50 â 5.0L V8 DOHC"},
+{Marca:"Kia", Modelo:"Rio â 1.6L I4 DOHC"},
+{Marca:"Kia", Modelo:"Forte â 2.0L I4 DOHC"},
+{Marca:"Kia", Modelo:"Forte â 1.6L Turbo I4"},
+{Marca:"Kia", Modelo:"Optima/K5 â 2.4L I4 DOHC"},
+{Marca:"Kia", Modelo:"Optima/K5 â 1.6L Turbo I4"},
+{Marca:"Kia", Modelo:"Stinger â 2.0L Turbo I4"},
+{Marca:"Kia", Modelo:"Stinger â 3.3L Twin Turbo V6"},
+{Marca:"Kia", Modelo:"Soul â 2.0L I4 DOHC"},
+{Marca:"Kia", Modelo:"Soul â 1.6L Turbo I4"},
+{Marca:"Kia", Modelo:"Sportage â 2.4L I4 DOHC"},
+{Marca:"Kia", Modelo:"Sportage â 2.0L Turbo I4"},
+{Marca:"Kia", Modelo:"Sorento â 2.4L I4 DOHC"},
+{Marca:"Kia", Modelo:"Sorento â 3.3L V6 DOHC"},
+{Marca:"Kia", Modelo:"Telluride â 3.8L V6 DOHC"},
+{Marca:"Lexus", Modelo:"IS 200t/300 â 2.0L Turbo I4 / 3.5L V6"},
+{Marca:"Lexus", Modelo:"ES 250/350 â 2.5L I4 / 3.5L V6"},
+{Marca:"Lexus", Modelo:"GS 350 â 3.5L V6 DOHC"},
+{Marca:"Lexus", Modelo:"GS 450h â 3.5L V6 HÃ­brido"},
+{Marca:"Lexus", Modelo:"RX 350 â 3.5L V6 DOHC"},
+{Marca:"Lexus", Modelo:"RX 450h â 3.5L V6 HÃ­brido"},
+{Marca:"Lexus", Modelo:"NX 300 â 2.0L Turbo I4"},
+{Marca:"Lexus", Modelo:"NX 300h â 2.5L I4 HÃ­brido"},
+{Marca:"Lexus", Modelo:"LX 570 â 5.7L V8"},
+{Marca:"Lexus", Modelo:"GX 460 â 4.6L V8"},
+{Marca:"Lexus", Modelo:"LC 500 â 5.0L V8"},
+{Marca:"Lexus", Modelo:"LS 500 â 3.5L V6 Twin Turbo"},
+{Marca:"Lexus", Modelo:"LS 500h â 3.5L V6 HÃ­brido"},
+{Marca:"Mazda", Modelo:"Mazda2 â 1.5L I4 DOHC"},
+{Marca:"Mazda", Modelo:"Mazda3 â 2.0L I4 DOHC"},
+{Marca:"Mazda", Modelo:"Mazda3 â 2.5L I4 DOHC"},
+{Marca:"Mazda", Modelo:"Mazda6 â 2.5L I4 DOHC"},
+{Marca:"Mazda", Modelo:"CX-3 â 2.0L I4 DOHC"},
+{Marca:"Mazda", Modelo:"CX-30 â 2.5L I4 DOHC"},
+{Marca:"Mazda", Modelo:"CX-5 â 2.5L I4 DOHC"},
+{Marca:"Mazda", Modelo:"CX-9 â 2.5L Turbo I4"},
+{Marca:"Mazda", Modelo:"MX-5 Miata â 2.0L I4 DOHC"},
+{Marca:"Mazda", Modelo:"MX-5 Miata Turbo â 2.0L Turbo I4"},
+{Marca:"Nissan", Modelo:"Versa â 1.6L I4 DOHC"},
+{Marca:"Nissan", Modelo:"Sentra â 2.0L I4 DOHC"},
+{Marca:"Nissan", Modelo:"Sentra â 1.6L Turbo I4"},
+{Marca:"Nissan", Modelo:"Altima â 2.5L I4 DOHC"},
+{Marca:"Nissan", Modelo:"Altima â 2.0L Turbo I4"},
+{Marca:"Nissan", Modelo:"Maxima â 3.5L V6 DOHC"},
+{Marca:"Nissan", Modelo:"Kicks â 1.6L I4 DOHC"},
+{Marca:"Nissan", Modelo:"Rogue â 2.5L I4 DOHC"},
+{Marca:"Nissan", Modelo:"Rogue â 1.5L Turbo I4"},
+{Marca:"Nissan", Modelo:"Murano â 3.5L V6 DOHC"},
+{Marca:"Nissan", Modelo:"Pathfinder â 3.5L V6 DOHC"},
+{Marca:"Nissan", Modelo:"Armada â 5.6L V8 DOHC"},
+{Marca:"Nissan", Modelo:"Frontier â 3.8L V6 DOHC"},
+{Marca:"Nissan", Modelo:"Titan â 5.6L V8 DOHC"},
+{Marca:"Volvo", Modelo:"S60 2.0L Turbo â 2.0L I4 Turbo"},
+{Marca:"Volvo", Modelo:"S60 T5 â 2.0L I4 Turbo"},
+{Marca:"Volvo", Modelo:"S60 T6 â 2.0L I4 Turbo / Supercharged"},
+{Marca:"Volvo", Modelo:"S60 Recharge â 2.0L I4 Turbo HÃ­brido"},
+{Marca:"Volvo", Modelo:"S90 2.0L Turbo â 2.0L I4 Turbo"},
+{Marca:"Volvo", Modelo:"S90 T6 â 2.0L I4 Turbo / Supercharged"},
+{Marca:"Volvo", Modelo:"S90 Recharge â 2.0L I4 Turbo HÃ­brido"},
+{Marca:"Volvo", Modelo:"V60 2.0L Turbo â 2.0L I4 Turbo"},
+{Marca:"Volvo", Modelo:"V60 T6 â 2.0L I4 Turbo / Supercharged"},
+{Marca:"Volvo", Modelo:"V60 Recharge â 2.0L I4 Turbo HÃ­brido"},
+{Marca:"Volvo", Modelo:"XC40 2.0L Turbo â 2.0L I4 Turbo"},
+{Marca:"Volvo", Modelo:"XC40 T5 â 2.0L I4 Turbo"},
+{Marca:"Volvo", Modelo:"XC60 2.0L Turbo â 2.0L I4 Turbo"},
+{Marca:"Volvo", Modelo:"XC60 T6 â 2.0L I4 Turbo / Supercharged"},
+{Marca:"Volvo", Modelo:"XC60 Recharge â 2.0L I4 Turbo HÃ­brido"},
+{Marca:"Volvo", Modelo:"XC90 2.0L Turbo â 2.0L I4 Turbo"},
+{Marca:"Volvo", Modelo:"XC90 T6 â 2.0L I4 Turbo / Supercharged"},
+{Marca:"Volvo", Modelo:"XC90 Recharge â 2.0L I4 Turbo HÃ­brido"},
+{Marca:"Mercedes-Benz", Modelo:"A220 â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"CLA250 â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"GLA250 â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"GLB250 â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"GLC300 â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"GLE350 â 3.5L V6 (Engine Code 276.952)"},
+{Marca:"Mercedes-Benz", Modelo:"GLS450 â 3.0L I6 Turbo (Engine Code M256)"},
+{Marca:"Mercedes-Benz", Modelo:"G550 â 4.0L V8 (Engine Code M176)"},
+{Marca:"Mercedes-Benz", Modelo:"E350 â 3.5L V6 (Engine Code 276.952)"},
+{Marca:"Mercedes-Benz", Modelo:"S450 â 3.0L I6 Turbo (Engine Code M256)"},
+{Marca:"Mercedes-Benz", Modelo:"S560 â 4.0L V8 (Engine Code M176)"},
+{Marca:"Mercedes-Benz", Modelo:"C300 â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"C43 AMG â 3.0L V6 Biturbo (Engine Code M276)"},
+{Marca:"Mercedes-Benz", Modelo:"E450 â 3.0L V6 Turbo (Engine Code M256)"},
+{Marca:"Mercedes-Benz", Modelo:"GLE450 â 3.0L V6 Turbo (Engine Code M256)"},
+{Marca:"Mercedes-Benz", Modelo:"GLS580 â 4.0L V8 Turbo (Engine Code M176)"},
+{Marca:"Mercedes-Benz", Modelo:"G-Class (G550) â 4.0L V8 (Engine Code M176)"},
+{Marca:"Mercedes-Benz", Modelo:"G-Class (G63 AMG) â 4.0L V8 Biturbo (Engine Code M177)"},
+{Marca:"Mercedes-Benz", Modelo:"GLK350 â 3.5L V6 (Engine Code 276.952)"},
+{Marca:"Mercedes-Benz", Modelo:"GL550 â 4.7L V8 (Engine Code M157)"},
+{Marca:"Mercedes-Benz", Modelo:"SLC300 â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"SL450 â 3.0L V6 Turbo (Engine Code M276)"},
+{Marca:"Mercedes-Benz", Modelo:"SL550 â 4.7L V8 (Engine Code M157)"},
+{Marca:"Mercedes-Benz", Modelo:"GLA250 4MATIC â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"GLB250 4MATIC â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"GLC300 4MATIC â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"GLE350 4MATIC â 3.5L V6 (Engine Code 276.952)"},
+{Marca:"Mercedes-Benz", Modelo:"GLS450 4MATIC â 3.0L I6 Turbo (Engine Code M256)"},
+{Marca:"Mercedes-Benz", Modelo:"G550 4MATIC â 4.0L V8 (Engine Code M176)"},
+{Marca:"Mercedes-Benz", Modelo:"S450 4MATIC â 3.0L I6 Turbo (Engine Code M256)"},
+{Marca:"Mercedes-Benz", Modelo:"S560 4MATIC â 4.0L V8 (Engine Code M176)"},
+{Marca:"Mercedes-Benz", Modelo:"C300 4MATIC â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"E350 4MATIC â 3.5L V6 (Engine Code 276.952)"},
+{Marca:"Mercedes-Benz", Modelo:"SLC300 4MATIC â 2.0L I4 Turbo (Engine Code 274.920)"},
+{Marca:"Mercedes-Benz", Modelo:"SL450 4MATIC â 3.0L V6 Turbo (Engine Code M276)"},
+{Marca:"Mercedes-Benz", Modelo:"SL550 4MATIC â 4.7L V8 (Engine Code M157)"},
+{Marca:"Audi", Modelo:"A1 1.0 TFSI â CHZE / CHZB"},
+{Marca:"Audi", Modelo:"A1 1.2 TFSI â CBZA"},
+{Marca:"Audi", Modelo:"A1 1.4 TFSI â CAXA / CNVA"},
+{Marca:"Audi", Modelo:"A3 1.6 â BGU / BSE"},
+{Marca:"Audi", Modelo:"A4 1.8 T â BFB / BEX"},
+{Marca:"Audi", Modelo:"A4 2.0 TFSI â CAEB / CPMA"},
+{Marca:"Audi", Modelo:"A5 2.0 TFSI â CAEB / CPMA"},
+{Marca:"Audi", Modelo:"A5 2.0 TSI â EA888 / DCGA"},
+{Marca:"Audi", Modelo:"A7 3.0 TFSI â CREC / CGWB"},
+{Marca:"Audi", Modelo:"A8 3.0 TFSI â CGWA / CREC"},
+{Marca:"Audi", Modelo:"A8 4.0 TFSI â CEUA / CTFA"},
+{Marca:"Audi", Modelo:"Q2 1.0 TFSI â CHZB"},
+{Marca:"Audi", Modelo:"Q3 1.5 TFSI â DADA / DACA"},
+{Marca:"Audi", Modelo:"Q3 2.0 TFSI â CZPA / DNVB"},
+{Marca:"Audi", Modelo:"Q3 Sportback 1.5 TFSI â DADA / DACA"},
+{Marca:"Audi", Modelo:"Q3 Sportback 2.0 TFSI â CZPA / DNVB"},
+{Marca:"Audi", Modelo:"Q5 2.0 TFSI â CAEB / CPMA"},
+{Marca:"Audi", Modelo:"Q8 3.0 TFSI â CREC / DLZA"},
+{Marca:"Audi", Modelo:"TT 1.8 T â AJQ / APP"},
+{Marca:"Audi", Modelo:"TT 2.0 TFSI â BWA / CESA"},
+{Marca:"Audi", Modelo:"R8 4.2 V8 â BYH / CFSA"},
+{Marca:"Audi", Modelo:"R8 5.2 V10 â CEUA / CNDA"},
+{Marca:"Audi", Modelo:"RS3 2.5 TFSI â DAZA / CZGB"},
+{Marca:"Audi", Modelo:"RS4 4.2 V8 â BNS / CFSA"},
+{Marca:"Audi", Modelo:"RS5 2.9 TFSI â DECA / DECD"},
+{Marca:"Audi", Modelo:"RS6 4.0 TFSI â CEUA / CRDB"},
+{Marca:"Audi", Modelo:"RS7 4.0 TFSI â CRDB / CTFA"},
+{Marca:"Audi", Modelo:"S3 2.0 TFSI â CJXA / DNUE"},
+{Marca:"Audi", Modelo:"S4 3.0 TFSI â CREC / CGWC"},
+{Marca:"Audi", Modelo:"S5 3.0 TFSI â CREC / CGWC"},
+{Marca:"Audi", Modelo:"S6 4.0 TFSI â CTFA / CRDB"},
+{Marca:"Audi", Modelo:"S7 4.0 TFSI â CTFA / CRDB"},
+{Marca:"Audi", Modelo:"S8 4.0 TFSI â CTFA / CRDB"},
+{Marca:"Audi", Modelo:"SQ5 3.0 TFSI â CREC / CGWB"},
+{Marca:"BMW", Modelo:"116i (E87) â N45 / N43"},
+{Marca:"BMW", Modelo:"118i (F20) â N13 / B38"},
+{Marca:"BMW", Modelo:"120i (E87/F20) â N46 / N20"},
+{Marca:"BMW", Modelo:"125i (F20) â N52 / B48"},
+{Marca:"BMW", Modelo:"316i (E90) â N43 / N45"},
+{Marca:"BMW", Modelo:"318i (E90/F30) â N46 / N20 / B38"},
+{Marca:"BMW", Modelo:"320i (E90/F30) â N46 / N20 / B48"},
+{Marca:"BMW", Modelo:"325i (E90) â N52 / M54"},
+{Marca:"BMW", Modelo:"328i (F30) â N20 / B48"},
+{Marca:"BMW", Modelo:"330i (F30/G20) â B48"},
+{Marca:"BMW", Modelo:"335i (E90/F30) â N54 / N55"},
+{Marca:"BMW", Modelo:"340i (F30/G20) â B58"},
+{Marca:"BMW", Modelo:"520i (F10) â N20 / B48"},
+{Marca:"BMW", Modelo:"528i (F10) â N52 / N20"},
+{Marca:"BMW", Modelo:"530i (G30) â B48"},
 {Marca:"BMW", Modelo:"325i (E90)"},
 {Marca:"BMW", Modelo:"328i (F30)"},
 {Marca:"BMW", Modelo:"330i (F30/G20)"},
@@ -557,7 +528,6 @@ const marcasModelos = [
 {Marca:"BMW", Modelo:"M6 (E63/F13)"},
 {Marca:"BMW", Modelo:"Z4 2.0i"},
 {Marca:"BMW", Modelo:"Z4 3.0i"},
-  /* agrega más si hace falta */
 ];
 
 const marcaSelect = document.getElementById("marcaSelect");
@@ -597,7 +567,7 @@ function jsonpRequest(url, callbackName) {
   document.body.appendChild(script);
 }
 
-// === Callback de precios ===
+// === Callback de precios (ejemplo) ===
 function handlePreciosResponse(data) {
   document.getElementById("precioEstimado").value = data.total || "";
   document.getElementById("reciboTotal").textContent = data.total || "";
@@ -612,19 +582,19 @@ document.getElementById("selectMarcaAceite").addEventListener("change", () => {
 
   if (!marcaAceite || !modelo) return;
 
-  const url = `${APP_SCRIPT_URL}?action=handlePrecios&marcaAceite=${encodeURIComponent(marcaAceite)}&modelo=${encodeURIComponent(modelo)}&aceiteRecomendado=${encodeURIComponent(aceiteRecomendado)}&litros=${litros}`;
+  const url = `${APP_SCRIPT_URL}?accion=precios&marcaAceite=${encodeURIComponent(marcaAceite)}&modelo=${encodeURIComponent(modelo)}&aceiteRecomendado=${encodeURIComponent(aceiteRecomendado)}&litros=${litros}`;
   jsonpRequest(url, "handlePreciosResponse");
 });
 
 // === Callback para guardar reserva ===
-function guardarReservaResponse(result) {
-  if (result.success) {
-    document.getElementById("mensaje").textContent = "✅ Reserva enviada con éxito";
+function reservarResponse(result) {
+  if (result.error) {
+    document.getElementById("mensaje").textContent = "❌ " + result.error;
+    document.getElementById("mensaje").style.color = "red";
+  } else {
+    document.getElementById("mensaje").textContent = "✅ " + (result.mensaje || "Reserva realizada con éxito");
     document.getElementById("mensaje").style.color = "lightgreen";
     document.getElementById("recibo").style.display = "block";
-  } else {
-    document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva";
-    document.getElementById("mensaje").style.color = "red";
   }
 }
 
@@ -633,8 +603,8 @@ document.getElementById("formCita").addEventListener("submit", function(e) {
   e.preventDefault();
   const formData = new FormData(e.target);
   const params = new URLSearchParams(formData).toString();
-  const url = `${APP_SCRIPT_URL}?action=guardarReserva&${params}`;
-  jsonpRequest(url, "guardarReservaResponse");
+  const url = `${APP_SCRIPT_URL}?accion=reservar&${params}`;
+  jsonpRequest(url, "reservarResponse");
 });
 
 // === Lógica del modal ===
