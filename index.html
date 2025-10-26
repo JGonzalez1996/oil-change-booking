@@ -187,12 +187,14 @@
       </div>
 
       <h4>💲 Desglose de Costos</h4>
-      <table class="tabla-recibo">
-        <tr><td>Filtro</td><td><span id="reciboFiltro"></span></td></tr>
-        <tr><td>Mano de obra</td><td><span id="reciboManoObra"></span></td></tr>
-        <tr><td>Desecho</td><td><span id="reciboDesecho"></span></td></tr>
-        <tr class="total"><td>Total</td><td><strong><span id="reciboTotal"></span></strong></td></tr>
-      </table>
+<table class="tabla-recibo">
+  <tr><td>Aceite</td><td><span id="reciboAceite"></span></td></tr>
+  <tr><td>Filtro</td><td><span id="reciboFiltro"></span></td></tr>
+  <tr><td>Mano de obra</td><td><span id="reciboManoObra"></span></td></tr>
+  <tr><td>Desecho</td><td><span id="reciboDesecho"></span></td></tr>
+  <tr class="total"><td>Total</td><td><strong><span id="reciboTotal"></span></strong></td></tr>
+</table>
+
     </div>
     <!-- Modal del Acuerdo -->
     <div id="modalAcuerdo" class="modal">
@@ -591,7 +593,7 @@ marcaSelect.addEventListener("change", () => {
 });
 
 /* URL Apps Script (tu URL proporcionada) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoaN8D9XyjIxb0g9qZD9o6E8xNiQt_0C-R3fEAOG98Sa5EyYpuDKgUKm0bcTCxJxD-/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAvqyaBnpR5ucCPZVGiZZGYhbs-uDcayqTA-G4w7gflGmwwPDHLqvYgcvi4yfx9T5oPg/exec";
 
 /* ---------------------------
    JSONP helper (para Apps Script)
@@ -678,6 +680,7 @@ marcaAceiteSelect.addEventListener("change", async () => {
     });
     // Esperamos que Apps Script devuelva { filtro: "...", manoObra: "...", desecho: "...", total: "..." }
     precioBox.textContent = data && data.total ? `💲 Precio estimado: ${data.total}` : "💲 Precio estimado: N/A";
+    document.getElementById("reciboAceite").textContent = (data && data.aceite) || "";
     document.getElementById("reciboFiltro").textContent = (data && data.filtro) || "";
     document.getElementById("reciboManoObra").textContent = (data && data.manoObra) || "";
     document.getElementById("reciboDesecho").textContent = (data && data.desecho) || "";
