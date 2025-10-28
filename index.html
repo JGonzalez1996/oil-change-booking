@@ -593,7 +593,7 @@ marcaSelect.addEventListener("change", () => {
 });
 
 /* URL Apps Script (tu URL proporcionada) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsonaOTXUmwWxlOFYgxiKB-oMPluusEEI7ErFcZTp4sCI8_8eOOxxkm5ocABxSwei2Ag/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbzsbfgkwfm2Hr97mveMeOfhY-R-RsWQ7ZydA_Nc5P0F1yYqBcCKo03UZw_NliOn3yuw/exec";
 
 /* ---------------------------
    JSONP helper (para Apps Script)
@@ -739,6 +739,19 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Debes aceptar el acuerdo antes de firmar y enviar la reserva.");
       return;
     }
+// ✅ Validación de anticipación mínima (12h)
+  const fecha = document.getElementById("fecha").value;
+  const hora = document.getElementById("hora").value;
+  const fechaHora = new Date(fecha + " " + hora);
+  const ahora = new Date();
+
+  const diffMs = fechaHora.getTime() - ahora.getTime();
+  const diffHoras = diffMs / (1000 * 60 * 60);
+
+  if (diffHoras < 24) {   // cambia a 24 si quieres 1 día completo
+    alert("⚠️ Solo puedes reservar con al menos 24 horas de anticipación.");
+    return;
+  }
 
     try {
       // Usamos JSONP para evitar CORS: enviamos todos los campos como query params (Apps Script debe soportarlo)
