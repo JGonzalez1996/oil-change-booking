@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GNZ Home Oil Services</title>
+  <title>GNZ Oil Services</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
@@ -593,7 +593,7 @@ marcaSelect.addEventListener("change", () => {
 });
 
 /* URL Apps Script (tu URL proporcionada) */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaqRYxEfzdbNXVv3XhCRZ5R1HAo6hwBnjKw3ctpZYxKcVzf-kI7ke9_VxnFvrzcWkBWg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsonaOTXUmwWxlOFYgxiKB-oMPluusEEI7ErFcZTp4sCI8_8eOOxxkm5ocABxSwei2Ag/exec";
 
 /* ---------------------------
    JSONP helper (para Apps Script)
@@ -726,68 +726,54 @@ document.addEventListener("DOMContentLoaded", () => {
     firmaInput.disabled = false;
   }
 
-/* ===========================
-   ENVIAR FORMULARIO (guardarReserva) VIA JSONP
-   =========================== */
-document.getElementById("formCita").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const form = e.target;
-  const formData = Object.fromEntries(new FormData(form).entries());
+  /* ===========================
+     ENVIAR FORMULARIO (guardarReserva) VIA JSONP
+     =========================== */
+  document.getElementById("formCita").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = Object.fromEntries(new FormData(form).entries());
 
-  // --- EVITAR ENVÍO DOBLE DE FORMULARIO ---
-  const submitBtn = form.querySelector('button[type="submit"]');
-  if (form.dataset.enviando === "true") {
-    return; // ya se está enviando, no hacemos nada
-  }
-  form.dataset.enviando = "true";
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Enviando...";
-
-  // Validación básica: firma debe estar habilitada
-  if (firmaInput.disabled) {
-    alert("Debes aceptar el acuerdo antes de firmar y enviar la reserva.");
-    // resetear estado para permitir reintento
-    form.dataset.enviando = "false";
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Enviar";
-    return;
-  }
-
-  try {
-    const params = { action: "guardarReserva" };
-    for (const k in formData) {
-      params[k] = formData[k];
+    // Validación básica: firma debe estar habilitada
+    if (firmaInput.disabled) {
+      alert("Debes aceptar el acuerdo antes de firmar y enviar la reserva.");
+      return;
     }
 
-    const result = await jsonpRequest(params);
-    if (result && result.success) {
-      document.getElementById("mensaje").textContent = "✅ Reserva enviada con éxito";
-      document.getElementById("recibo").style.display = "block";
-      document.getElementById("rNombre").textContent = formData.nombre || "";
-      document.getElementById("rTelefono").textContent = formData.telefono || "";
-      document.getElementById("rCorreo").textContent = formData.correo || "";
-      document.getElementById("rMarca").textContent = formData.marca || "";
-      document.getElementById("rModelo").textContent = formData.modelo || "";
-      document.getElementById("rAno").textContent = formData.ano || "";
-      document.getElementById("rMarcaAceite").textContent = formData.marcaAceite || "";
-      document.getElementById("rDireccionRec").textContent = formData.direccion || "";
-      document.getElementById("rFecha").textContent = formData.fecha || "";
-      document.getElementById("rHora").textContent = formData.hora || "";
-      document.getElementById("rComentarios").textContent = formData.comentarios || "";
-      document.getElementById("rFirma").textContent = formData.firma || "";
-    } else {
-      document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva";
+    try {
+      // Usamos JSONP para evitar CORS: enviamos todos los campos como query params (Apps Script debe soportarlo)
+      // transformamos objeto en parámetros; JSONP via GET, por lo tanto cuidado con longitud; si tu payload es grande,
+      // es preferible el fetch POST (pero dijiste JSONP).
+      const params = { action: "guardarReserva" };
+      for (const k in formData) {
+        params[k] = formData[k];
+      }
+
+      const result = await jsonpRequest(params);
+      if (result && result.success) {
+        document.getElementById("mensaje").textContent = "✅ Reserva enviada con éxito";
+        // Mostrar recibo con datos
+        document.getElementById("recibo").style.display = "block";
+        document.getElementById("rNombre").textContent = formData.nombre || "";
+        document.getElementById("rTelefono").textContent = formData.telefono || "";
+        document.getElementById("rCorreo").textContent = formData.correo || "";
+        document.getElementById("rMarca").textContent = formData.marca || "";
+        document.getElementById("rModelo").textContent = formData.modelo || "";
+        document.getElementById("rAno").textContent = formData.ano || "";
+        document.getElementById("rMarcaAceite").textContent = formData.marcaAceite || "";
+        document.getElementById("rDireccionRec").textContent = formData.direccion || "";
+        document.getElementById("rFecha").textContent = formData.fecha || "";
+        document.getElementById("rHora").textContent = formData.hora || "";
+        document.getElementById("rComentarios").textContent = formData.comentarios || "";
+        document.getElementById("rFirma").textContent = formData.firma || "";
+      } else {
+        document.getElementById("mensaje").textContent = "❌ Error al enviar la reserva";
+      }
+    } catch (err) {
+      console.error("Error al enviar reserva (JSONP):", err);
+      document.getElementById("mensaje").textContent = "❌ Error de conexión";
     }
-  } catch (err) {
-    console.error("Error al enviar reserva (JSONP):", err);
-    document.getElementById("mensaje").textContent = "❌ Error de conexión";
-  } finally {
-    // liberar bloqueo para permitir reintento
-    form.dataset.enviando = "false";
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Enviar";
-  }
-});
+  });
 });
 </script>
 
